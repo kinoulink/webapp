@@ -1,0 +1,232 @@
+@import "../variables";
+@import "compass/css3";
+
+html.menu-active
+{
+  #header-right-button, #header-search
+  {
+    display: none;
+  }
+
+  body
+  {
+    overflow: hidden;
+  }
+
+  header#header
+  {
+    background: $bz_menu_background;
+  }
+
+  #menu
+  {
+    left:0;
+  }
+
+  #header-left-button
+  {
+    .a2
+    {
+      display:none;
+    }
+
+    .a1, .a3
+    {
+      top:17px;
+    }
+
+    .a1
+    {
+      @include transform(rotateZ(45deg));
+    }
+
+    .a3
+    {
+      @include transform(rotateZ(-45deg));
+    }
+  }
+}
+
+#menu
+{
+	position: fixed;
+    top:0;
+    bottom:0;
+    height: 100%;
+	color: #fff;
+    padding-top:40px;
+	z-index: 6;
+    background: $bz_menu_background;
+
+  .__a
+  {
+    position: relative;
+    text-align: center;
+    background: $bz_menu_background_dark;
+    padding: 10px;
+
+    i
+    {
+      background: rgb(215, 215, 215);
+      padding: 5px 6px;
+      border-radius: 20px;
+      color: #5C5C5C;
+      position: absolute;
+      left: 50%;
+      margin-left: 70px;
+    }
+  }
+
+  .ui-notif-bubble
+  {
+    margin-top: 3px;
+    min-width: 20px;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin-left: 10px;
+  }
+
+  ._m1
+  {
+    text-align: center;
+    padding: 1%;
+    max-width: 320px;
+    margin: auto;
+
+    a
+    {
+      display: inline-block;
+      position: relative;
+      width: 46%;
+      height: 80px;
+      max-width: 150px;
+      margin: 1%;
+      margin-top: 2%;
+      padding:10px 0;
+      background: $bz_menu_background_dark;
+      border-radius: 4px;
+      box-shadow: 0px 1px rgba(0,0,0,0.2);
+      color: #fff;
+
+      > i {
+        display: block;
+        font-size: 2em;
+        height: 40px;
+        line-height: 40px;
+      }
+
+      &:hover
+      {
+        box-shadow: 0px 1px rgba(0,0,0,0.6);
+      }
+
+      &:active, &.active
+      {
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.8) inset;
+        text-decoration: none;
+      }
+    }
+  }
+
+  ._m2
+  {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    a
+    {
+      color: #fff;
+      display: block;
+      padding: 5px 10px;
+    }
+  }
+
+  .a
+  {
+    display: block;
+
+    .t
+    {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+
+      span
+      {
+        background: #cfcfcf;
+        padding: 2px 5px;
+        color: #333;
+        border-radius: 4px;
+        border: 1px solid #d1d1d1;
+      }
+    }
+  }
+}
+
+@media #{$information-phone}
+{
+  body
+  {
+    padding-top:40px;
+  }
+
+  nav#menu
+  {
+    left: -100%;
+    @include transition-property(left);
+    @include transition-duration(300ms);
+    width: 100%;
+  }
+}
+
+  @media #{$information-tablet}
+  {
+    body {
+      padding-left: 21% !important;
+      position: relative;
+    }
+
+    nav#menu
+    {
+      display: block;
+      width:21%;
+      left:0;
+      min-width: 200px;
+      display: block;
+      padding-top:0;
+    }
+
+    #nav-logo-button
+    {
+      display: block;
+      height: 72px;
+      background:$kinoulink_background_green_logo url(/images/logo-header.png) 50% 50% no-repeat;
+      background-size:97px 28px;
+    }
+  }
+
+@media(max-height: 480px)
+{
+  #menu {
+
+    .__a {
+      img {
+        height: 100px;
+        width: 94px;
+      }
+    }
+
+    ._m2 {
+      text-align: center;
+
+      a {
+        display: inline-block;
+        width: 48%;
+      }
+    }
+  }
+}

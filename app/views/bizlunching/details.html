@@ -1,0 +1,56 @@
+<bz-loader class="block full" ng-show="loading"></bz-loader>
+
+<div class="heading" ng-show="!loading">
+    <div class="container">
+        <div class="_header">
+            <div class="clearfix">
+                <img ng-src="{{invitation.author.avatar}}" class="pull-left" style="margin-right: 5px" />
+                <div style="margin:10px">
+                    <div>{{invitation.author.title}}</div>
+                    <div class="text-muted">Envoyée le {{ invitation.createdat | formatDateVerbose }} à {{ invitation.createdat | formatTime }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" ng-show="!loading">
+
+    <div>
+
+        <h4 class="text-embossed">Quand</h4>
+        <div class="panel-form _datetime">
+            <i class="fa fa-clock-o"></i> {{invitation.date_verbose}}
+        </div>
+
+        <h4 class="text-embossed">Invité(s)</h4>
+        <div class="panel-form">
+            <div ng-repeat="user in invitation.recipients" ng-class="{_guest : true, clearfix: true, _accepted: user.workflow.status == 1, _declined: user.workflow.status == 2}">
+                <div class="__h">
+                    <img ng-src="{{user.avatar}}" />
+                </div>
+                <div class="__b">
+                    <div>{{user.title}}</div>
+                    <div class="text-muted"> {{user.workflow.status | kinoulinkState}} {{ user.workflow.date | momentVerbose }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="invitation.message.length > 0">
+            <h4 class="text-embossed">Message</h4>
+            <div class="panel-form">
+                {{invitation.message}}
+            </div>
+        </div>
+
+        <h4 class="text-embossed">Actions</h4>
+        <div class="panel-form">
+            <a ng-href="/#/me/inbox/t-{{invitation.thread}}" ng-show="invitation.thread!=null">Voir la conversation</a>
+            <a ng-click="createThread()" href="javascript:void(0)" ng-show="invitation.thread==null">Créer la conversation avec tous les invités</a>
+        </div>
+
+        <br />
+
+    </div>
+
+</div>

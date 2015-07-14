@@ -1,0 +1,215 @@
+@import "../variables";
+
+$bz_light_blue_shadow: #D7E4ED;
+
+.ribbon
+{
+  color: #fff;
+  height: 20px;
+  display: block;
+  line-height: 22px;
+  -webkit-transform: rotate(45deg);
+  position: absolute;
+  right: -21px;
+  top: 0px;
+  text-align: center;
+  width: 64px;
+
+  &._accepted
+  {
+    background: $kinoulink_background_green_logo;
+  }
+
+  &._declined
+  {
+    background: $kinoulink_background_red_color;
+  }
+}
+
+.InvitationsController
+{
+  .container
+  {
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .panel-form
+  {
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 3px 0 $bz_light_blue_shadow;
+  }
+
+  .__timeline
+  {
+    position: relative;
+  }
+
+  .guest
+  {
+    text-align: center;
+    display: inline-block;
+
+    img
+    {
+      width: 28px;
+      height: 31px;
+    }
+  }
+
+  .__row
+  {
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 80px;
+
+    ._f
+    {
+      background:#f6f7f8;
+      box-shadow: 0 3px 3px -3px rgba(0, 0, 0, 0.2) inset;
+      margin:0 -12px -12px -12px;
+
+      ._a1, ._a2
+      {
+        border-right: 1px solid $bz_light_blue_shadow;
+      }
+
+      ._a2
+      {
+        box-shadow: -1px 0 0px $bz_light_blue_shadow;
+      }
+
+      ._a2, ._a3
+      {
+      border-left: 1px solid #FBFBFB;
+    }
+
+      a
+      {
+        display: inline-block;
+
+        line-height: 40px;
+        width: 130px;
+        text-align: center;
+      }
+    }
+
+    h4
+    {
+      color: #3b5998;
+      font-size: 14px;
+      font-weight: 600;
+      margin:0;
+    }
+
+    .__st
+    {
+      color:#999999;
+      font-size: 12px;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    @media #{$information-phone}
+    {
+      padding-left: 10px;
+      padding-top: 10px;
+
+      h4, .__st
+      {
+        padding-left: 45px;
+      }
+
+      .__st
+      {
+        margin-bottom: 15px;
+      }
+
+      ._f > a
+      {
+        width: 33.33%;
+      }
+    }
+    ._w-a
+    {
+      vertical-align: top;
+      width: 80px;
+      position: absolute;
+      top:0;
+      left:0;
+      z-index: 1;
+
+      @media #{$information-phone}
+      {
+        width: 64px;
+      }
+
+      &:after {
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 15px solid #fff;
+        position: absolute;
+        right: 0;
+        top: 15px;
+        content: " ";
+      }
+
+      img
+      {
+        width:57px;
+        height: 64px;
+      }
+
+      a
+      {
+        display: block;
+        position: relative;
+        width: 57px;
+      }
+
+    }
+  }
+
+  .__m
+  {
+    > p:first-child
+    {
+      margin-top:0;
+      padding-top:0;
+    }
+  }
+
+  .__footer
+  {
+    background: #fff;
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    left: 21%;
+    right: 0;
+    border-top: 1px solid #F0F0F0;
+    box-shadow: 0 -1px 3px rgba(200,200,200,0.3);
+
+    button
+    {
+      line-height: 30px;
+      border: 0;
+      background: none;
+      outline: none;
+    }
+
+
+    @media #{$information-phone}
+    {
+      left:0;
+    }
+  }
+
+  #page
+  {
+    padding-bottom: 40px;
+  }
+}

@@ -1,0 +1,82 @@
+<div class="ui-tabs top x2">
+    <button ng-class="{active : state_view == 1}" ng-click="state_view=1">Mes contacts</button>
+    <button ng-class="{active : state_view == 2}" ng-click="state_view=2">Inviter</button>
+</div>
+
+<div class="container">
+    <div class="container-center" ng-show="state_view == 1">
+
+        <div class="__search">
+            <input type="text" class="form-control" placeholder="Filtrer ..." ng-model="search">
+        </div>
+
+        <div class="book-group clearfix" ng-repeat="group in groups">
+            <div class="clearfix">
+                <span class="_t">{{group.title}}</span>
+            </div>
+            <div class="_g">
+                <a ng-repeat="item in group.items" ng-click="onUserClick(item)" class="book-contact clearfix">
+                    <img ng-src="{{item.avatar}}" />
+                    <span class="__t">{{item.title}}</span>
+                    <span class="__st">{{item.status}}</span>
+                </a>
+            </div>
+        </div>
+        
+
+        <div class="alert alert-info">
+            <h3>Invitez vos amis sur kinoulink !</h3>
+            <p>Seul sur kinoulink ? Pensez à inviter vos proches ou collaborateurs à rejoindre le service kinoulink</p>
+            <div class="text-center">
+                <br />
+                <a class="btn btn-default" ng-href="#/invitations">Inviter quelqu'un sur kinoulink</a>
+            </div>
+        </div>
+    </div>
+    <div class="container-center" ng-show="state_view == 2">
+
+        <h3 class="text-embossed">Inviter sur kinoulink</h3>
+
+        <form class="panel-form" ng-submit="submitInvitations()">
+            <textarea class="form-control" placeholder="Adresses eMail, séparées par une virgule." ng-model="emails"></textarea>
+            <br />
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+                    <input type="submit" class="btn btn-success btn-block" value="Inviter" />
+                </div>
+            </div>
+            <div class="div-loading" ng-show="state_invitation==2"></div>
+        </form>
+
+        <span class="text-embossed gap-v-1">OU</span>
+
+        <div class="panel-form">
+            <h4>Partager kinoulink sur vos réseaux sociaux</h4>
+            <div class="row">
+                <div class="col-sm-4">
+                    <button class="btn btn-block btn-linkedin" ng-click="share('https://www.linkedin.com/shareArticle?mini=true&url=http://kinoulink.fr&title=kinoulink,%20le%20business%20%C3%A0%20table&summary=&source=')"><i class="fa fa-linkedin-square"></i> LinkedIn</button>
+                </div>
+                <br class="visible-xs-block" />
+                <div class="col-sm-4">
+                    <button class="btn btn-block btn-facebook" ng-click="share('https://www.facebook.com/sharer/sharer.php?u=http://kinoulink.fr')"><i class="fa fa-facebook-square"></i> Facebook</button>
+                </div>
+                <br class="visible-xs-block" />
+                <div class="col-sm-4">
+                    <button class="btn btn-block btn-twitter" ng-click="share('https://twitter.com/home?status=Rejoignez%20moi%20sur%20kinoulink%20-%20http://kinoulink.fr%20-%20le%20business%20%C3%A0%20table%20!')"><i class="fa fa-twitter-square"></i> Twitter</button>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div ng-show="invitations.length==0">
+            <span class="text-embossed">Vous n'avez pas encore envoyé d'invitations ;-(</span>
+        </div>
+
+        <div class="panel-form" ng-show="invitations.length > 0">
+            <h3>Déjà invité</h3>
+            <div ng-repeat="invitation in invitations">
+                {{invitation.email}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="container" ng-show="linkedin_contacts==null">
+
+    <h2>Bonjour {{user.name.first}},</h2>
+
+    <h2>Ces personnes sont prêtes à vous rencontrer dès maintenant </h2>
+
+    <bz-loader class="block" ng-show="suggestions==null"></bz-loader>
+
+    <div class="row">
+        <div class="col-sm-4 text-center"  ng-repeat="user in suggestions">
+            <div>
+                <img class="_avatar_img" src="{{user.avatar}}" />
+            </div>
+            <div class="_avatar">
+                <span><strong>{{user.title}}</strong></span>
+                <span>{{user.job}}</span>
+                <span>{{user.sector}}</span>
+                <span>{{user.city}}</span>
+                <a class="btn btn-success" ng-href="/#/kinoulink/new?recipient={{user.id}}">Inviter</a>
+            </div>
+        </div>
+    </div>
+
+    <h2>Envie de rencontrer vos contacts, invitez les sur kinoulink</h2>
+
+    <div class="text-center">
+        <a href="javascript:void(0)" ng-click="inviteViaLinkedin()" style="font-size: 16px;margin: 20px;" class="btn btn-large btn-primary"><i class="fa fa-linkedin-square"></i> Invitez vos contacts LinkedIn</a>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-3">
+            <a class="btn btn-default btn-block" href="http://support.kinoulink.fr/"><i class="fa fa-support"></i> Aide en ligne</a>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="/#/people" class="btn btn-default btn-block"><i class="fa fa-search"></i> Recherche</a>
+            <br class="visible-xs" />
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="/#/me/inbox" class="btn btn-default btn-block"><i class="fa fa-wechat"></i> Messagerie</a>
+            <br class="visible-xs" />
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <a href="/#/me/invitations" class="btn btn-default btn-block"><i class="fa fa-calendar"></i> Invitations</a>
+            <br class="visible-xs" />
+        </div>
+    </div>
+
+</div>
+
+
+<div class="linkedin_contact_wrapper" ng-show="linkedin_contacts!=null">
+
+
+
+    <div class="container">
+
+        <h2>
+            <button class="close" ng-click="linkedin_contacts=null"><i class="fa fa-times"></i></button>
+            Envie de rencontrer vos contacts, invitez les sur kinoulink
+        </h2>
+
+        <div>
+            <input class="form-control" ng-model="linkedin_contact_search" type="text" placeholder="Rechercher dans mes contacts ..." />
+        </div>
+
+        <div class="text-center" style="padding: 10px 0;">
+            <button ng-click="sendLinkedinInvitationToAll()" class="btn btn-primary">Inviter tout le monde</button>
+        </div>
+
+        <table>
+            <tr class="linkedin_contact clearfix" ng-repeat="contact in linkedin_contacts  | filter:linkedin_contact_search  | orderBy: 'name'">
+                <td>
+                    <img src="{{contact.avatar}}" />
+                </td>
+                <td>
+                    <strong>{{contact.name}}</strong>
+                    <span class="text-muted">{{contact.headline}}</span>
+                </td>
+                <td>
+                    <a ng-show="contact.status==null || contact.status==0" href="javascript:void(0)" ng-click="sendLinkedinInvitation(contact)" class="btn btn-success">Inviter</a>
+                    <span ng-show="contact.status==1">En cours ...</span>
+                    <span ng-show="contact.status==2">Envoyée !</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,68 @@
+<div class="bg-info section heading">
+    <div class="container clearfix">
+        <i class="fa fa-glass"></i>
+        <span>Evènement</span>
+        <p>Participez à un évènement ..... rencontrez ... échangez .....</p>
+    </div>
+</div>
+<div class="container" ng-show="step==1 || step==2">
+    <div ng-class="{'panel-form' : true, 'loading': step==2}">
+        <h4><i class="fa fa-glass"></i> Créer un évènement kinoulink</h4>
+        <form id="registerForm" class="form-horizontal" ng-submit="doSave()" ng-hide="loading" onsubmit="return false" method="post">
+            <div class="form-group">
+                <label class="col-md-3 col-sm-2 control-label" for="inputTitle">Intitulé <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="text" ng-model="event.title" class="form-control" id="inputTitle" required>
+                </div>
+            </div>
+            <hr />
+            <h4>Début</h4>
+            <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label" for="inputDateStart">Date <i class="required"></i></label>
+                <div class="col-sm-4 col-md-4">
+                    <input type="date" ng-model="event.start_date" class="form-control" id="inputDateStart" required>
+                </div>
+                <label class="col-sm-2 col-sm-2 control-label" for="inputTimeStart">Heure <i class="required"></i></label>
+                <div class="col-sm-4 col-md-4">
+                    <input type="time" ng-model="event.start_time" class="form-control" id="inputTimeStart" required>
+                </div>
+            </div>
+            <hr />
+            <h4>Fin</h4>
+            <div class="form-group">
+                <label class="col-sm-2 col-xs-2 control-label" for="inputDateEnd">Date <i class="required"></i></label>
+                <div class="col-sm-4 col-md-4">
+                    <input type="date" ng-model="event.end_date" class="form-control" id="inputDateEnd" required>
+                </div>
+                <label class="col-sm-2 col-sm-2 control-label" for="inputTimeEnd">Heure <i class="required"></i></label>
+                <div class="col-sm-4 col-md-4">
+                    <input type="time" ng-model="event.end_time" class="form-control" id="inputTimeEnd" required>
+                </div>
+            </div>
+            <hr />
+            <h4>Addresse</h4>
+            <div class="form-group">
+                <label class="col-md-3 col-sm-2 control-label" for="inputAddress">Rue <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="text" name="street" ng-model="event.address_street" class="form-control" id="inputAddress" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 col-sm-2 control-label" for="inputCodepost">Code postal <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="text" name="codepost" ng-model="event.address_codepost" class="form-control" id="inputCodepost" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 col-sm-2 control-label" for="inputCity">Ville <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="text" name="city" ng-model="event.address_city" class="form-control" id="inputCity" required>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" class="btn btn-success" value="Créer" />
+            </div>
+        </form>
+    </div>
+    <br />
+</div>

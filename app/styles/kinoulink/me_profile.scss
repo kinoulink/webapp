@@ -1,0 +1,18 @@
+@import "../variables";
+
+body.MeProfileController
+{
+  img.__img-map
+  {
+    border-radius: 5px;
+    border: 1px solid #D1D1D2;
+    border-bottom-color: #888;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .__geo-form
+  {
+    min-height: 150px;
+  }
+}

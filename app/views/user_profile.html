@@ -1,0 +1,52 @@
+<div class="_w text-center">
+
+    <img class="_a" ng-src="{{user.avatar.big}}" />
+
+    <div class="container">
+        <h1>{{user.title}}</h1>
+        <div class="_actions clearfix">
+            <button class="btn btn-white" ng-click="openInboxMessenger()">Discuter</button>
+            <a class="btn btn-white" ng-href="#/kinoulink/new?recipient={{user.id}}" title="Inviter à kinoulinker">Inviter</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel-form">
+                    <div>{{user.status.text}}</div>
+                    <hr />
+                    <table class="table text-left" style="width: 100%">
+                        <tr>
+                            <td>Age</td><td>{{user.age}} ans</td>
+                        </tr>
+                        <tr>
+                            <td>Poste</td><td>{{user.job}}</td>
+                        </tr>
+                        <tr>
+                            <td>Secteur</td><td>{{user.sector}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ville</td><td>{{user.city}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel-form">
+                    <table class="table" style="width: 100%">
+                        <tr>
+                            <td>Membre depuis</td><td>{{user.date.creation | formatDateVerbose}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <br class="visible-xs" />
+                <div class="panel-form _panel-geo">
+                    <img ng-src="{{user.avatar.map}}" />
+                    <p>{{user.title}} est à {{user.position | distance}} de vous !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

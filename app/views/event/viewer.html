@@ -1,0 +1,38 @@
+<div class="bg-info section heading">
+    <div class="container clearfix text-center">
+        <h1>{{event.title}}</h1>
+    </div>
+</div>
+<div class="section" style="background: #ddd; color: #333">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-sm-6">
+                <span class="__a">Indiquez votre précence</span>
+            </div>
+            <div class="col-sm-6">
+                <button ng-disabled="loading" ng-show="user_presence==1" class="btn btn-primary" ng-click="clockIn()">Je suis à cet évènement</button>
+                <button ng-disabled="loading" ng-show="user_presence==2" class="btn btn-warning" ng-click="clockOut()">Je ne suis plus à cet évènement</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <h2>Participants</h2>
+
+        <div class="__u" ng-repeat="user in users">
+            <bz-presence bz-user="user"></bz-presence>
+
+            <a ng-href="#/u/{{user.id}}" class="_t">{{user.title}}</a>
+            <span>{{user.job}} {{user.sector}}</span>
+            <span>{{user.status}}</span>
+
+            <div>
+                <button ng-click="startConversation(user)" class="btn btn-success">Rencontrer</button>
+            </div>
+
+            <a ng-href="#/u/{{user.id}}"><img class="_a" ng-src="{{user.avatar}}" /></a>
+        </div>
+
+    </div>
+</div>

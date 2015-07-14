@@ -1,0 +1,20 @@
+<div>
+    <textarea class="form-control" placeholder="Lieu personnalisé..." ng-model="place_custom"></textarea>
+    <div class="text-right gap-v-1">
+        <input type="button" value="Ok" class="btn btn-default" ng-click="selectCustomPlace()" />
+    </div>
+</div>
+
+<div class="text-embossed">Ou</div>
+
+<div class="__search">
+    <input type="text" class="form-control" placeholder="Rechercher" ng-model="search" ng-model-options="{ debounce: 600 }">
+</div>
+
+<div class="book-group clearfix" style="margin: 20px 0">
+    <a ng-repeat="item in restaurants" ng-click="onRestaurantClick(item)" class="book-contact clearfix">
+        <span class="__t">{{item.title}}</span>
+        <span>{{item.address.street}}, {{item.address.city}}</span>
+        <span class="__r label label-primary">{{item.location | distance}}</span>
+    </a>
+</div>

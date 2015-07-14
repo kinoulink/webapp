@@ -1,0 +1,90 @@
+.EventCreate
+{
+  .heading
+  {
+    i
+    {
+      font-size: 32px;
+      float: left;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+
+    span
+    {
+      font-size: 140%;
+    }
+  }
+}
+
+.EventDetails
+{
+  .__a
+  {
+    color:#333;
+    font-weight: bold;
+    line-height: 30px;
+  }
+
+  .__u
+  {
+    border-radius: 6px;
+    border: 1px solid #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 70px;
+    padding-left: 30px;
+    position: relative;
+    min-height: 77px;
+    margin-bottom: 10px;
+
+    bz-presence
+    {
+      position: absolute;
+      left: 5px;
+    }
+
+    img._a
+    {
+      position: absolute;
+      right: 5px;
+      top:5px;
+    }
+
+    span
+    {
+      display: block;
+      color: #ddd;
+    }
+
+    ._t
+    {
+      font-weight: bold;
+      color: #fff;
+      font-size: 16px;
+    }
+  }
+
+  .section
+  {
+    position: relative;
+  }
+
+  #page:before
+  {
+    content: " ";
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    background: url(/images/bg2.jpg) no-repeat;
+    background-size: cover;
+  }
+
+  .container
+  {
+    position: relative;
+    color: #fff;
+  }
+}

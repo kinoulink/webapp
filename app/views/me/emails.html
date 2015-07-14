@@ -1,0 +1,18 @@
+<div class="container">
+
+    <h2>eMails envoyés par kinoulink</h2>
+
+    <div class="panel-form">
+        <table class="table" style="width: 100%">
+            <tr ng-repeat="email in emails | orderBy:'date':'reverse'" style="height: 38px">
+                <td>
+                    <strong>{{email.template}}</strong>
+                </td>
+                <td>
+                    {{email.date | formatDateVerbose}}, {{email.date | formatTime}}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

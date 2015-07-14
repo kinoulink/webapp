@@ -1,0 +1,76 @@
+@import "../variables";
+
+body.MeInboxController
+{
+  h2 > small
+  {
+    margin-top: 7px;
+  }
+
+  .panel-form
+  {
+    padding-top: 0;
+    min-height: 150px;
+  }
+}
+
+.inbox-thread
+{
+  display: block;
+  min-height: 72px;
+  border-bottom: 1px solid #F4F4F4;
+  padding: 5px 0;
+  margin: 5px 0;
+
+  & > *
+  {
+    display: inline-block;
+  }
+
+  img
+  {
+    margin-right: 5px;
+    width: 64px;
+    max-height: 70px;
+  }
+
+  ._col1
+  {
+    position: relative;
+    display: inline-block;
+
+    .__n
+    {
+      background: $kinoulink_background_green_transparent_color;
+      border-radius: 19px;
+      font-size: 0.7em;
+      line-height: 17px;
+      padding: 0 6px;
+      margin-top: 3px;
+      position: absolute;
+      right: -3px;
+      top: 4px;
+      color: #fff;
+
+      transform: scale(0);
+      opacity: 0;
+
+      .play-fx & {
+
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+
+  ._col2
+  {
+    width: calc(100% - 160px);
+    line-height: 16px;
+  }
+
+  ._col3
+  {
+    text-align: right;
+  }
+}

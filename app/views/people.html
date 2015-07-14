@@ -1,0 +1,46 @@
+<div id="home-map" ng-show="!showFilters && viewIndex==1" class="div-loading">
+</div>
+
+<div id="home-list" ng-show="viewIndex==2">
+    <form id="home-search-form" ng-submit="submitSearchForm()">
+        <div class="__q">
+            <input type="text" id="home-search-query-input" class="form-control" ng-model="filters.query" ng-model-options="{ debounce: 600 }" placeholder="Un resto, une adresse, un kinoulinker ..." />
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <label><input type="checkbox" ng-model="filters.users" /> kinoulinker </label>
+            </div>
+            <div class="col-xs-6">
+                <label><input type="checkbox" ng-model="filters.places" /> Restaurants </label>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary" value="Rechercher" />
+        </div>
+    </form>
+    <div ng-class="{_inner : true, 'div-loading' : loading}">
+        <div class="_res" ng-hide="loading">{{message_list_header}}</div>
+        <a ng-repeat="marker in markers" ng-hide="loading" ng-click="onListItemClick(2, marker)" ng-class="{'clearfix' : true,  '__m' : true, last: $last}">
+            <img class="avatar" ng-src="{{marker.avatar}}" />
+            <h4 class="list-group-item-heading">{{marker.title}}</h4>
+            <p class="list-group-item-text">{{marker.subtitle}}</p>
+            <label ng-class="{label : true, 'label-success' : marker.distance < 10, 'label-warning' : marker.distance > 10, 'label-danger' : marker.distance > 50}">{{marker.distance | distance2}}</label>
+        </a>
+    </div>
+    <a id="home-layout-sizr"></a>
+</div>
+
+<div id="home-footer">
+    <div>
+        <a class="_a" ng-class="{'tab-item': true, active: viewIndex == 1}" ng-click="viewIndex=1" href="javascript:void(0)">
+            <i class="fa fa-map-marker"></i>
+            Carte
+        </a>
+    </div>
+    <div>
+        <a ng-class="{'tab-item': true, active: viewIndex == 2}" ng-click="viewIndex=2" href="javascript:void(0)">
+            <i class="fa fa-list"></i>
+            Liste
+        </a>
+    </div>
+</div>

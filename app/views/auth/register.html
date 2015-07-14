@@ -1,0 +1,32 @@
+<div class="container">
+    <div ng-class="{'panel-form' : true, 'loading': loading}">
+        <h3><i class="fa fa-child"></i> Créer son compte kinoulink</h3>
+
+        <form id="registerForm" class="form-horizontal" action="http://api.kinoulink.com/user/auth/register" ng-submit="doRegister()" ng-hide="loading" onsubmit="return false" method="post">
+
+            <div class="form-group">
+                <label class="col-md-3 col-sm-2 control-label" for="inputFirstname">Login <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="text" ng-model="user.name.first" class="form-control" id="inputFirstname" ng-focus="onInputFocus()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 col-md-3 control-label" for="inputPassword">Mot de passe <i class="required"></i></label>
+                <div class="col-sm-10 col-md-9">
+                    <input type="password" ng-model="user.password" ng-show="sso==null" class="form-control" id="inputPassword" ng-focus="onInputFocus()">
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-success" type="submit">Enregistrer</button>
+                <span class="text-muted">(* Champs obligatoires)</span>
+            </div>
+        </form>
+        <hr />
+        <p class="text-center">
+            <a ng-href="#/login">Déjà un compte kinoulink ?</a>
+        </p>
+    </div>
+    <br />
+</div>

@@ -1,0 +1,44 @@
+@import "../variables";
+
+@media #{$information-phone}
+{
+  .uv-icon.uv-bottom-right
+  {
+    display: none;
+  }
+
+  html.menu-active
+  {
+    .uv-icon.uv-bottom-right
+    {
+      display: block;
+    }
+  }
+}
+
+@media #{$information-tablet}
+{
+  .uv-icon.uv-bottom-right
+  {
+    left: 225px !important;
+  }
+
+  html.loading
+  {
+    .uv-icon.uv-bottom-right
+    {
+      display: none;
+    }
+  }
+}
+
+.LoginController, .RegisterController
+{
+  .uv-icon.uv-bottom-right
+  {
+    top: 10px;
+    right: 10px;
+    left: auto !important;
+    display: block;
+  }
+}

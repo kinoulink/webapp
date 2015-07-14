@@ -1,0 +1,91 @@
+@import "../variables";
+
+body.kinoulinkDetailsController
+{
+  .heading
+  {
+    background: $bz_menu_background;
+    color:#fff;
+    padding-bottom: 10px;
+  }
+
+  .container
+  {
+    padding-top: 10px;
+  }
+
+    h4
+    {
+      font-size: 20px !important;
+    }
+
+  .panel-form
+  {
+    padding:10px;
+  }
+
+  ._datetime
+  {
+    text-align: center;
+
+    i
+    {
+      float: left;
+      font-size: 20px;
+      color: #D5D5D5;
+    }
+  }
+
+  ._guest
+  {
+    display: inline-block;
+    text-align: center;
+    margin:1%;
+    border:1px solid $kinoulink_timeline_bg;
+    height:140px;
+    border-radius: 4px;
+
+    .__h
+    {
+      height: 100px;
+      line-height: 100px;
+      width: 150px;
+      background: $kinoulink_timeline_bg;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+
+    &._accepted
+    {
+      border-color: $kinoulink_background_green_logo;
+
+      .__h {
+        background: $kinoulink_background_green_logo;
+      }
+    }
+
+    &._declined
+    {
+      border-color: $kinoulink_background_red_color;
+
+      .__h {
+        background: $kinoulink_background_red_color;
+      }
+    }
+
+    @media (max-width: 369px)
+    {
+      display: block;
+      height:101px;
+      line-height: 50px;
+
+      .__h
+      {
+        width: 80px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 3px;
+        float: left;
+      }
+    }
+  }
+}

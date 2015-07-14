@@ -1,0 +1,79 @@
+@import "../variables";
+
+body.UserProfileController #page {
+  &::before {
+    content: " ";
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url(/images/bg2.jpg) no-repeat;
+    background-size: cover;
+  }
+
+  ._w {
+    position: relative;
+    background: rgba(122, 122, 122, 0.5);
+    padding-top: 71px;
+    margin-top: 70px;
+
+    ._a {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      margin-left: -70px;
+      width: 114px;
+      height: 128px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      margin-top: 0;
+    }
+  }
+
+  .container {
+    margin-top: 10px;
+  }
+
+  ._actions {
+    margin-bottom: 10px;
+
+    * {
+      width: calc(50% - 5px);
+      float: left;
+      display: block;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+  }
+
+  tr > td:first-child {
+    color: #ccc;
+  }
+
+  ._panel-geo {
+    padding: 0;
+
+    img {
+      width: 100%;
+    }
+
+    p {
+      padding: 5px;
+    }
+  }
+}

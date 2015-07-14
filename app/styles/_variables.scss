@@ -1,0 +1,57 @@
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+@import "compass";
+
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+
+// Small screen / tablet
+$container-tablet:             ((520px + $grid-gutter-width));
+//** For `$screen-sm-min` and up.
+$container-sm:                 $container-tablet;
+
+// Medium screen / desktop
+$container-desktop:            ((600px + $grid-gutter-width));
+//** For `$screen-md-min` and up.
+$container-md:                 $container-desktop;
+
+// Large screen / wide desktop
+$container-large-desktop:      ((700px + $grid-gutter-width));
+//** For `$screen-lg-min` and up.
+$container-lg:                 $container-large-desktop;
+
+$kinoulink_background_red_color: #d13f4b;
+$kinoulink_background_green_transparent_color: rgba(13, 205, 191, 0.8);
+$kinoulink_background_green_logo: #1596D4;
+$kinoulink_background_dark: #474747;
+$kinoulink_timeline_bg: #ECECEC;
+$kinoulink_background_light_gray: #F3F3F5;
+
+$bz_menu_background: #303843;
+$bz_menu_background_dark: darken($bz_menu_background, 5%);
+
+$bz_blue_flat: #2D7CB7;
+
+$alert-danger-text:              #fff;
+$alert-danger-bg:                $kinoulink_background_red_color;
+$alert-danger-border:            darken(adjust-hue($kinoulink_background_red_color, -10), 5%);
+
+$alert-success-text:              #fff;
+$alert-success-bg:                $kinoulink_background_green_transparent_color;
+$alert-success-border:            darken(adjust-hue($kinoulink_background_green_transparent_color, -10), 5%);
+
+$btn-success-bg:                  $kinoulink_background_green_logo;
+$btn-success-border:              $kinoulink_background_green_logo;
+
+$btn-primary-bg:                  $bz_blue_flat;
+$btn-primary-border:              $bz_blue_flat;
+
+$brand-success:                   $kinoulink_background_green_transparent_color;
+$brand-primary:                   $bz_blue_flat;
+$brand-info:                      #2D7CB7;
+
+$state-info-bg:                   #2D7CB7;
+
+$information-phone-small: "only screen and (max-width:330px)";
+$information-phone: "only screen and (max-width : #{$screen-sm-min})";
+$information-tablet: "only screen and (min-width : #{$screen-sm-min})";

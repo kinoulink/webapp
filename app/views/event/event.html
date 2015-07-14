@@ -1,0 +1,26 @@
+<div class="bg-info section heading">
+    <div class="container clearfix">
+        <i class="fa fa-glass"></i>
+        <span>Evènement</span>
+        <p>Participez à un évènement ..... rencontrez ... échangez .....</p>
+    </div>
+</div>
+<div class="section section-action">
+    <div class="container">
+        Nouveau sur kinoulink
+        <a class="pull-right btn btn-primary" ng-href="/#/event/create">Créer un évènement</a>
+    </div>
+</div>
+<div class="container">
+    <h3>Evènements</h3>
+    <div>
+        <div class="panel-form" ng-repeat="event in events">
+            <h3>{{event.title}}</h3>
+            <p>Commence le {{event.date.start | formatDateVerbose}} et fini le {{event.date.end | formatDateVerbose}}</p>
+            <p>{{event.address.street}}, {{event.address.city}}</p>
+            <div class="text-right">
+                <a ng-href="/#/event/{{event.id}}">Voir l'évènement</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+@import "../variables";
+
+.avatar-big
+{
+  width: 128px;
+  height: 144px;
+}
+
+i.required
+{
+  display: inline-block;
+  width: 8px;
+  height: 9px;
+  background: url(/images/required.png) no-repeat;
+  background-size: 8px 9px;
+}
+
+i.logo
+{
+  display: inline-block;
+  width: 111px;
+  height: 125px;
+  background:url(/images/logo-login.png) no-repeat;
+  background-size: 111px 125px;
+}
+
+.panel-form
+{
+  background: #fff;
+  border-radius: 3px;
+  padding: 12px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  > h3, h4:first-child
+  {
+    margin-top:0;
+  }
+
+  + .panel-form
+  {
+    margin-top: 20px;
+  }
+
+  @media #{$information-phone}
+  {
+    padding:15px;
+  }
+}
+
+.container > .panel-form:first-child
+{
+  margin-top: 20px;
+}
+
+.alert
+{
+  > h3
+  {
+    margin-top: 0;
+  }
+}
+
+a:hover
+{
+  text-decoration: none;
+}
+
+.list-item2
+{
+  float: left;
+  width: 48%;
+  border: 1px solid #D1D1D2;
+  margin: 1%;
+  padding: 1%;
+  background: #FAFAFA;
+  border-radius: 5px;
+  height: 80px;
+  position: relative;
+
+  a
+  {
+    position: absolute;
+    top:3px;
+    right:3px;
+  }
+}
+
+@media (max-width:$screen-sm-min)
+{
+  .list-item2
+  {
+    width:48%;
+  }
+}
+
+@media (max-width:$screen-xs-min)
+{
+  .list-item2
+  {
+    float:none;
+    width: auto;
+  }
+
+  .panel-form
+  {
+    padding: 10px;
+  }
+}
+
+.btn:focus {
+  outline: none;
+}
+
+._btn, button
+{
+  border: 0;
+  background: none;
+  outline: none;
+}
+
+.table-layout {
+  display:table;
+  width: 100%;
+}
+.table-layout .table-cell {
+  display:table-cell;
+}
+
+.fixed-width-200 {
+  width:200px;
+}
+
+.text-warning
+{
+  font-size: 23px;
+  color: #F99954;
+}
+
+.text-embossed
+{
+  font-size: 26px;
+  display: block;
+  text-align: center;
+  text-shadow: 0px 1px 1px #FFFFFF;
+  color: #ccc;
+  font-weight: 600;
+}
+
+.gap-v-1
+{
+  margin:10px 0;
+}

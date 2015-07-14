@@ -1,0 +1,116 @@
+@import "../variables";
+
+html.loading
+{
+  height:100%;
+
+  body
+  {
+    height: 100%;
+    background:$bz_menu_background;
+    padding: 0 !important;
+  }
+
+  #page
+  {
+    background: none;
+    text-align: center;
+
+    .__l
+    {
+      background: url(/images/logo-splash.png) no-repeat 50% 50%;
+      background-size: 177px 201px;
+
+      width: 177px;
+      height: 201px;
+      min-height: 300px;
+
+      margin:auto;
+    }
+  }
+
+  header#header, nav#menu
+  {
+    display:none !important;
+  }
+
+  .hide-loading
+  {
+    display: none;
+  }
+
+  bz-loader path
+  {
+    fill :#ddd;
+  }
+}
+
+.div-loading
+{
+  background:#fff url(/images/loader.gif) no-repeat 50% 50%;
+  background-size: 32px 32px;
+  min-height: 100px;
+}
+
+.panel-form .div-loading
+{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+
+.panel-form.loading, form.loading .panel-form
+{
+  position: relative;
+
+  &::after
+  {
+    content: " ";
+    background: rgba(255, 255, 255, 0.8) url(/images/loader.gif) no-repeat 50% 50%;
+    background-size: 32px 32px;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 3px;
+  }
+}
+
+@media (min-width:$screen-sm-min)
+{
+  html.loading
+  {
+    #page
+    {
+      background-position: 33% 50%;
+
+    }
+  }
+}
+
+bz-loader
+{
+  &.block {
+    display: block;
+    text-align: center;
+  }
+
+  &.full {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -55px;
+    margin-top: -32px;
+  }
+
+  path
+  {
+    fill: $kinoulink_background_green_logo;
+  }
+}
