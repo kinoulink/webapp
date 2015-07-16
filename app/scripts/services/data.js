@@ -13,23 +13,6 @@
         this.$rootScope.messenger_connected = false;
 	}
 
-    DataService.prototype.sendRemoteMessage = function(name, args)
-    {
-        instance.socket.emit(name, args);
-    };
-
-    DataService.prototype.onRemoteMessage = function(name, listener)
-    {
-        if (instance.socket !== null)
-        {
-            instance.socket.on(name, function(data)
-            {
-                listener(data);
-
-                instance.$rootScope.$apply();
-            });
-        }
-    };
 
     DataService.prototype.sendMessage = function(name, args)
     {
@@ -41,46 +24,20 @@
         if (instance.user === null)
         {
             instance.user = value;
-
-            instance.connectRemoteMessenger();
         }
 
 		instance.user = value;
 
         instance.sendMessage('bind.user', value);
 	};
-
-    DataService.prototype.connectRemoteMessenger = function()
-    {
-        var myIoSocket = io.connect('http://messenger.kinoulink.fr:80', {transports: ['websocket']});
-
-        myIoSocket.on("connect", function()
-        {
-            myIoSocket.emit('user.connect', {user : instance.user.id, session : instance.user.session_token});
-        });
-
-        myIoSocket.on("disconnect", function()
-        {
-            instance.$rootScope.messenger_connected = false;
-            instance.$rootScope.$apply();
-        });
-
-        myIoSocket.on('connection.error', function(error)
-        {
-            instance.notifyDisplayToast('danger', 'kinoulink Messenger', 'Erreur ' + error.message);
-        });
-
-        myIoSocket.on('connection.success', function(error)
-        {
-            instance.$rootScope.messenger_connected = true;
-            instance.$rootScope.$apply();
-        });
-
-        this.socket = myIoSocket;
-    }
 	
 	DataService.prototype.api = function(service, param, callback)
 	{
+        if (instance.user !== null)
+        {
+            param['user_access_token'] = instance.user.access_token;
+        }
+
 		return instance.$http({
 			method: 'POST',
 			url: instance.apiRoot + service,
@@ -118,7 +75,7 @@
             }
             else
             {
-                error = 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data.message;
+                error = 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data;
             }
 
             instance.notifyDisplayToast('danger', 'kinoulink API', error);

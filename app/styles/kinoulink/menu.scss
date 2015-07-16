@@ -96,12 +96,9 @@ html.menu-active
 
     a
     {
-      display: inline-block;
+      display: block;
       position: relative;
-      width: 46%;
       height: 80px;
-      max-width: 150px;
-      margin: 1%;
       margin-top: 2%;
       padding:10px 0;
       background: $bz_menu_background_dark;
@@ -204,7 +201,7 @@ html.menu-active
     {
       display: block;
       height: 72px;
-      background:$kinoulink_background_green_logo url(/images/logo-header.png) 50% 50% no-repeat;
+      background:$kinoulink_background_green_logo;
       background-size:97px 28px;
     }
   }

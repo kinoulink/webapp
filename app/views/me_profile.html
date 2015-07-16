@@ -1,15 +1,6 @@
 <div class="container">
     <div class="container-center-lg">
 
-        <h3>Statut</h3>
-
-        <form ng-class="{'form-horizontal' : true, 'panel-form' : true, loading : loadingStatus}" ng-submit="submitStatus()">
-            <textarea class="minimal" ng-model="user.status.text" style="height: 60px" placeholder="Faites savoir aux autres ce que vous cherchez"></textarea>
-            <div class="clearfix">
-                <input type="submit" class="btn btn-success pull-right" value="Publier" />
-            </div>
-        </form>
-
         <h3>Informations</h3>
 
         <form class="form-horizontal panel-form" ng-submit="submitDetails()">
@@ -79,73 +70,12 @@
             </div>
         </form>
 
-        <h3>Avatar</h3>
-
-        <form class="form-horizontal panel-form">
-            <img ng-src="{{user.avatar.big}}" style="width:120px"/>
-            <button ng-file-select="onFileSelect($files)" accept="image/*" class="btn btn-success">Sélectionner une
-                photo ...
-            </button>
-            <br/>
-
-            <div class="clearfix text-center">
-                <div class="progress" ng-show="uploadProgress > 0">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar"
-                         ng-style="{ 'width' : uploadProgress + '%' }">
-                        <span class="sr-only">{{uploadProgress}}% Complete</span>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <h3>Localisation</h3>
-
-        <div ng-class="{'form-horizontal' : true, 'panel-form' : true, '__geo-form' : true, 'loading' : geoWorkflowStep == 2}">
-            <div class="row">
-                <div class="col-sm-4">
-                    <img class="__img-map" src="{{user.avatar.map}}"/>
-                    <div class="text-muted text-center">
-                        {{user.position.lat}}, {{user.position.lon}}
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div ng-show="geoWorkflowStep==0">
-                        <h4>Enregistrer votre position</h4>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <button class="btn btn-primary btn-block" ng-click="geoCenterOnPosition()">Sur ma position actuelle</button>
-                            </div>
-                            <div class="col-sm-6">
-                                <br class="visible-xs-block" />
-                                <button class="btn btn-primary btn-block" ng-click="geoWorkflowStep=1">Sur une ville ou
-                                    addresse
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="form-horizontal" ng-show="geoWorkflowStep==1" ng-submit="geoSearch()">
-                        <a title="Fermer" ng-click="geoWorkflowStep=0"><i class="fa fa-times"></i> </a>
-                        <div class="form-group">
-                            <input type="text" ng-model="geo.city" class="form-control" placeholder="Ville ou codepostal">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" ng-model="geo.street" class="form-control" placeholder="Adresse (num, rue..)">
-                       </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-success" value="Ok" />
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
 
-        <h3>Notifications</h3>
+        <h3>Facturation</h3>
 
         <div class="panel-form">
-            <p class="text-muted">Dans le cadre de la version "Test", il n'est pas encore possible de paramétrer la notification.</p>
-            <div class="text-center">
-                <a class="btn-link" ng-href="#/me/notifications/emails">Voir les eMails envoyés par kinoulink</a>
-            </div>
+            <p class="text-muted">Facturation ...</p>
         </div>
 
         <br/>

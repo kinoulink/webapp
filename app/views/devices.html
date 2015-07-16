@@ -1,0 +1,25 @@
+<div class="container">
+
+    <h2>Mes KinouTV</h2>
+
+    <div class="device-list-item" ng-repeat="device in devices">
+        <i class="fa fa-tablet"></i>
+        <h4>{{ device.device }}</h4>
+    </div>
+
+    <h2>Ajouter</h2>
+
+    <form ng-submit="add()">
+
+        <div class="row">
+            <div class="col-sm-6">
+                <input ng-model="add.code" type="text" placeholder="Code" class="form-control" />
+            </div>
+            <div class="col-sm-6">
+                <input type="submit" class="btn btn-success" />
+            </div>
+        </div>
+
+    </form>
+
+</div>

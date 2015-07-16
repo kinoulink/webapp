@@ -3,7 +3,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 {
     var htmlNode = angular.elementById('html'), hasFocus = false;
 
-    $scope.user = {};
+    $scope.user = {name : {first : "", last: "", mode: "b"} };
     $scope.pseudo_type = {b: "Prénom Nom", a : "Prénom N."};
     $scope.sso = null;
     $scope.loading = false;
@@ -23,6 +23,16 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
         $scope.user.email = searchObject.email;
     }
 
+    if (searchObject.hasOwnProperty('firstname'))
+    {
+        $scope.user.name.first = searchObject.firstname;
+    }
+
+    if (searchObject.hasOwnProperty('lastname'))
+    {
+        $scope.user.name.last = searchObject.lastname;
+    }
+
     $scope.doRegister = function()
 	{
         var extraData   = {device : bz.device},
@@ -30,7 +40,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
         $scope.loading = true;
 
-		data.api('auth/register', params, function(response)
+		data.api('user/auth/register', params, function(response)
 		{
             $scope.loading = false;
 
@@ -166,7 +176,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
         }
         else
         {
-            window.open(bz.api + '/auth/' + vendor + '/authorize', 'kinoulink Connect', 'width=600,height=300');
+            window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {

@@ -77,8 +77,7 @@ module.exports = function (grunt)
   
   grunt.registerTask('deploy', [
 	  'build',
-	  'compress',
-      'exec:slack'
+	  'compress'
   ]);
 
   grunt.registerTask('default', [

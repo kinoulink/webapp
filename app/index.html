@@ -24,7 +24,7 @@
   </head>
   <body id="body">
 
-	  <header id="header" ng-class="{'visible-xs': true, 'm-notouch' : true}" role="navigation" ng-controller="header">
+	  <header id="header" ng-class="{'visible-xs': true, 'm-notouch' : true}" role="navigation">
           <div class="_s">
               <a id="header-left-button" ng-click="$root.navOpened=!$root.navOpened" title="Menu">
                     <span class="a1"></span><span class="a2"></span><span class="a3"></span>
@@ -36,7 +36,7 @@
 
 	  </header>
 
-      <nav id="menu" ng-controller="MenuController" role="navigation" class="m-notouch">
+      <nav id="menu" role="navigation" class="m-notouch">
           <a id="nav-logo-button" ng-href="#/" title="kinoulink"></a>
 
           <div class="__a">
@@ -47,11 +47,8 @@
           </div>
 
           <div class="_m1">
-              <a ng-href="#/people" ng-click="$root.navOpened=false" title="Rechercher"><i class="fa fa-search"></i> Recherche</a>
-              <a ng-href="#/me/inbox" ng-click="$root.navOpened=false" title="Mes conversations"><i class="fa fa-wechat"></i> Messagerie <span class="ui-notif-bubble fx" ng-show="user.notifications.messages > 0 && showNotitication">{{user.notifications.messages}}</span></a>
-              <a ng-href="#/me/contacts" ng-click="$root.navOpened=false" title="Mes contacts"><i class="fa fa-users"></i> Réseau</a>
-              <a ng-href="#/me/invitations" ng-click="$root.navOpened=false" title="Mes invitations"><i class="fa fa-calendar"></i> Invitation <span class="ui-notif-bubble fx" ng-show="user.notifications.invitations > 0 && showNotitication">{{user.notifications.invitations}}</span></a>
-              <a ng-href="#/events" ng-click="$root.navOpened=false" title="Evènement"><i class="fa fa-glass"></i> Evènement</a>
+              <a ng-href="#/devices" ng-click="$root.navOpened=false" title="Rechercher"><i class="fa fa-tablet"></i> Mes KinouTVs</a>
+              <a ng-href="#/media" ng-click="$root.navOpened=false" title="Mes conversations"><i class="fa fa-film"></i> Mes Média </a>
           </div>
 
           <div class="_m2">
@@ -88,7 +85,7 @@
       </div>
 
       <script>
-          var bz = {phonegap: false, api: 'http://api.kinoulink.com/', root: '/', my : 'http://app.kinoulink.com/', device : {vendor : navigator.userAgent}};
+          var bz = {phonegap: false, api: 'http://qwant/', root: '/', my : 'http://app.kinoulink.com/', device : {vendor : navigator.userAgent}};
 
           var ga = function(a,b,c) {console.log('GA(' + a + ',' + b + ',' + c + ')')}
 

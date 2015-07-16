@@ -2,12 +2,12 @@
     <div ng-class="{'panel-form' : true, 'loading': loading}">
         <h3><i class="fa fa-child"></i> Créer son compte kinoulink</h3>
 
-        <form id="registerForm" class="form-horizontal" action="http://api.kinoulink.com/user/auth/register" ng-submit="doRegister()" ng-hide="loading" onsubmit="return false" method="post">
+        <form id="registerForm" class="form-horizontal" ng-submit="doRegister()" ng-hide="loading" onsubmit="return false">
 
             <div class="form-group">
                 <label class="col-md-3 col-sm-2 control-label" for="inputFirstname">Login <i class="required"></i></label>
                 <div class="col-sm-10 col-md-9">
-                    <input type="text" ng-model="user.name.first" class="form-control" id="inputFirstname" ng-focus="onInputFocus()">
+                    <input type="text" ng-model="user.login" class="form-control" id="inputFirstname" ng-focus="onInputFocus()">
                 </div>
             </div>
 

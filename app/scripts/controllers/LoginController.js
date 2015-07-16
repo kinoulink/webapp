@@ -23,7 +23,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 			window.localStorage.setItem('default_username', $scope.username);
 		}
 
-		data.api('auth/login', {login: $scope.username, password: $scope.password, extra : extraData}, function(response)
+		data.api('user/auth/login', {login: $scope.username, password: $scope.password, extra : extraData}, function(response)
 		{
 			if (response.status === 200)
 			{
@@ -67,7 +67,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 			{
 				if (response.data.hasOwnProperty('action')) {
 					if (response.data.action === 'register') {
-						if (confirm("Nous n'avons trouvé aucun compte rattaché, souhaitez vous vous inscrire à kinoulink ?")) {
+						if (confirm("Nous n'avons trouvé aucun compte rattaché, souhaitez vous vous inscrire à Bizlunch ?")) {
 							router.redirectPath('register');
 						}
 					}
@@ -116,7 +116,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 		}
 		else
 		{
-			window.open(bz.api + '/auth/' + vendor + '/authorize', 'kinoulink Connect', 'width=600,height=300');
+			window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {

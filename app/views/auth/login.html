@@ -13,10 +13,10 @@
 					<button title="Se connecter avec LinkedIn" class="btn btn-block btn-primary btn-linkedin" ng-click="openConnect('linkedin')"><i class="fa fa-linkedin-square"></i> LinkedIn</button>
 				</div>
 			</div>
-			<form id="loginForm" class="form-horizontal" action="http://api.kinoulink.fr/redirect" autocomplete="true" ng-submit="doLogin()" onsubmit="return false" method="post">
+			<form id="loginForm" class="form-horizontal" autocomplete="true" ng-submit="doLogin()" onsubmit="return false">
 				<div class="__ig">
 					<i class="fa fa-user"></i>
-					<input type="email" name="email" spellcheck="false" ng-model="username" class="form-control" ng-focus="onInputFocus()" placeholder="Adresse eMail">
+					<input type="text" name="login" spellcheck="false" ng-model="username" class="form-control" ng-focus="onInputFocus()" placeholder="Login">
 				</div>
 				<div class="__ig">
 					<i class="fa fa-unlock-alt"></i>

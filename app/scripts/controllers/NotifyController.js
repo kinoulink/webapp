@@ -27,28 +27,4 @@ kinoulinkApp.controller('NotifyController', ['$scope', 'data', function($scope, 
     $scope.$on('notify.sound.play', playSound);
     $scope.$on('notify.toast.display', displayToast);
 
-    data.onRemoteMessage('chat.message.received', function (incomingData)
-    {
-        var eventSent = data.sendMessage('chat.message.received', incomingData);
-
-        if (!eventSent.defaultPrevented)
-        {
-            data.user.notifications.messages++;
-
-            data.sendMessage('bind.user');
-
-            playSound();
-        }
-    });
-
-    data.onRemoteMessage('push.user', function (incomingData)
-    {
-        if (incomingData.hasOwnProperty('notifications'))
-        {
-            data.user.notifications.messages    = incomingData.notifications.messages;
-            data.user.notifications.invitations = incomingData.notifications.invitations;
-
-            data.sendMessage('bind.user');
-        }
-    });
 }]);

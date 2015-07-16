@@ -32,16 +32,6 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
 {
     $routeProvider.when('/about', {
         templateUrl: bzrup("about")
-    }).when('/event', {
-        templateUrl: bzrup("event/event"),
-        controller: "EventIndex"
-    }).when('/event/create', {
-        templateUrl: bzrup("event/create"),
-        controller: 'EventCreate'
-    }).when('/event/:uid', {
-        templateUrl: bzrup("event/viewer"),
-        controller: "EventDetails",
-        ga: '/event/details'
     });
 
     if (kinoulinkMe === null)
@@ -68,59 +58,13 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
             controller: 'home',
             reloadOnSearch: false
         })
-        .when('/people', {
-                templateUrl: bzrup('people'),
-                controller: 'PeopleController',
-                reloadOnSearch: false
-            })
-        .when('/account', {
-            templateUrl: bzrup('my/profile'),
-            controller: 'UserProfileController'
+        .when('/devices', {
+            templateUrl: bzrup('devices'),
+            controller: 'DevicesController'
         })
-        .when('/me/invitations', {
-            templateUrl: bzrup('kinoulinking/index'),
-            controller: 'InvitationsController'
-        })
-        .when('/refering/linkedin',
-        {
-            templateUrl : bzrup('refering/linkedin'),
-            controller: 'ReferingLinkedin'
-        })
-        .when('/kinoulink/new', {
-            templateUrl: bzrup("kinoulinking/create"),
-            controller: 'kinoulinkProposalController'
-        })
-        .when('/kinoulink/:uid', {
-            templateUrl: bzrup("kinoulinking/details"),
-            controller: 'kinoulinkDetailsController'
-        })
-        .when('/me', {
-            templateUrl: bzrup("me_profile"),
-            controller: 'MeProfileController'
-        })
-        .when('/me/notifications/emails', {
-            templateUrl: bzrup("me/emails"),
-            controller: 'MeNotifEmails'
-        })
-        .when('/me/inbox', {
-            templateUrl: bzrup("me_inbox"),
-            controller: 'MeInboxController'
-        })
-        .when('/me/inbox/t-:uid', {
-            templateUrl: bzrup("messenger"),
-            controller: 'MessengerController'
-        })
-        .when('/me/contacts', {
-            templateUrl: bzrup("me_contacts"),
-            controller: 'MeContactsController'
-        })
-        .when('/r/:uid', {
-            templateUrl: bzrup("restaurant"),
-            controller: 'RestaurantController'
-        })
-        .when('/u/:uid', {
-            templateUrl: bzrup("user_profile"),
-            controller: 'UserProfileController'
+        .when('/media', {
+            templateUrl: bzrup('media'),
+            controller: 'MediaController'
         })
         .otherwise({
             redirectTo: '/'
@@ -135,7 +79,7 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
 
     $http({
         method: 'POST',
-        url: bz.api + 'auth/me',
+        url: bz.api + 'user/me',
         withCredentials: true,
         cache: false,
         responseType: "json",
