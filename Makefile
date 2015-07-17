@@ -2,9 +2,9 @@
 
 deploy:
 
-	#grunt build
+	grunt build
 
-	#grunt compress
+	grunt compress
 
 	rsync -azv \
 	--delete-after \

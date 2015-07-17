@@ -18,7 +18,6 @@ module.exports = {
             "<%= yeoman.vendor %>/angular-resource/angular-resource.js",
             "<%= yeoman.vendor %>/angular-sanitize/angular-sanitize.js",
             "<%= yeoman.vendor %>/ng-file-upload/angular-file-upload.js",
-            "<%= yeoman.vendor %>/angular-socket-io/socket.js",
             "<%= yeoman.vendor %>/moment/moment.js",
             "<%= yeoman.vendor %>/angular-loading-bar/build/loading-bar.js",
             "<%= yeoman.app %>/scripts/vendor/*"

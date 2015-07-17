@@ -1,8 +1,30 @@
 <div class="container">
 
-    <h2>Bonjour {{user.login}},</h2>
+    <h2>Mes Média</h2>
 
-    <h2>Bienvenue sur votre espace Kinoulink </h2>
+    <div class="device-list-item" ng-repeat="media in medias">
+        <i class="fa fa-tablet"></i>
+        <h4>{{ media.data.name }}</h4>
+    </div>
 
+    <h2>Ajouter</h2>
+
+    <form ng-submit="add()">
+
+        <button ng-file-select="onFileSelect($files)" accept="image/*" class="btn btn-success">Sélectionner une
+            photo ...
+        </button>
+        <br/>
+
+        <div class="clearfix text-center">
+            <div class="progress" ng-show="uploadProgress > 0">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                     ng-style="{ 'width' : uploadProgress + '%' }">
+                    <span class="sr-only">{{uploadProgress}}% Complete</span>
+                </div>
+            </div>
+        </div>
+
+    </form>
 
 </div>

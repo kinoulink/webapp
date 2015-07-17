@@ -65,7 +65,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 			}
 			else
 			{
-                data.notifyDisplayToast('danger', 'Inscription', response.data.message);
+                data.notifyDisplayToast('danger', 'Inscription', response.data);
 			}
 		});
 	};

@@ -44,7 +44,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 			}
 			else
 			{
-                data.notifyDisplayToast('danger', 'Connexion', response.data.message);
+                data.notifyDisplayToast('danger', 'Connexion', response.data);
 			}
 		});
 	};

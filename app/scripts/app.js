@@ -47,7 +47,7 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
             templateUrl: bzrup("auth/register"),
             controller: 'RegisterController'
         }).otherwise({
-            redirectTo: '/register'
+            redirectTo: '/login'
         });
     }
     else
@@ -61,6 +61,10 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
         .when('/devices', {
             templateUrl: bzrup('devices'),
             controller: 'DevicesController'
+        })
+        .when('/devices/:token', {
+            templateUrl: bzrup('device'),
+            controller: 'DeviceController'
         })
         .when('/media', {
             templateUrl: bzrup('media'),

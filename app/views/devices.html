@@ -2,10 +2,10 @@
 
     <h2>Mes KinouTV</h2>
 
-    <div class="device-list-item" ng-repeat="device in devices">
+    <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
         <i class="fa fa-tablet"></i>
         <h4>{{ device.device }}</h4>
-    </div>
+    </a>
 
     <h2>Ajouter</h2>
 
