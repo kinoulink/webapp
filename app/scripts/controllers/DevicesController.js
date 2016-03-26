@@ -14,7 +14,14 @@ kinoulinkApp.controller("DevicesController", ["$scope", "data",
         {
             dataService.api('user/devices/attach', { device : $scope.add.code }, function(response)
             {
-                refresh();
+                if (response.status == 200)
+                {
+                    refresh();
+                }
+                else
+                {
+                    dataService.displayError('Nouvelle KTV', response);
+                }
             });
         };
 

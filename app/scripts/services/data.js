@@ -30,6 +30,18 @@
 
         instance.sendMessage('bind.user', value);
 	};
+
+    DataService.prototype.displayError = function(title, response)
+    {
+        if (response.data.hasOwnProperty('error'))
+        {
+            this.notifyDisplayToast('danger', title, response.data.error);
+        }
+        else
+        {
+            this.notifyDisplayToast('danger', title, response.data);
+        }
+    };
 	
 	DataService.prototype.api = function(service, param, callback)
 	{

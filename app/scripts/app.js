@@ -66,6 +66,10 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
             templateUrl: bzrup('device'),
             controller: 'DeviceController'
         })
+        .when('/devices/:token/media/add', {
+            templateUrl: bzrup('deviceMediaAdd'),
+            controller: 'DeviceMediaAddController'
+        })
         .when('/media', {
             templateUrl: bzrup('media'),
             controller: 'MediaController'

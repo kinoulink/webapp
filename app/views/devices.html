@@ -2,14 +2,16 @@
 
     <h2>Mes KinouTV</h2>
 
-    <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
-        <i class="fa fa-tablet"></i>
-        <h4>{{ device.device }}</h4>
-    </a>
+    <div class="panel-form">
+        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
+            <i class="fa fa-tablet"></i>
+            <h4>{{ device.device }}</h4>
+        </a>
+    </div>
 
     <h2>Ajouter</h2>
 
-    <form ng-submit="add()">
+    <form class="panel-form" ng-submit="add()">
 
         <div class="row">
             <div class="col-sm-6">

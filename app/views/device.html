@@ -2,16 +2,96 @@
 
     <h2>Ma KinouTV {{ device.token }}</h2>
 
-    <table class="table">
-        <tbody>
-        <tr ng-repeat="media in device.media">
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
+    <h3>Média</h3>
 
-    <h2>Modifier</h2>
+    <div class="panel-form">
 
-    <a class="btn btn-danger" ng-click="det">Enlever la KinouTV</a>
+        <div ng-show="device.media.length == 0">
+            <div class="alert alert-info">
+                Pas de média ;-(
+            </div>
+        </div>
+
+        <a class="btn btn-primary" href="#/devices/{{ device.token }}/media/add">Ajouter un média</a>
+
+        <hr />
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Intitulé
+                </th>
+                <th>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="media in device.media">
+                    <td>{{ media.data.name }}</td>
+                    <td>
+                        <a href="#" ng-click="removeMedia(media._id)" title="Enlever le média" class="fa fa-ambulance"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <h3>Actions</h3>
+
+    <div class="panel-form">
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                <a class="btn btn-danger btn-block" ng-click="sendAction('off')">Eteindre l'écran</a>
+            </div>
+
+            <div class="col-sm-3">
+                <a class="btn btn-success btn-block" ng-click="sendAction('on')">Allumer l'écran</a>
+            </div>
+
+            <div class="col-sm-3">
+                <a class="btn btn-default btn-block" ng-click="sendAction('action3')">Action 3</a>
+            </div>
+
+            <div class="col-sm-3">
+                <a class="btn btn-default btn-block" ng-click="sendAction('action4')">Action 4</a>
+            </div>
+
+        </div>
+
+        <hr />
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Action
+                </th>
+                <th>
+                    Date
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="instruction in device.instructions">
+                <td>{{ instruction.action }}</td>
+                <td>{{ instruction.timestamp }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <h3>Modifier</h3>
+
+    <div class="panel-form">
+
+        <a class="btn btn-danger" ng-click="detach()">Enlever la KinouTV</a>
+
+    </div>
 
 </div>

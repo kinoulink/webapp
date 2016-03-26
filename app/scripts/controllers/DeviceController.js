@@ -7,7 +7,7 @@ kinoulinkApp.controller("DeviceController", ["$scope", "data", "router",
         {
             dataService.api('user/devices/details', { device : device}, function(response)
             {
-                $scope.devices = response.data;
+                $scope.device = response.data;
             });
         }
 
@@ -22,6 +22,22 @@ kinoulinkApp.controller("DeviceController", ["$scope", "data", "router",
         $scope.detach = function()
         {
             dataService.api('user/devices/detach', { device : device }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.sendAction = function(action)
+        {
+            dataService.api('user/devices/actions/add', { device : device, action : action }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.removeMedia = function(media)
+        {
+            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
             {
                 refresh();
             });
