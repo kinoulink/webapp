@@ -1,0 +1,13 @@
+{
+    "name" : "kinoulink",
+    "stage" : "local",
+    "api" : {
+        "url" : "http://api.local.kinoulink.com"
+    },
+    "build" : {
+        "optimize" : false,
+        "minify" : false,
+        "assets" : true,
+        "rev" : false
+    }
+}
