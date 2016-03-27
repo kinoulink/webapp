@@ -20,7 +20,7 @@ gulp.task('view:index', function()
     return  processHTML(gulp.src(
                 path.join(conf.paths.src, '*.html')
             ))
-            .pipe(gulp.dest(conf.paths.dist))
+            .pipe(gulp.dest(conf.paths.build))
 });
 
 function processHTML(stream)
@@ -41,9 +41,9 @@ function processPartials()
         path.join(conf.paths.src, 'views/**/*.html')
     ]))
         .pipe($.angularTemplatecache('views.js', {
-            module: conf.project.name
+            module: 'kinoulinkApp'
         }))
-        .pipe(gulp.dest(conf.paths.dist + '/js/'));
+        .pipe(gulp.dest(conf.paths.build + '/js/'));
 }
 
 exports.processPartials = processPartials;

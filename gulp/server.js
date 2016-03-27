@@ -37,10 +37,10 @@ browserSync.use(browserSyncSpa({
 
 gulp.task('serve', ['build', 'watch'], function ()
 {
-  browserSyncInit(conf.paths.dist);
+  browserSyncInit(conf.paths.build);
 });
 
 gulp.task('serve:dist', function ()
 {
-    browserSyncInit(conf.paths.dist);
+    browserSyncInit(conf.paths.build);
 });

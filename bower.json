@@ -9,7 +9,7 @@
     "angular-sanitize": "1.3.8",
     "angular-route": "1.3.8",
 	"bootstrap-sass-official" : "master",
-      "ng-file-upload" : "master",
+      "ng-file-upload" : "12.0.4",
       "moment" : "master",
       "angular-loading-bar" : "master"
   },

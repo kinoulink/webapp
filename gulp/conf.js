@@ -15,7 +15,10 @@ var cliOptions = minimist(process.argv.slice(2), {
     default: {env: process.env.NODE_ENV || 'local'}
 });
 
-if (["dev", "prod", "local"].indexOf(cliOptions.env) === -1)
+exports.env     = cliOptions.env;
+exports.envs    = ["dev", "prod", "local"];
+
+if (exports.envs.indexOf(cliOptions.env) === -1)
 {
     console.log("<!> env must be dev, prod, local <!>");
 
@@ -27,13 +30,17 @@ if (["dev", "prod", "local"].indexOf(cliOptions.env) === -1)
  */
 exports.paths = {
     src: 'app',
-    dist: 'gen/build',
+    gen : 'gen',
+    builds: 'gen/builds/archives',
+    build: 'gen/builds/src/' + cliOptions.env,
     tmp: 'gen/.tmp',
     e2e: 'e2e',
     vendor: 'bower_components'
 };
 
 exports.project = JSON.parse(fs.readFileSync('./config/' + cliOptions.env + '.json'));
+
+exports.package = JSON.parse(fs.readFileSync('package.json'));
 
 /**
  *  Common implementation for an error handler of a Gulp plugin

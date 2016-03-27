@@ -62,7 +62,7 @@ function processScript(script)
                 mangle : false,
                 preserveComments : false
             })))
-            .pipe(gulp.dest(path.join(conf.paths.dist, 'js')));
+            .pipe(gulp.dest(path.join(conf.paths.build, 'js')));
 }
 
 gulp.task('scripts', ["script:app", "script:vendor"]);

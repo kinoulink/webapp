@@ -22,8 +22,8 @@ gulp.task('asset:images', function ()
                 svgoPlugins: [{removeViewBox: false}],
                 use: [pngquant(), jpegtran()]
             }))
-        .pipe(gulp.dest(path.join(conf.paths.dist, '/images/')))
-        .pipe($.size({ title: path.join(conf.paths.dist, '/'), showFiles: false }));
+        .pipe(gulp.dest(path.join(conf.paths.build, '/images/')))
+        .pipe($.size({ title: path.join(conf.paths.build, '/'), showFiles: false }));
 });
 
 gulp.task('asset:fonts', function ()
@@ -32,8 +32,8 @@ gulp.task('asset:fonts', function ()
             .src([
                 path.join(conf.paths.src, 'fonts', '**/*.{eot,svg,ttf,woff,woff2}')
             ])
-            .pipe(gulp.dest(path.join(conf.paths.dist, '/fonts/')))
-            .pipe($.size({ title: path.join(conf.paths.dist, '/'), showFiles: true }));
+            .pipe(gulp.dest(path.join(conf.paths.build, '/fonts/')))
+            .pipe($.size({ title: path.join(conf.paths.build, '/'), showFiles: true }));
 });
 
 gulp.task('asset:others', function()
@@ -44,7 +44,7 @@ gulp.task('asset:others', function()
             path.join(conf.paths.src, './sounds/**/*'),
             path.join(conf.paths.src, './*.{txt,ico,config,xml,png,jpg,jpeg}')
         ], {base : conf.paths.src})
-        .pipe(gulp.dest(path.join(conf.paths.dist)))
+        .pipe(gulp.dest(path.join(conf.paths.build)))
 });
 
 if (conf.project.build.assets)

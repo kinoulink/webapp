@@ -9,9 +9,7 @@
 var gulp        = require('gulp'),
     conf        = require('./gulp/conf'),
     wrench      = require('wrench'),
-    path        = require('path'),
-    runSequence = require('run-sequence'),
-    $           = require('gulp-load-plugins')();
+    path        = require('path');
 
 /**
  *  This will load all js or coffee files in the gulp directory
@@ -23,28 +21,11 @@ wrench.readdirSyncRecursive('./gulp').filter(function(file) {
     require('./gulp/' + file);
 });
 
-gulp.task('build', function(cb)
-{
-    runSequence(
-        'clean',
-        ['scripts', 'styles', 'assets'],
-        'views',
-        'revision',
-        cb
-    );
-});
 
 /**
  *  Default task clean temporaries directories and launch the
  *  main optimization build task
  */
 gulp.task('default', ['clean', 'build']);
-
-gulp.task('clean', function ()
-{
-    return gulp
-        .src(conf.paths.dist, {read : false})
-        .pipe($.clean())
-});
 
 

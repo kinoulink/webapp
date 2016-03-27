@@ -59,7 +59,7 @@ function processStyle(task)
             .pipe(cssFilters)
                 .pipe($.if(conf.project.build.minify, $.cssnano()))
             .pipe(cssFilters.restore)
-            .pipe(gulp.dest(path.join(conf.paths.dist, 'css')));
+            .pipe(gulp.dest(path.join(conf.paths.build, 'css')));
 }
 
 gulp.task('styles', ['style:app', 'style:vendor']);

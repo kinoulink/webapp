@@ -2,14 +2,10 @@
 
 deploy:
 
-	grunt build
+	gulp clean:all
 
-	grunt compress
+	gulp version:release
 
-	rsync -azv \
-	--delete-after \
-	--exclude .git \
-	--exclude .DS_Store  \
-	--exclude .idea  \
-	--exclude composer.*  \
-	dist/ k-prod.cloudapp.net:/var/kinoulink/webapp/build
+	NODE_ENV=local gulp build
+	NODE_ENV=dev gulp build
+	NODE_ENV=prod gulp build

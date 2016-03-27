@@ -1,4 +1,4 @@
-var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'angularFileUpload', 'angular-loading-bar'])
+var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -132,12 +132,7 @@ function formatDateShortFuture(value)
 
 function bzrup(url)
 {
-    if (_bzConfig.hasOwnProperty('release'))
-    {
-        url += '.' + _bzConfig.release;
-    }
-
-    return 'views/' + url + '.html';
+    return url + '.html';
 }
 
 angular.floatPrecision = function(number)

@@ -9,24 +9,24 @@ var path        = require('path'),
 gulp.task("revision:assets", [], function()
 {
     return gulp.src([
-            path.join(conf.paths.dist, 'js', '*.js'),
-            path.join(conf.paths.dist, 'css', '*.css')
-        ], {base : conf.paths.dist})
+            path.join(conf.paths.build, 'js', '*.js'),
+            path.join(conf.paths.build, 'css', '*.css')
+        ], {base : conf.paths.build})
         .pipe($.rev())
-        .pipe(gulp.dest(conf.paths.dist))
+        .pipe(gulp.dest(conf.paths.build))
         .pipe($.rev.manifest())
-        .pipe(gulp.dest(conf.paths.dist))
+        .pipe(gulp.dest(conf.paths.build))
 });
 
 if (conf.project.build.rev)
 {
     gulp.task("revision", ["revision:assets"], function ()
     {
-        return gulp.src(path.join(conf.paths.dist, 'index.html'))
+        return gulp.src(path.join(conf.paths.build, 'index.html'))
             .pipe($.revReplace({
-                manifest: gulp.src(path.join(conf.paths.dist, 'rev-manifest.json'))
+                manifest: gulp.src(path.join(conf.paths.build, 'rev-manifest.json'))
             }))
-            .pipe(gulp.dest(conf.paths.dist));
+            .pipe(gulp.dest(conf.paths.build));
     });
 }
 else

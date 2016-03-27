@@ -4,7 +4,7 @@ node_modules
 .tmp
 .DS_Store
 .idea
-dist/
+gen/builds/archives
 cordova/www/fonts
 cordova/www/images
 cordova/www/scripts
