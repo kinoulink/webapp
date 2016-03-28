@@ -1,0 +1,1 @@
+var appConfig = {"api":"http://api.local.kinoulink.com/","stage":"local","root":"/"};

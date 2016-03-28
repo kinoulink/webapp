@@ -9,16 +9,16 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
         router.reloadApp();
     }
 
-	if (bz.phonegap)
+	if (appConfig.phonegap)
 	{
 		$scope.username = window.localStorage.getItem('default_username');
 	}
 
 	$scope.doLogin = function()
 	{
-		var extraData = {device : bz.device};
+		var extraData = {device : appConfig.device};
 
-		if (bz.phonegap)
+		if (appConfig.phonegap)
 		{
 			window.localStorage.setItem('default_username', $scope.username);
 		}
@@ -31,7 +31,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 
 				ga('send', 'event', 'auth', 'login', 'email');
 
-				if (bz.phonegap)
+				if (appConfig.phonegap)
 				{
 					router.reloadApp();
 				}
@@ -93,9 +93,9 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 			}
 		};
 
-		if (bz.phonegap)
+		if (appConfig.phonegap)
 		{
-			var ssoWindow = window.open(bz.my + 'api/auth/' + vendor + '/authorize', '_blank', 'location=no');
+			var ssoWindow = window.open(appConfig.my + 'api/auth/' + vendor + '/authorize', '_blank', 'location=no');
 
 			ssoWindow.addEventListener('loadstop', function (event)
 			{
@@ -116,7 +116,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 		}
 		else
 		{
-			window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
+			window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {

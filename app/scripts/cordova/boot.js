@@ -1,10 +1,10 @@
 document.addEventListener("deviceready", function()
 {
-    bz.device = device;
+    appConfig.device = device;
 
     document.getElementById('html').classList.add(device.platform.toLowerCase());
 
-    bz.setupNotifications(function()
+    appConfig.setupNotifications(function()
     {
     }, function()
     {

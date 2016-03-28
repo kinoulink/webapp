@@ -1,4 +1,4 @@
-bz.setupNotifications = function(successHandler, errorHandler)
+appConfig.setupNotifications = function(successHandler, errorHandler)
 {
     var pushNotification = window.plugins.pushNotification;
 
@@ -44,7 +44,7 @@ function onNotification(e)
         case 'registered':
             if ( e.regid.length > 0 )
             {
-                bz.device.notification = {id : e.regid};
+                appConfig.device.notification = {id : e.regid};
             }
         break;
 

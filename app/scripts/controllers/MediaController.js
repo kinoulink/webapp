@@ -1,5 +1,5 @@
-kinoulinkApp.controller("MediaController", ["$scope", "data", "$upload",
-    function ($scope, dataService, $upload)
+kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
+    function ($scope, dataService, Upload)
     {
         function refresh()
         {
@@ -15,7 +15,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "data", "$upload",
 
             $scope.uploadProgress = 0;
 
-            $scope.upload = $upload.upload({
+            $scope.upload = Upload.upload({
                 url: dataService.apiRoot + 'user/media/upload',
                 method: 'POST',
                 cache: false,

@@ -4,7 +4,9 @@ deploy:
 
 	gulp clean:all
 
-	gulp version:release
+	mkdir -p gen/builds/src
+
+	gulp version:patch
 
 	NODE_ENV=local gulp build
 	NODE_ENV=dev gulp build

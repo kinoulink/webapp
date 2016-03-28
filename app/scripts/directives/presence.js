@@ -24,7 +24,7 @@ kinoulinkApp.directive('bzPresence', ['$http', function($http)
 
                     if (status === 200)
                     {
-                        element.html('<img src="' + bz.root + 'images/presence-online.png" />');
+                        element.html('<img src="' + appConfig.root + 'images/presence-online.png" />');
                     }
                     else
                     {

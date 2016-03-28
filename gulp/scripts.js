@@ -3,7 +3,6 @@
 var path        = require('path'),
     gulp        = require('gulp'),
     conf        = require('./conf'),
-    utils       = require('./utils'),
     $           = require('gulp-load-plugins')();
 
 var scripts = {
@@ -43,8 +42,30 @@ Object.keys(scripts).forEach(function(targetName)
 
 function processScript(script)
 {
-    return utils.bindConfiguration(
-            gulp
+    if (script === 'app')
+    {
+        var fs = require('fs');
+
+        fs.access(conf.paths.build, function(err)
+        {
+            if (err)
+            {
+                var config = {
+                    api: conf.project.api.url + '/',
+                    stage: conf.project.stage,
+                    root: '/'
+                };
+
+
+                fs.mkdirSync(conf.paths.build);
+                fs.mkdirSync(conf.paths.build + '/js');
+
+                fs.writeFileSync(conf.paths.build + '/js/config.js', 'var appConfig = ' + JSON.stringify(config) + ';');
+            }
+        });
+    }
+
+    return  gulp
                 .src((scripts[script]).map(function(src)
                 {
                     return src
@@ -53,7 +74,6 @@ function processScript(script)
                         ;
                 }))
                 .pipe($.concat(script + '.js'))
-            )
             .pipe($.eslint())
             .pipe($.eslint.format())
             .pipe($.if(conf.project.build.minify, $.ngAnnotate({

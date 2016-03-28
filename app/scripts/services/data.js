@@ -7,7 +7,7 @@
 		this.user       = null;
 		this.$rootScope = $rootScope;
 		this.$http      = $http;
-        this.apiRoot    = bz.api;
+        this.apiRoot    = appConfig.api;
         this.socket     = null;
 
         this.$rootScope.messenger_connected = false;

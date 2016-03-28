@@ -1,4 +1,5 @@
-var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
+var kinoulinkMe = null,
+    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -87,7 +88,7 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
 
     $http({
         method: 'POST',
-        url: bz.api + 'user/me',
+        url: appConfig.api + 'user/me',
         withCredentials: true,
         cache: false,
         responseType: "json",

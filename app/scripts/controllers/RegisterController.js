@@ -35,7 +35,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
     $scope.doRegister = function()
 	{
-        var extraData   = {device : bz.device},
+        var extraData   = {device : appConfig.device},
             params        = angular.extend(extraData, $scope.user);
 
         $scope.loading = true;
@@ -50,7 +50,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
                 ga('send', 'event', 'auth', 'register', 'Inscription', 1);
 
-                if (bz.phonegap) {
+                if (appConfig.phonegap) {
                     router.reloadApp();
                 }
                 else {
@@ -153,9 +153,9 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
             $scope.$apply();
         };
 
-        if (bz.phonegap)
+        if (appConfig.phonegap)
         {
-            var ssoWindow = window.open(bz.api + '/auth/' + vendor + '/authorize', '_blank', 'location=no');
+            var ssoWindow = window.open(appConfig.api + '/auth/' + vendor + '/authorize', '_blank', 'location=no');
 
             ssoWindow.addEventListener('loadstop', function (event)
             {
@@ -176,7 +176,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
         }
         else
         {
-            window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
+            window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {

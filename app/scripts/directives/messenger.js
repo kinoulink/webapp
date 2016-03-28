@@ -97,7 +97,7 @@ kinoulinkApp.directive('bzkinoulinkMessenger', ['data', function(dataService)
             });
 
             if (foundUser === null) {
-                foundUser = {title : 'kinoulink', avatar: bz.root + 'images/avatar.gif'};
+                foundUser = {title : 'kinoulink', avatar: appConfig.root + 'images/avatar.gif'};
             }
 
             return foundUser;

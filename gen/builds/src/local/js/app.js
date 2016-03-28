@@ -1,4 +1,5 @@
-var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
+var kinoulinkMe = null,
+    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -87,7 +88,7 @@ var kinoulinkMe = null, kinoulinkApp = angular.module('kinoulinkApp', ['ngResour
 
     $http({
         method: 'POST',
-        url: bz.api + 'user/me',
+        url: appConfig.api + 'user/me',
         withCredentials: true,
         cache: false,
         responseType: "json",
@@ -480,7 +481,7 @@ kinoulinkApp.directive('bzkinoulinkMessenger', ['data', function(dataService)
             });
 
             if (foundUser === null) {
-                foundUser = {title : 'kinoulink', avatar: bz.root + 'images/avatar.gif'};
+                foundUser = {title : 'kinoulink', avatar: appConfig.root + 'images/avatar.gif'};
             }
 
             return foundUser;
@@ -644,7 +645,7 @@ kinoulinkApp.directive('bzPresence', ['$http', function($http)
 
                     if (status === 200)
                     {
-                        element.html('<img src="' + bz.root + 'images/presence-online.png" />');
+                        element.html('<img src="' + appConfig.root + 'images/presence-online.png" />');
                     }
                     else
                     {
@@ -754,7 +755,7 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
 		this.user       = null;
 		this.$rootScope = $rootScope;
 		this.$http      = $http;
-        this.apiRoot    = bz.api;
+        this.apiRoot    = appConfig.api;
         this.socket     = null;
 
         this.$rootScope.messenger_connected = false;
@@ -1070,7 +1071,7 @@ kinoulinkApp.factory('router', [
 
         function redirectInternUri(uri)
         {
-            if (bz.phonegap)
+            if (appConfig.phonegap)
             {
                 return redirectUrl('file://' + location.pathname + uri);// 'file:///android_asset/www/index.html' + uri);
             }
@@ -1231,16 +1232,16 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
         router.reloadApp();
     }
 
-	if (bz.phonegap)
+	if (appConfig.phonegap)
 	{
 		$scope.username = window.localStorage.getItem('default_username');
 	}
 
 	$scope.doLogin = function()
 	{
-		var extraData = {device : bz.device};
+		var extraData = {device : appConfig.device};
 
-		if (bz.phonegap)
+		if (appConfig.phonegap)
 		{
 			window.localStorage.setItem('default_username', $scope.username);
 		}
@@ -1253,7 +1254,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 
 				ga('send', 'event', 'auth', 'login', 'email');
 
-				if (bz.phonegap)
+				if (appConfig.phonegap)
 				{
 					router.reloadApp();
 				}
@@ -1315,9 +1316,9 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 			}
 		};
 
-		if (bz.phonegap)
+		if (appConfig.phonegap)
 		{
-			var ssoWindow = window.open(bz.my + 'api/auth/' + vendor + '/authorize', '_blank', 'location=no');
+			var ssoWindow = window.open(appConfig.my + 'api/auth/' + vendor + '/authorize', '_blank', 'location=no');
 
 			ssoWindow.addEventListener('loadstop', function (event)
 			{
@@ -1338,7 +1339,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 		}
 		else
 		{
-			window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
+			window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {
@@ -1505,8 +1506,8 @@ kinoulinkApp.controller("MeProfileController", ["$scope", "data", "$upload", "ge
         return parseFloat(parseFloat("" + value).toFixed(3));
     }
 }]);
-kinoulinkApp.controller("MediaController", ["$scope", "data", "$upload",
-    function ($scope, dataService, $upload)
+kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
+    function ($scope, dataService, Upload)
     {
         function refresh()
         {
@@ -1522,7 +1523,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "data", "$upload",
 
             $scope.uploadProgress = 0;
 
-            $scope.upload = $upload.upload({
+            $scope.upload = Upload.upload({
                 url: dataService.apiRoot + 'user/media/upload',
                 method: 'POST',
                 cache: false,
@@ -1618,7 +1619,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
     $scope.doRegister = function()
 	{
-        var extraData   = {device : bz.device},
+        var extraData   = {device : appConfig.device},
             params        = angular.extend(extraData, $scope.user);
 
         $scope.loading = true;
@@ -1633,7 +1634,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
                 ga('send', 'event', 'auth', 'register', 'Inscription', 1);
 
-                if (bz.phonegap) {
+                if (appConfig.phonegap) {
                     router.reloadApp();
                 }
                 else {
@@ -1736,9 +1737,9 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
             $scope.$apply();
         };
 
-        if (bz.phonegap)
+        if (appConfig.phonegap)
         {
-            var ssoWindow = window.open(bz.api + '/auth/' + vendor + '/authorize', '_blank', 'location=no');
+            var ssoWindow = window.open(appConfig.api + '/auth/' + vendor + '/authorize', '_blank', 'location=no');
 
             ssoWindow.addEventListener('loadstop', function (event)
             {
@@ -1759,7 +1760,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
         }
         else
         {
-            window.open(bz.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
+            window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
 
             window.onmessage = function(e)
             {

@@ -8,7 +8,7 @@ kinoulinkApp.factory('router', [
 
         function redirectInternUri(uri)
         {
-            if (bz.phonegap)
+            if (appConfig.phonegap)
             {
                 return redirectUrl('file://' + location.pathname + uri);// 'file:///android_asset/www/index.html' + uri);
             }
