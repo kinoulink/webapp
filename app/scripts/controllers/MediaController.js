@@ -1,11 +1,23 @@
-kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
-    function ($scope, dataService, Upload)
+kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upload",
+    function ($scope, $rootScope, dataService, Upload)
     {
+        $scope.loading = true;
+        $rootScope.menu = 'media';
+
         function refresh()
         {
             dataService.api('user/media/', {}, function(response)
             {
-                $scope.medias = response.data;
+                $scope.loading = false;
+
+                if (response.status == 200)
+                {
+                    $scope.medias = response.data;
+                }
+                else
+                {
+                    dataService.displayError('Media', response);
+                }
             });
         }
 
@@ -23,13 +35,21 @@ kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
                 headers : {'Content-Type': 'application/x-www-form-urlencoded'},
                 withCredentials: true,
                 file: fileToUpload
-            }).progress(function(evt) {
+            }).progress(function(evt)
+            {
                 $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
             }).success(function(data, status, headers, config)
             {
                 $scope.uploadProgress = 0;
 
-                refresh();
+                if (data.status == 200)
+                {
+                    refresh();
+                }
+                else
+                {
+                    dataService.displayError('Téléchargement', data);
+                }
             });
         };
 

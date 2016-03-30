@@ -1,6 +1,8 @@
-<div class="container">
+<header>
+    <h1>Ma KinouTV {{ device.token }}</h1>
+</header>
 
-    <h2>Ma KinouTV {{ device.token }}</h2>
+<div class="container">
 
     <h3>Média</h3>
 
@@ -31,7 +33,7 @@
                 <tr ng-repeat="media in device.media">
                     <td>{{ media.data.name }}</td>
                     <td>
-                        <a href="#" ng-click="removeMedia(media._id)" title="Enlever le média" class="fa fa-ambulance"></a>
+                        <a ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></a>
                     </td>
                 </tr>
             </tbody>
@@ -47,14 +49,17 @@
 
             <div class="col-sm-3">
                 <a class="btn btn-danger btn-block" ng-click="sendAction('off')">Eteindre l'écran</a>
+                <br class="visible-xs" />
             </div>
 
             <div class="col-sm-3">
                 <a class="btn btn-success btn-block" ng-click="sendAction('on')">Allumer l'écran</a>
+                <br class="visible-xs" />
             </div>
 
             <div class="col-sm-3">
                 <a class="btn btn-default btn-block" ng-click="sendAction('action3')">Action 3</a>
+                <br class="visible-xs" />
             </div>
 
             <div class="col-sm-3">
@@ -77,9 +82,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="instruction in device.instructions">
+            <tr ng-repeat="instruction in device.instructions | orderBy : '-timestamp'">
                 <td>{{ instruction.action }}</td>
-                <td>{{ instruction.timestamp }}</td>
+                <td>{{ instruction.timestamp | momentVerbose }}</td>
             </tr>
             </tbody>
         </table>
@@ -93,5 +98,7 @@
         <a class="btn btn-danger" ng-click="detach()">Enlever la KinouTV</a>
 
     </div>
+
+    <br />
 
 </div>

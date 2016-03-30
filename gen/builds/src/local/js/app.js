@@ -1,5 +1,5 @@
 var kinoulinkMe = null,
-    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
+    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -16,6 +16,8 @@ var kinoulinkMe = null,
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
     {
         $body.attr('class', evData.controller);
+
+        $rootScope.sidebarToggled = false;
 
         setTimeout(function()
         {
@@ -750,17 +752,16 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
 {
 	var instance = null;
 	
-	function DataService($rootScope, $http)
+	function DataService($rootScope, $http, Notification)
 	{
-		this.user       = null;
-		this.$rootScope = $rootScope;
-		this.$http      = $http;
-        this.apiRoot    = appConfig.api;
-        this.socket     = null;
+		this.user           = null;
+		this.$rootScope     = $rootScope;
+		this.$http          = $http;
+        this.Notification   = Notification;
+        this.apiRoot        = appConfig.api;
 
         this.$rootScope.messenger_connected = false;
 	}
-
 
     DataService.prototype.sendMessage = function(name, args)
     {
@@ -816,6 +817,17 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
 
                 response = {status:500, data:null};
             }
+            else
+            {
+                if (response.status == 200)
+                {
+                    Rollbar.info("API /" + service, {query : param});
+                }
+                else
+                {
+                    Rollbar.error("API /" + service, {query : param, response : response});
+                }
+            }
 
            /* if (parseInt(response.status) >= 300)
             {
@@ -846,7 +858,7 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
 
     DataService.prototype.notifyDisplayToast = function(type, title, message)
     {
-        instance.sendMessage('notify.toast.display', {type: type, title: title, message: message});
+        this.Notification.error({message : message, title : title, positionY : 'bottom'});
     };
 
     DataService.prototype.notifyPlaySound = function()
@@ -854,117 +866,16 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
         instance.sendMessage('notify.sound.play');
     };
 	
-	kinoulinkApp.factory("data", ["$rootScope", "$http", function($rootScope, $http)
+	kinoulinkApp.factory("data", ["$rootScope", "$http", "Notification", function($rootScope, $http, Notification)
 	{
 		if (instance === null)
 		{
-			instance = new DataService($rootScope, $http);
+			instance = new DataService($rootScope, $http, Notification);
 		}
 		
 		return instance;
 	}]);
 })(angular, window.bz);
-kinoulinkApp.factory('geolocation', ['data', function(data)
-{
-    var watchingID = 0;
-
-    return {
-        start: function()
-        {
-            if (navigator.geolocation)
-            {
-                watchingID = navigator.geolocation.watchPosition(function(position)
-                {
-                    data.sendMessage('geo.position', position);
-                },
-                function(error)
-                {
-                    data.sendMessage('geo.position', getErrorMessage(error));
-                },
-                {
-                    enableHighAccuracy: true,
-                    maximumAge: 3000,
-                    timeout: 10000
-                });
-            }
-            else
-            {
-                data.sendMessage('geo.error', '404');
-            }
-        },
-        stop : function()
-        {
-            if (navigator.geolocation)
-            {
-                navigator.geolocation.clearWatch(watchingID);
-            }
-        },
-        /**
-         * Calculates the distance between two spots.
-         * This method is more simple but also far more inaccurate
-         *
-         * @param    object    Start position {latitude: 123, longitude: 123}
-         * @param    object    End position {latitude: 123, longitude: 123}
-         * @param    integer   Accuracy (in meters)
-         * @return   integer   Distance (in meters)
-         */
-        getDistanceSimple: function(start, end)
-        {
-            var lat1 = start.lat, lon1 = start.lon, lat2 = end.lat, lon2 = end.lon;
-            var deg2rad = 0.017453292519943295; // === Math.PI / 180
-            var cos = Math.cos;
-
-            lat1 *= deg2rad;
-            lon1 *= deg2rad;
-            lat2 *= deg2rad;
-            lon2 *= deg2rad;
-            var diam = 12742; // Diameter of the earth in km (2 * 6371)
-            var dLat = lat2 - lat1;
-            var dLon = lon2 - lon1;
-            var a = (
-                (1 - cos(dLat)) +
-                (1 - cos(dLon)) * cos(lat1) * cos(lat2)
-                ) / 2;
-
-            return diam * Math.asin(Math.sqrt(a));
-        }
-    };
-
-    function getErrorMessage(error)
-    {
-        var content = '';
-
-        switch (error.code)
-        {
-            case 0:
-            {
-                content = 'UNKNOWN_ERROR';
-            }
-                break;
-            case 1:
-            {
-                content = 'PERMISSION_DENIED';
-            }
-                break;
-            case 2:
-            {
-                content = 'POSITION_UNAVAILABLE';
-            }
-                break;
-            case 3:
-            {
-                content = 'TIMEOUT';
-            }break;
-
-            case 9:
-            {
-                content = 'GEOLOCATION_NOT_SUPPORTED';
-            }
-        }
-
-        return content;
-    }
-}]);
 kinoulinkApp.factory('layout', function()
 {
     function init()
@@ -1108,9 +1019,11 @@ kinoulinkApp.factory('router', [
         };
     }
 ]);
-kinoulinkApp.controller("DeviceController", ["$scope", "data", "router",
-    function ($scope, dataService, router)
+kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
     {
+        $rootScope.menu = "devices";
+
         var device = router.get('token');
 
         function refresh()
@@ -1156,9 +1069,11 @@ kinoulinkApp.controller("DeviceController", ["$scope", "data", "router",
         refresh();
 
     }]);
-kinoulinkApp.controller("DeviceMediaAddController", ["$scope", "data", "router",
-    function ($scope, dataService, router)
+kinoulinkApp.controller("DeviceMediaAddController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope,dataService, router)
     {
+        $rootScope.menu = "devices";
+
         var device = router.get('token');
 
         $scope.device = device;
@@ -1182,9 +1097,11 @@ kinoulinkApp.controller("DeviceMediaAddController", ["$scope", "data", "router",
         refresh();
 
     }]);
-kinoulinkApp.controller("DevicesController", ["$scope", "data",
-    function ($scope, dataService)
+kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
+    function ($scope, $rootScope,dataService)
     {
+        $rootScope.menu = 'devices';
+
         function refresh()
         {
             dataService.api('user/devices/', {}, function(response)
@@ -1227,6 +1144,8 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 	$scope.username = "";
 	$scope.password = "";
 
+    $scope.connected = false;
+
     if (data.user !== null)
     {
         router.reloadApp();
@@ -1248,12 +1167,16 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 
 		data.api('user/auth/login', {login: $scope.username, password: $scope.password, extra : extraData}, function(response)
 		{
-			if (response.status === 200)
+			if (response.status == 200)
 			{
                 var form = angular.elementById('loginForm');
 
 				ga('send', 'event', 'auth', 'login', 'email');
 
+                router.reloadApp();
+
+                $scope.connected = true;
+/*
 				if (appConfig.phonegap)
 				{
 					router.reloadApp();
@@ -1263,7 +1186,7 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 					form.removeAttr('onsubmit').removeAttr('ng-submit');
 
 					(form[0]).submit();
-				}
+				}*/
 			}
 			else
 			{
@@ -1279,74 +1202,8 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
 	
 	$scope.openSite = function()
 	{
-		 window.open(encodeURI('http://www.kinoulink.fr'), '_system', 'location=yes');
+		 window.open(encodeURI('http://www.kinoulink.com'), '_system', 'location=yes');
 	};
-
-	$scope.openConnect = function(vendor)
-	{
-		window._kinoulink_callback = function(response)
-		{
-			if (response.status === 200)
-			{
-				if (response.data.hasOwnProperty('action')) {
-					if (response.data.action === 'register') {
-						if (confirm("Nous n'avons trouvé aucun compte rattaché, souhaitez vous vous inscrire à Bizlunch ?")) {
-							router.redirectPath('register');
-						}
-					}
-					else
-					{
-						ga('send', 'event', 'auth', 'login', vendor);
-
-						return router.reloadApp();
-					}
-				}
-				else
-				{
-					data.notifyDisplayToast('danger', 'Connexion', 'Erreur serveur, action is missing!');
-
-					$scope.$apply();
-				}
-			}
-			else
-			{
-				data.notifyDisplayToast('danger', 'Connexion', response.data.message);
-
-				$scope.$apply();
-			}
-		};
-
-		if (appConfig.phonegap)
-		{
-			var ssoWindow = window.open(appConfig.my + 'api/auth/' + vendor + '/authorize', '_blank', 'location=no');
-
-			ssoWindow.addEventListener('loadstop', function (event)
-			{
-				var url = event.url;
-
-				if (url.indexOf('my.kinoulink.fr/api/auth/') > -1 && url.indexOf('authorize/callback') > 0) {
-					ssoWindow.executeScript({
-						code: 'window.callbackData'
-					}, function (values) {
-						window._kinoulink_callback(values[0]);
-
-						setTimeout(function () {
-							ssoWindow.close();
-						}, 50);
-					});
-				}
-			});
-		}
-		else
-		{
-			window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
-
-            window.onmessage = function(e)
-            {
-                window._kinoulink_callback(e.data);
-            };
-		}
-	}
 }]);
 kinoulinkApp.controller("MeProfileController", ["$scope", "data", "$upload", "geolocation",
     function ($scope, dataService, $upload, geolocation)
@@ -1506,14 +1363,26 @@ kinoulinkApp.controller("MeProfileController", ["$scope", "data", "$upload", "ge
         return parseFloat(parseFloat("" + value).toFixed(3));
     }
 }]);
-kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
-    function ($scope, dataService, Upload)
+kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upload",
+    function ($scope, $rootScope, dataService, Upload)
     {
+        $scope.loading = true;
+        $rootScope.menu = 'media';
+
         function refresh()
         {
             dataService.api('user/media/', {}, function(response)
             {
-                $scope.medias = response.data;
+                $scope.loading = false;
+
+                if (response.status == 200)
+                {
+                    $scope.medias = response.data;
+                }
+                else
+                {
+                    dataService.displayError('Media', response);
+                }
             });
         }
 
@@ -1531,13 +1400,21 @@ kinoulinkApp.controller("MediaController", ["$scope", "data", "Upload",
                 headers : {'Content-Type': 'application/x-www-form-urlencoded'},
                 withCredentials: true,
                 file: fileToUpload
-            }).progress(function(evt) {
+            }).progress(function(evt)
+            {
                 $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
             }).success(function(data, status, headers, config)
             {
                 $scope.uploadProgress = 0;
 
-                refresh();
+                if (data.status == 200)
+                {
+                    refresh();
+                }
+                else
+                {
+                    dataService.displayError('Téléchargement', data);
+                }
             });
         };
 
@@ -1665,113 +1542,22 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
         }
     };
 
-    $scope.openConnect = function(vendor)
-    {
-        window._kinoulink_callback = function(response)
-        {
-            if (response.status === 200)
-            {
-                if (response.data.hasOwnProperty('action')) {
-                    if (response.data.action === 'register') {
-                        var userData = response.data.user;
-
-                        $scope.sso = {
-                            vendor: vendor
-                        };
-
-                        if (userData.hasOwnProperty('first_name'))
-                        {
-                            $scope.user.name.first = userData.first_name;
-                        }
-
-                        if (userData.hasOwnProperty('last_name'))
-                        {
-                            $scope.user.name.last = userData.last_name;
-                        }
-
-                        if (userData.hasOwnProperty('email'))
-                        {
-                            $scope.user.email = userData.email;
-                        }
-
-                        if (userData.hasOwnProperty('firstName'))
-                        {
-                            $scope.user.name.first = userData.firstName;
-                        }
-
-                        if (userData.hasOwnProperty('lastName'))
-                        {
-                            $scope.user.name.last = userData.lastName;
-                        }
-
-                        if (userData.hasOwnProperty('emailAddress'))
-                        {
-                            $scope.user.email = userData.emailAddress;
-                        }
-
-                        if (userData.hasOwnProperty('job'))
-                        {
-                            $scope.user.job = userData.job;
-                        }
-
-                        if (userData.hasOwnProperty('sector'))
-                        {
-                            $scope.user.sector = userData.sector;
-                        }
-
-                        $scope.user.sso = {vendor: vendor, token: response.data.token};
-                    }
-                    else
-                    {
-                        return router.reloadApp();
-                    }
-                } else {
-                    data.notifyDisplayToast('danger', 'Connexion', 'Erreur serveur, action is missing!');
-                }
-            }
-            else
-            {
-                data.notifyDisplayToast('danger', 'Connexion', response.data.message);
-            }
-
-            $scope.$apply();
-        };
-
-        if (appConfig.phonegap)
-        {
-            var ssoWindow = window.open(appConfig.api + '/auth/' + vendor + '/authorize', '_blank', 'location=no');
-
-            ssoWindow.addEventListener('loadstop', function (event)
-            {
-                var url = event.url;
-
-                if (url.indexOf('my.kinoulink.fr/api/auth/') > -1 && url.indexOf('authorize/callback') > 0) {
-                    ssoWindow.executeScript({
-                        code: 'window.callbackData'
-                    }, function (values) {
-                        window._kinoulink_callback(values[0]);
-
-                        setTimeout(function () {
-                            ssoWindow.close();
-                        }, 50);
-                    });
-                }
-            });
-        }
-        else
-        {
-            window.open(appConfig.api + '/auth/' + vendor + '/authorize', 'Bizlunch Connect', 'width=600,height=300');
-
-            window.onmessage = function(e)
-            {
-                window._kinoulink_callback(e.data);
-            };
-        }
-    }
 }]);
 kinoulinkApp.controller("home", ["$scope", "data",
     function ($scope, dataService)
     {
 
+
+    }]);
+kinoulinkApp.controller("menu", ["$scope", "$window", "data",
+    function ($scope, $window, dataService)
+    {
+        $scope.logout = function()
+        {
+            dataService.api('/user/auth/logout', {}, function()
+            {
+                $window.location.reload();
+            });
+        };
 
     }]);

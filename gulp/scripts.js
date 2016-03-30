@@ -25,6 +25,7 @@ var scripts = {
             "{VENDOR}/angular-loading-bar/build/loading-bar.js",
             "{VENDOR}/angular-bootstrap/ui-bootstrap.js",
             "{VENDOR}/angular-bootstrap/ui-bootstrap-tpls.js",
+            "{VENDOR}/angular-ui-notification/dist/angular-ui-notification.js",
             "{APP}/scripts/vendor/*"
         ]
 };
@@ -50,18 +51,19 @@ function processScript(script)
         {
             if (err)
             {
-                var config = {
-                    api: conf.project.api.url + '/',
-                    stage: conf.project.stage,
-                    root: '/'
-                };
-
-
                 fs.mkdirSync(conf.paths.build);
                 fs.mkdirSync(conf.paths.build + '/js');
-
-                fs.writeFileSync(conf.paths.build + '/js/config.js', 'var appConfig = ' + JSON.stringify(config) + ';');
             }
+
+            var config = {
+                api: conf.project.api.url + '/',
+                stage: conf.project.stage,
+                debug: conf.project.debug,
+                version: conf.package.version,
+                root: '/'
+            };
+
+            fs.writeFileSync(conf.paths.build + '/js/config.js', 'var appConfig = ' + JSON.stringify(config) + ';');
         });
     }
 

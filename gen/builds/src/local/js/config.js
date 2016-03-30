@@ -1,1 +1,1 @@
-var appConfig = {"api":"http://api.local.kinoulink.com/","stage":"local","root":"/"};
+var appConfig = {"api":"http://api.local.kinoulink.com/","stage":"local","debug":true,"version":"3.0.8","root":"/"};

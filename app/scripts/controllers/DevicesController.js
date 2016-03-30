@@ -1,6 +1,8 @@
-kinoulinkApp.controller("DevicesController", ["$scope", "data",
-    function ($scope, dataService)
+kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
+    function ($scope, $rootScope,dataService)
     {
+        $rootScope.menu = 'devices';
+
         function refresh()
         {
             dataService.api('user/devices/', {}, function(response)

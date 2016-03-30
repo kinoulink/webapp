@@ -1,10 +1,11 @@
 'use strict';
 
-var path        = require('path'),
-    gulp        = require('gulp'),
-    conf        = require('./conf'),
-    utils       = require('./utils'),
-    $           = require('gulp-load-plugins')();
+var path            = require('path'),
+    gulp            = require('gulp'),
+    conf            = require('./conf'),
+    utils           = require('./utils'),
+    inlinesource    = require('gulp-inline-source'),
+    $               = require('gulp-load-plugins')();
 
 
 /**
@@ -20,6 +21,9 @@ gulp.task('view:index', function()
     return  processHTML(gulp.src(
                 path.join(conf.paths.src, '*.html')
             ))
+            .pipe(inlinesource({
+                rootpath: conf.paths.build
+            }))
             .pipe(gulp.dest(conf.paths.build))
 });
 

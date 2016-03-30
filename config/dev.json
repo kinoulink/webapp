@@ -4,6 +4,7 @@
     "api" : {
         "url" : "http://api.dev.kinoulink.com"
     },
+    "debug" : true,
     "build" : {
         "optimize" : true,
         "minify" : true,

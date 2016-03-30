@@ -1,0 +1,78 @@
+.LoginController, .RegisterController, .ForgotPassword, .NumberController {
+  nav#menu > *, #header-left-button, #header-right-button {
+    display: none !important;
+  }
+}
+
+
+.LoginController, .RegisterController, .ForgotPassword, .MeProfileController, .NumberController {
+
+
+  .header {
+    background: #808080;
+    padding: 20px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 10px;
+
+    img {
+      height: 28px;
+      vertical-align: baseline;
+    }
+  }
+
+  form {
+    position: relative;
+
+    label {
+      font-style: none;
+    }
+
+    .__t {
+      position: absolute;
+      top: 110px;
+      left: 0;
+      right: 0;
+      text-align: center;
+
+      span {
+        font-size: 18px;
+        background: #cfcfcf;
+        padding: 3px;
+        border-radius: 4px;
+        border: 1px solid #000;
+      }
+    }
+
+    .__s {
+      margin-top: 15px;
+    }
+  }
+
+  &.fx-delay {
+    #page::after {
+      opacity: 0.6;
+    }
+
+    .panel-form {
+      top: 0 !important;
+    }
+  }
+}
+
+html.focus {
+  #page {
+    padding-top: 20px;
+    background: none;
+  }
+}
+
+body.RegisterController {
+  @media (max-width: 400px) {
+    h3 {
+      font-size: 22px;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.media-listing
+{
+  .thumbnail
+  {
+    height: 200px;
+
+    img
+    {
+      display: block;
+      width: 92px;
+      height: 92px;
+    }
+
+    .caption
+    {
+      height: 100px;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+  }
+}

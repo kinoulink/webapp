@@ -1,1 +1,0 @@
-var appConfig = {"api":"http://api.dev.kinoulink.com/","stage":"dev","root":"/"};

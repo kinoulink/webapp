@@ -2,17 +2,16 @@
 {
 	var instance = null;
 	
-	function DataService($rootScope, $http)
+	function DataService($rootScope, $http, Notification)
 	{
-		this.user       = null;
-		this.$rootScope = $rootScope;
-		this.$http      = $http;
-        this.apiRoot    = appConfig.api;
-        this.socket     = null;
+		this.user           = null;
+		this.$rootScope     = $rootScope;
+		this.$http          = $http;
+        this.Notification   = Notification;
+        this.apiRoot        = appConfig.api;
 
         this.$rootScope.messenger_connected = false;
 	}
-
 
     DataService.prototype.sendMessage = function(name, args)
     {
@@ -68,6 +67,17 @@
 
                 response = {status:500, data:null};
             }
+            else
+            {
+                if (response.status == 200)
+                {
+                    Rollbar.info("API /" + service, {query : param});
+                }
+                else
+                {
+                    Rollbar.error("API /" + service, {query : param, response : response});
+                }
+            }
 
            /* if (parseInt(response.status) >= 300)
             {
@@ -98,7 +108,7 @@
 
     DataService.prototype.notifyDisplayToast = function(type, title, message)
     {
-        instance.sendMessage('notify.toast.display', {type: type, title: title, message: message});
+        this.Notification.error({message : message, title : title, positionY : 'bottom'});
     };
 
     DataService.prototype.notifyPlaySound = function()
@@ -106,11 +116,11 @@
         instance.sendMessage('notify.sound.play');
     };
 	
-	kinoulinkApp.factory("data", ["$rootScope", "$http", function($rootScope, $http)
+	kinoulinkApp.factory("data", ["$rootScope", "$http", "Notification", function($rootScope, $http, Notification)
 	{
 		if (instance === null)
 		{
-			instance = new DataService($rootScope, $http);
+			instance = new DataService($rootScope, $http, Notification);
 		}
 		
 		return instance;

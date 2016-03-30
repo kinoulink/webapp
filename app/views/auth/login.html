@@ -5,15 +5,30 @@
 
 			<h3>Se connecter à kinoulink</h3>
 
-			<form id="loginForm" class="form-horizontal" autocomplete="true" ng-submit="doLogin()" onsubmit="return false">
-				<div class="__ig">
-					<i class="fa fa-user"></i>
-					<input type="text" name="login" spellcheck="false" ng-model="username" class="form-control" ng-focus="onInputFocus()" placeholder="Login">
-				</div>
-				<div class="__ig">
-					<i class="fa fa-unlock-alt"></i>
-					<input type="password" name="password" ng-model="password" class="form-control" ng-focus="onInputFocus()" placeholder="Mot de passe">
-				</div>
+            <hr />
+
+            <div ng-show="connected" class="alert alert-success text-center">
+                Vous êtes connecté !
+                <br />
+                <a href="/">Si vous n'êtes pas redirigé automatiquement vers votre compte, cliquez ici</a>
+            </div>
+
+			<form id="loginForm" ng-hide="connected" class="form-horizontal" autocomplete="true" ng-submit="doLogin()">
+
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-2 control-label" for="inputFirstname">Login <i class="required"></i></label>
+                    <div class="col-sm-10 col-md-9">
+                        <input type="text" ng-model="username" class="form-control" id="inputFirstname" ng-focus="onInputFocus()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 col-md-3 control-label" for="inputPassword">Mot de passe <i class="required"></i></label>
+                    <div class="col-sm-10 col-md-9">
+                        <input type="password" ng-model="password" class="form-control" id="inputPassword" ng-focus="onInputFocus()">
+                    </div>
+                </div>
+
 				<div class="row text-center">
 					<div class="col-sm-6">
 						<button class="btn btn-success" type="submit">Se connecter</button>
@@ -22,6 +37,7 @@
 						<a class="btn btn-link" ng-href="#/forgot-password">Mot de passe oublié ?</a>
 					</div>
 				</div>
+
 			</form>
 			<hr />
 			<div class="text-center">

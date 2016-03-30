@@ -1,5 +1,5 @@
 var kinoulinkMe = null,
-    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'angular-loading-bar'])
+    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -16,6 +16,8 @@ var kinoulinkMe = null,
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
     {
         $body.attr('class', evData.controller);
+
+        $rootScope.sidebarToggled = false;
 
         setTimeout(function()
         {

@@ -1,19 +1,17 @@
-<div class="container">
+<header>
+    <h1>Mes Média</h1>
+</header>
 
-    <h2>Mes Média</h2>
+<section class="container">
 
-    <div class="device-list-item" ng-repeat="media in medias">
-        <i class="fa fa-tablet"></i>
-        <h4>{{ media.data.name }}</h4>
-    </div>
+    <form ng-submit="add()" class="panel-form">
 
-    <h2>Ajouter</h2>
-
-    <form ng-submit="add()">
+        <h2>Un nouveau média ?</h2>
 
         <button ngf-select="onFileSelect($files)" class="btn btn-success">Sélectionner une vidéo ou photo ..
         </button>
-        <br/>
+
+        <hr />
 
         <div class="clearfix text-center">
             <div class="progress" ng-show="uploadProgress > 0">
@@ -26,4 +24,22 @@
 
     </form>
 
-</div>
+    <div ng-class="{'panel-form' : true, 'loading' : loading }">
+        <div class="alert alert-info" ng-show="medias.length == 0">
+            Vous n'avez pas encore téléchargé de photos ou vidéos!
+        </div>
+
+        <div class="row media-listing">
+            <div class="col-sm-6 col-md-4" ng-repeat="media in medias">
+                <div class="thumbnail">
+                    <img ng-src="{{ media.thumbnail }}">
+                    <div class="caption">
+                        <p>{{ media.data.name }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

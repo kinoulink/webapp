@@ -1,6 +1,8 @@
-kinoulinkApp.controller("DeviceController", ["$scope", "data", "router",
-    function ($scope, dataService, router)
+kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
     {
+        $rootScope.menu = "devices";
+
         var device = router.get('token');
 
         function refresh()

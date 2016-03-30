@@ -1,0 +1,32 @@
+@import "../variables";
+
+article
+{
+  float: right !important;
+  padding:0 !important;
+  /*box-shadow: -10px 0 10px rgba(0,0,0,0.5);*/
+  height: 100vh;
+
+  header
+  {
+    background: $color-header-background;
+    border-bottom: 1px solid $color-header-border;
+    margin-bottom: 20px;
+
+    h1
+    {
+      margin: 0;
+      padding: 0;
+      color: $color-header-font;
+      text-align: center;
+      line-height: 60px;
+    }
+  }
+
+  h2, h3, h4
+  {
+    color: $color-article-heading;
+    text-align: center;
+    font-weight: 200;
+  }
+}

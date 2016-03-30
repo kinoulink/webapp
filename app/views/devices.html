@@ -1,15 +1,10 @@
+<header>
+    <h1>Mes KinouTV</h1>
+</header>
+
 <div class="container">
 
-    <h2>Mes KinouTV</h2>
-
-    <div class="panel-form">
-        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
-            <i class="fa fa-tablet"></i>
-            <h4>{{ device.device }}</h4>
-        </a>
-    </div>
-
-    <h2>Ajouter</h2>
+    <h2>Un nouveau boîtier ?</h2>
 
     <form class="panel-form" ng-submit="add()">
 
@@ -18,10 +13,24 @@
                 <input ng-model="add.code" type="text" placeholder="Code" class="form-control" />
             </div>
             <div class="col-sm-6">
+                <br class="visible-xs" />
                 <input type="submit" class="btn btn-success" />
             </div>
         </div>
 
     </form>
+
+    <hr />
+
+    <h2>Mes KTVs</h2>
+
+    <div class="panel-form">
+        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
+            <i class="fa fa-tablet"></i>
+            <h4>{{ device.device }}</h4>
+        </a>
+    </div>
+
+
 
 </div>
