@@ -3,9 +3,11 @@ kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
     {
         $rootScope.menu = 'devices';
 
+        $scope.deviceNew = {};
+
         function refresh()
         {
-            dataService.api('user/devices/', {}, function(response)
+            dataService.apiGet('device', {}, function(response)
             {
                 $scope.devices = response.data;
             });
@@ -14,7 +16,7 @@ kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
 
         $scope.add = function()
         {
-            dataService.api('user/devices/attach', { device : $scope.add.code }, function(response)
+            dataService.apiPost('device/create', $scope.deviceNew, function(response)
             {
                 if (response.status == 200)
                 {

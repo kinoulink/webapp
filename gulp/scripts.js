@@ -7,7 +7,7 @@ var path        = require('path'),
 
 var scripts = {
     app:[
-            "{APP}/scripts/app.js",
+            "{APP}/scripts/*.js",
             "{APP}/scripts/filters/*.js",
             "{APP}/scripts/directives/*.js",
             "{APP}/scripts/services/*.js",
@@ -26,6 +26,9 @@ var scripts = {
             "{VENDOR}/angular-bootstrap/ui-bootstrap.js",
             "{VENDOR}/angular-bootstrap/ui-bootstrap-tpls.js",
             "{VENDOR}/angular-ui-notification/dist/angular-ui-notification.js",
+            "{VENDOR}/jquery/dist/jquery.js",
+            "{VENDOR}/fullcalendar/dist/fullcalendar.min.js",
+            "{VENDOR}/angular-ui-calendar/src/calendar.js",
             "{APP}/scripts/vendor/*"
         ]
 };

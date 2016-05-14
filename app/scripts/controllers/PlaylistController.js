@@ -1,15 +1,15 @@
-kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "router",
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router",
     function ($scope, $rootScope, dataService, router)
     {
-        $rootScope.menu = "devices";
+        $rootScope.menu = "playlist";
 
-        var device = router.get('token');
+        var token = router.get('token');
 
         function refresh()
         {
-            dataService.apiGet('device/' + device, { }, function(response)
+            dataService.apiGet('playlist/' + token, { }, function(response)
             {
-                $scope.device = response.data;
+                $scope.playlist = response.data;
             });
         }
 

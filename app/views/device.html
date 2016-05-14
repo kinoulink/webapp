@@ -1,43 +1,16 @@
 <header>
-    <h1>Ma KinouTV {{ device.token }}</h1>
+    <h1>Ma KTV "{{ device.title }}"</h1>
 </header>
 
 <div class="container">
 
-    <h3>Média</h3>
+    <h3>Calendrier - Playlist</h3>
 
     <div class="panel-form">
 
-        <div ng-show="device.media.length == 0">
-            <div class="alert alert-info">
-                Pas de média ;-(
-            </div>
-        </div>
-
-        <a class="btn btn-primary" href="#/devices/{{ device.token }}/media/add">Ajouter un média</a>
+        <a class="btn btn-primary" href="#/calendar/{{ device.calendar }}">Voir le calendrier</a>
 
         <hr />
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                    Intitulé
-                </th>
-                <th>
-
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="media in device.media">
-                    <td>{{ media.data.name }}</td>
-                    <td>
-                        <a ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
     </div>
 

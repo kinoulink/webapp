@@ -1,31 +1,20 @@
-kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
-	function($scope, data, router)
+kinoulinkApp.controller("LoginController", ["$scope", "$rootScope", "data", "router",
+	function($scope, $rootScope, data, router)
 {
 	$scope.username = "";
 	$scope.password = "";
 
     $scope.connected = false;
 
-    if (data.user !== null)
-    {
-        router.reloadApp();
-    }
-
-	if (appConfig.phonegap)
-	{
-		$scope.username = window.localStorage.getItem('default_username');
-	}
+	$scope.username = data.getLocal('default_username');
 
 	$scope.doLogin = function()
 	{
 		var extraData = {device : appConfig.device};
 
-		if (appConfig.phonegap)
-		{
-			window.localStorage.setItem('default_username', $scope.username);
-		}
+		data.setLocal('default_username', $scope.username);
 
-		data.api('user/auth/login', {login: $scope.username, password: $scope.password, extra : extraData}, function(response)
+		data.api('user/login', {email: $scope.username, password: $scope.password, extra : extraData}, function(response)
 		{
 			if (response.status == 200)
 			{
@@ -36,6 +25,12 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
                 router.reloadApp();
 
                 $scope.connected = true;
+
+                $rootScope.user = response.data.user;
+                $rootScope.accessToken = response.data.access_token;
+
+                data.setLocal('access_token', response.data.access_token);
+
 /*
 				if (appConfig.phonegap)
 				{

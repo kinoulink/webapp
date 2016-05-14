@@ -3,10 +3,9 @@ kinoulinkApp.controller("menu", ["$scope", "$window", "data",
     {
         $scope.logout = function()
         {
-            dataService.api('/user/auth/logout', {}, function()
-            {
-                $window.location.reload();
-            });
+            localStorage.removeItem('access_token');
+
+            $window.location.reload();
         };
 
     }]);

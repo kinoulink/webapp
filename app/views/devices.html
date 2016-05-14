@@ -4,33 +4,48 @@
 
 <div class="container">
 
+    <h2>Mes KTVs</h2>
+
+    <div class="panel-form">
+        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.id }}">
+            <i class="fa fa-tablet"></i>
+            <h4>{{ device.title }}</h4>
+        </a>
+    </div>
+
+    <hr />
+
     <h2>Un nouveau boîtier ?</h2>
 
     <form class="panel-form" ng-submit="add()">
 
         <div class="row">
-            <div class="col-sm-6">
-                <input ng-model="add.code" type="text" placeholder="Code" class="form-control" />
+            <div class="col-sm-4">
+                <label for="inputSerial">Code secret</label>
             </div>
             <div class="col-sm-6">
-                <br class="visible-xs" />
-                <input type="submit" class="btn btn-success" />
+                <input id="inputSerial" name="serial" ng-model="deviceNew.token" type="text" class="form-control" />
             </div>
         </div>
 
+        <br />
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputTitle">Intitulé</label>
+            </div>
+            <div class="col-sm-6">
+                <input id="inputTitle" name="title" ng-model="deviceNew.title" type="text" class="form-control" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="col-sm-6 col-sm-offset-4">
+            <br class="visible-xs" />
+            <input type="submit" class="btn btn-success" />
+        </div>
+
     </form>
-
-    <hr />
-
-    <h2>Mes KTVs</h2>
-
-    <div class="panel-form">
-        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.device }}">
-            <i class="fa fa-tablet"></i>
-            <h4>{{ device.device }}</h4>
-        </a>
-    </div>
-
-
 
 </div>

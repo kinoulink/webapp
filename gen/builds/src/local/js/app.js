@@ -1,5 +1,4 @@
-var kinoulinkMe = null,
-    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
+var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar', 'ui.calendar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -8,9 +7,9 @@ var kinoulinkMe = null,
 
     $html.removeClass('loading');
 
-    if (kinoulinkMe !== null)
+    if (_global_bootstrap_data !== null)
     {
-        data.setUser(kinoulinkMe);
+        $rootScope.user = _global_bootstrap_data;
     }
 
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
@@ -37,7 +36,7 @@ var kinoulinkMe = null,
         templateUrl: bzrup("about")
     });
 
-    if (kinoulinkMe === null)
+    if (_global_bootstrap_data === null)
     {
         $routeProvider.when('/login', {
             templateUrl: bzrup("auth/login"),
@@ -61,6 +60,7 @@ var kinoulinkMe = null,
             controller: 'home',
             reloadOnSearch: false
         })
+
         .when('/devices', {
             templateUrl: bzrup('devices'),
             controller: 'DevicesController'
@@ -73,6 +73,26 @@ var kinoulinkMe = null,
             templateUrl: bzrup('deviceMediaAdd'),
             controller: 'DeviceMediaAddController'
         })
+
+        .when('/calendar', {
+            templateUrl: bzrup('calendar_list'),
+            controller: 'CalendarsController'
+        })
+        .when('/calendar/:token', {
+            templateUrl: bzrup('calendar_details'),
+            controller: 'CalendarController'
+        })
+
+        .when('/playlist', {
+            templateUrl: bzrup('playlist_list'),
+            controller: 'PlaylistsController'
+        })
+        .when('/playlist/:token', {
+            templateUrl: bzrup('playlist_details'),
+            controller: 'PlaylistController'
+        })
+
+
         .when('/media', {
             templateUrl: bzrup('media'),
             controller: 'MediaController'
@@ -82,46 +102,6 @@ var kinoulinkMe = null,
         });
     }
 }]);
-
-(function()
-{
-    var initInjector = angular.injector(['ng']);
-    var $http = initInjector.get('$http');
-
-    $http({
-        method: 'POST',
-        url: appConfig.api + 'user/me',
-        withCredentials: true,
-        cache: false,
-        responseType: "json",
-        timeout : 20000,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).
-    error(function(data)
-    {
-        if (data === null)
-        {
-            data = {data : {message : "Vérifiez votre connexion Internet!"}};
-        }
-
-        angular.elementById('body').html('<div style="margin:2em" class="alert alert-danger"><h1>Oups, kinoulink a un problème: </h1><p>' + data.data.message + '</p></div>');
-    }).
-    then(function(response)
-    {
-        var apiResponse = response.data;
-
-        if (apiResponse.status === 200)
-        {
-            kinoulinkMe = apiResponse.data;
-
-            ga('set', '&uid', kinoulinkMe.id);
-        }
-
-        angular.element(document).ready(function() {
-            angular.bootstrap(document, ['kinoulinkApp']);
-        });
-    })
-})();
 
 function formatDateVerbose(value)
 {
@@ -162,6 +142,46 @@ Object.values = function (obj) {
     }
     return vals;
 };
+(function()
+{
+    var initInjector = angular.injector(['ng']);
+    var $http = initInjector.get('$http');
+    var accessToken = localStorage.getItem('access_token');
+
+    $http({
+        method: 'POST',
+        url: appConfig.api + 'user/me',
+        withCredentials: true,
+        cache: false,
+        responseType: "json",
+        timeout : 20000,
+        headers : {'Content-Type': 'application/json', 'X-Auth-Token' : accessToken}
+    }).
+    error(function(data)
+    {
+        if (data === null)
+        {
+            data = {data  : "Vérifiez votre connexion Internet!"};
+        }
+
+        angular.elementById('body').html('<div style="margin:2em" class="alert alert-danger"><h1>Oups, kinoulink a un problème: </h1><p>' + data.data + '</p></div>');
+    }).
+    then(function(response)
+    {
+        var apiResponse = response.data;
+
+        if (apiResponse.status === 200)
+        {
+            _global_bootstrap_data = apiResponse.data;
+
+            ga('set', '&uid', _global_bootstrap_data);
+        }
+
+        angular.element(document).ready(function() {
+            angular.bootstrap(document, ['kinoulinkApp']);
+        });
+    })
+})();
 kinoulinkApp.filter('kinoulinkState', function()
 {
     return function(value)
@@ -748,100 +768,123 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
        }
    };
 }]);
-(function(angular, bz)
+kinoulinkApp.factory("data",
+    ["$rootScope", "$http", "Notification", function($rootScope, $http, Notification)
 {
-	var instance = null;
-	
-	function DataService($rootScope, $http, Notification)
-	{
-		this.user           = null;
-		this.$rootScope     = $rootScope;
-		this.$http          = $http;
-        this.Notification   = Notification;
-        this.apiRoot        = appConfig.api;
-
-        this.$rootScope.messenger_connected = false;
-	}
-
-    DataService.prototype.sendMessage = function(name, args)
-    {
-        return instance.$rootScope.$broadcast(name, args);
-    };
-
-	DataService.prototype.setUser = function(value)
-	{
-        if (instance.user === null)
+    return {
+        displayError: function (title, response)
         {
-            instance.user = value;
-        }
-
-		instance.user = value;
-
-        instance.sendMessage('bind.user', value);
-	};
-
-    DataService.prototype.displayError = function(title, response)
-    {
-        if (response.data.hasOwnProperty('error'))
-        {
-            this.notifyDisplayToast('danger', title, response.data.error);
-        }
-        else
-        {
-            this.notifyDisplayToast('danger', title, response.data);
-        }
-    };
-	
-	DataService.prototype.api = function(service, param, callback)
-	{
-        if (instance.user !== null)
-        {
-            param['user_access_token'] = instance.user.access_token;
-        }
-
-		return instance.$http({
-			method: 'POST',
-			url: instance.apiRoot + service,
-			data: param,
-			withCredentials: true,
-			cache: false,
-			responseType: "json",
-            timeout : 20000,
-			headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-		}).
-        success(function(response, status, headers, config)
-        {
-            if (response === null)
+            if (response.hasOwnProperty('data'))
             {
-                instance.notifyDisplayToast('danger', 'kinoulink API', 'Le serveur kinoulink semble rencontrer un petit problème ;-(');
-
-                response = {status:500, data:null};
-            }
-            else
-            {
-                if (response.status == 200)
+                if (response.data.hasOwnProperty('error'))
                 {
-                    Rollbar.info("API /" + service, {query : param});
+                    notifyDisplayToast('danger', title, response.data.error);
                 }
                 else
                 {
-                    Rollbar.error("API /" + service, {query : param, response : response});
+                    notifyDisplayToast('danger', title, response.data);
                 }
             }
-
-           /* if (parseInt(response.status) >= 300)
+            else if (response.hasOwnProperty('code'))
             {
-                instance.notifyDisplayToast('danger', 'kinoulink API', 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data.message);
+                if (response.code === 'E_VALIDATION')
+                {
+                    var message = '';
+
+                    for (var key in response.invalidAttributes)
+                    {
+                        message += key + ' : ' + response.invalidAttributes[key][0].message + "\n<br />";
+                    }
+
+                    notifyDisplayToast('danger', 'Erreur de validation', message);
+                }
             }
-*/
+        },
+
+        setLocal: function(key, value)
+        {
+            localStorage.setItem(key, value);
+        },
+
+        getLocal : function(key)
+        {
+            return localStorage.getItem(key);
+        },
+
+        apiGet: function(service, param, cb)
+        {
+            return callAPI('get', service, param, cb);
+        },
+
+        apiPost: function(service, param, cb)
+        {
+            return callAPI('post', service, param, cb);
+        },
+
+        api: callAPI,
+
+        notifyDisplayToast: notifyDisplayToast
+    };
+
+    function notifyDisplayToast(type, title, message)
+    {
+        Notification.error({
+            message: message,
+            title: title,
+            positionY: 'bottom'
+        });
+    }
+
+    function callAPI(method, service, param, callback)
+    {
+        return $http({
+            method: method,
+            url: appConfig.api + service,
+            data: param,
+            withCredentials: false,
+            cache: false,
+            responseType: "json",
+            timeout: 20000,
+            headers: {'Content-Type': 'application/json', 'X-Auth-Token' : $rootScope.accessToken}
+        }).success(function (response, status, headers, config)
+        {
+            if (response === null)
+            {
+                notifyDisplayToast('danger', 'kinoulink API', 'Le serveur kinoulink semble rencontrer un petit problème ;-(');
+
+                response = {
+                    status: 500,
+                    data: null
+                };
+            }
+            else
+            {
+                /*  if (response.status == 200)
+                 {
+                 Rollbar.info("API /" + service, {query : param});
+                 }
+                 else
+                 {
+                 Rollbar.error("API /" + service, {query : param, response : response});
+                 }*/
+            }
+
+            /* if (parseInt(response.status) >= 300)
+             {
+             instance.notifyDisplayToast('danger', 'kinoulink API', 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data.message);
+             }
+             */
             callback(response);
-        }).error(function(response, status, headers, config)
+        }).error(function (response, status, headers, config)
         {
             var error;
 
             if (response === null)
             {
-                response = {status:500, data:null};
+                response = {
+                    status: 500,
+                    data: null
+                };
 
                 error = 'Le serveur kinoulink semble rencontrer un petit problème ;-(';
             }
@@ -850,32 +893,14 @@ kinoulinkApp.factory("browser", ["layout", function(layout)
                 error = 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data;
             }
 
-            instance.notifyDisplayToast('danger', 'kinoulink API', error);
+            notifyDisplayToast('danger', 'kinoulink API', error);
 
             callback(response);
-		});
-	};
+        });
+    }
 
-    DataService.prototype.notifyDisplayToast = function(type, title, message)
-    {
-        this.Notification.error({message : message, title : title, positionY : 'bottom'});
-    };
 
-    DataService.prototype.notifyPlaySound = function()
-    {
-        instance.sendMessage('notify.sound.play');
-    };
-	
-	kinoulinkApp.factory("data", ["$rootScope", "$http", "Notification", function($rootScope, $http, Notification)
-	{
-		if (instance === null)
-		{
-			instance = new DataService($rootScope, $http, Notification);
-		}
-		
-		return instance;
-	}]);
-})(angular, window.bz);
+}]);
 kinoulinkApp.factory('layout', function()
 {
     function init()
@@ -1019,6 +1044,75 @@ kinoulinkApp.factory('router', [
         };
     }
 ]);
+kinoulinkApp.controller("CalendarController", ["$scope", "$rootScope", "data", "uiCalendarConfig",
+    function ($scope, $rootScope, dataService, uiCalendarConfig)
+    {
+        $rootScope.menu = "calendar";
+
+        $scope.eventSources = [];
+
+        $scope.uiConfig = {
+            calendar:{
+                height: 600,
+                editable: true,
+                header:{
+                    left: 'title',
+                    center: '',
+                    right: 'today prev,next'
+                }
+            }
+        };
+
+        /* remove event */
+        $scope.remove = function(index) {
+            $scope.events.splice(index,1);
+        };
+        /* Change View */
+        $scope.changeView = function(view,calendar) {
+            getCalendar().fullCalendar('changeView',view);
+        };
+        /* Change View */
+        $scope.renderCalender = function(calendar) {
+            if(uiCalendarConfig.calendars[calendar]){
+                uiCalendarConfig.calendars[calendar].fullCalendar('render');
+            }
+        };
+        /* Render Tooltip */
+        $scope.eventRender = function( event, element, view ) {
+            element.attr({'tooltip': event.title,
+                'tooltip-append-to-body': true});
+            $compile(element)($scope);
+        };
+
+        function getCalendar()
+        {
+            return uiCalendarConfig.calendars['myCalendar'];
+        }
+    }]);
+kinoulinkApp.controller("CalendarsController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
+    {
+        $rootScope.menu = "calendar";
+        $scope.calendarNew = null;
+
+        function refresh()
+        {
+            dataService.apiGet('calendar', {}, function(response)
+            {
+                $scope.calendars = response.data;
+            });
+        }
+
+        $scope.create = function()
+        {
+            dataService.apiPost('calendar/create', $scope.calendarNew, function(response)
+            {
+                refresh();
+            });
+        };
+
+        refresh();
+    }]);
 kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "router",
     function ($scope, $rootScope, dataService, router)
     {
@@ -1028,7 +1122,7 @@ kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "ro
 
         function refresh()
         {
-            dataService.api('user/devices/details', { device : device}, function(response)
+            dataService.apiGet('device/' + device, { }, function(response)
             {
                 $scope.device = response.data;
             });
@@ -1102,9 +1196,11 @@ kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
     {
         $rootScope.menu = 'devices';
 
+        $scope.deviceNew = {};
+
         function refresh()
         {
-            dataService.api('user/devices/', {}, function(response)
+            dataService.apiGet('device', {}, function(response)
             {
                 $scope.devices = response.data;
             });
@@ -1113,7 +1209,7 @@ kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
 
         $scope.add = function()
         {
-            dataService.api('user/devices/attach', { device : $scope.add.code }, function(response)
+            dataService.apiPost('device/create', $scope.deviceNew, function(response)
             {
                 if (response.status == 200)
                 {
@@ -1138,34 +1234,23 @@ kinoulinkApp.controller("ForgotPassword", ["$scope", "data",
 
         $scope.loading = false;
     }]);
-kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
-	function($scope, data, router)
+kinoulinkApp.controller("LoginController", ["$scope", "$rootScope", "data", "router",
+	function($scope, $rootScope, data, router)
 {
 	$scope.username = "";
 	$scope.password = "";
 
     $scope.connected = false;
 
-    if (data.user !== null)
-    {
-        router.reloadApp();
-    }
-
-	if (appConfig.phonegap)
-	{
-		$scope.username = window.localStorage.getItem('default_username');
-	}
+	$scope.username = data.getLocal('default_username');
 
 	$scope.doLogin = function()
 	{
 		var extraData = {device : appConfig.device};
 
-		if (appConfig.phonegap)
-		{
-			window.localStorage.setItem('default_username', $scope.username);
-		}
+		data.setLocal('default_username', $scope.username);
 
-		data.api('user/auth/login', {login: $scope.username, password: $scope.password, extra : extraData}, function(response)
+		data.api('user/login', {email: $scope.username, password: $scope.password, extra : extraData}, function(response)
 		{
 			if (response.status == 200)
 			{
@@ -1176,6 +1261,12 @@ kinoulinkApp.controller("LoginController", ["$scope", "data", "router",
                 router.reloadApp();
 
                 $scope.connected = true;
+
+                $rootScope.user = response.data.user;
+                $rootScope.accessToken = response.data.access_token;
+
+                data.setLocal('access_token', response.data.access_token);
+
 /*
 				if (appConfig.phonegap)
 				{
@@ -1371,7 +1462,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
 
         function refresh()
         {
-            dataService.api('user/media/', {}, function(response)
+            dataService.apiGet('media', {}, function(response)
             {
                 $scope.loading = false;
 
@@ -1393,17 +1484,19 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
             $scope.uploadProgress = 0;
 
             $scope.upload = Upload.upload({
-                url: dataService.apiRoot + 'user/media/upload',
+                url: appConfig.api + 'media/upload',
                 method: 'POST',
                 cache: false,
                 responseType: "json",
-                headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+                headers : {'Content-Type': 'application/x-www-form-urlencoded', 'X-Auth-Token' : $rootScope.accessToken},
                 withCredentials: true,
                 file: fileToUpload
-            }).progress(function(evt)
+            })
+            .progress(function(evt)
             {
                 $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-            }).success(function(data, status, headers, config)
+            })
+            .success(function(data, status, headers, config)
             {
                 $scope.uploadProgress = 0;
 
@@ -1459,6 +1552,89 @@ kinoulinkApp.controller('NotifyController', ['$scope', 'data', function($scope, 
     $scope.$on('notify.toast.display', displayToast);
 
 }]);
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
+    {
+        $rootScope.menu = "playlist";
+
+        var token = router.get('token');
+
+        function refresh()
+        {
+            dataService.apiGet('playlist/' + token, { }, function(response)
+            {
+                $scope.playlist = response.data;
+            });
+        }
+
+        $scope.addMedia = function()
+        {
+            dataService.api('user/devices/media/add', { device : device }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.detach = function()
+        {
+            dataService.api('user/devices/detach', { device : device }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.sendAction = function(action)
+        {
+            dataService.api('user/devices/actions/add', { device : device, action : action }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.removeMedia = function(media)
+        {
+            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        refresh();
+
+    }]);
+kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
+    {
+        $rootScope.menu = "playlist";
+        $scope.playlists = [];
+        $scope.playlistNew = {};
+
+        function refresh()
+        {
+            dataService.apiGet('playlist', { }, function(response)
+            {
+                $scope.playlists = response.data;
+            });
+        }
+
+        $scope.add = function()
+        {
+            dataService.apiPost('playlist/create', $scope.playlistNew, function(response)
+            {
+                if (response.status == 200)
+                {
+                    refresh();
+                }
+                else
+                {
+                    dataService.displayError('Nouvelle Playlist', response);
+                }
+            });
+        };
+
+        refresh();
+
+    }]);
 kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "router",
 	function($scope, $location, data, router)
 {
@@ -1501,7 +1677,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
         $scope.loading = true;
 
-		data.api('user/auth/register', params, function(response)
+		data.api('user/create', params, function(response)
 		{
             $scope.loading = false;
 
@@ -1554,10 +1730,9 @@ kinoulinkApp.controller("menu", ["$scope", "$window", "data",
     {
         $scope.logout = function()
         {
-            dataService.api('/user/auth/logout', {}, function()
-            {
-                $window.location.reload();
-            });
+            localStorage.removeItem('access_token');
+
+            $window.location.reload();
         };
 
     }]);

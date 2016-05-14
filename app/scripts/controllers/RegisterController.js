@@ -40,7 +40,7 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
 
         $scope.loading = true;
 
-		data.api('user/auth/register', params, function(response)
+		data.api('user/create', params, function(response)
 		{
             $scope.loading = false;
 

@@ -2,7 +2,7 @@
     "name" : "kinoulink",
     "stage" : "local",
     "api" : {
-        "url" : "http://api.local.kinoulink.com"
+        "url" : "http://localhost:1337"
     },
     "debug" : true,
     "build" : {

@@ -1,5 +1,4 @@
-var kinoulinkMe = null,
-    kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
+var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar', 'ui.calendar'])
 
 .run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
 {
@@ -8,9 +7,9 @@ var kinoulinkMe = null,
 
     $html.removeClass('loading');
 
-    if (kinoulinkMe !== null)
+    if (_global_bootstrap_data !== null)
     {
-        data.setUser(kinoulinkMe);
+        $rootScope.user = _global_bootstrap_data;
     }
 
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
@@ -37,7 +36,7 @@ var kinoulinkMe = null,
         templateUrl: bzrup("about")
     });
 
-    if (kinoulinkMe === null)
+    if (_global_bootstrap_data === null)
     {
         $routeProvider.when('/login', {
             templateUrl: bzrup("auth/login"),
@@ -61,6 +60,7 @@ var kinoulinkMe = null,
             controller: 'home',
             reloadOnSearch: false
         })
+
         .when('/devices', {
             templateUrl: bzrup('devices'),
             controller: 'DevicesController'
@@ -73,6 +73,26 @@ var kinoulinkMe = null,
             templateUrl: bzrup('deviceMediaAdd'),
             controller: 'DeviceMediaAddController'
         })
+
+        .when('/calendar', {
+            templateUrl: bzrup('calendar_list'),
+            controller: 'CalendarsController'
+        })
+        .when('/calendar/:token', {
+            templateUrl: bzrup('calendar_details'),
+            controller: 'CalendarController'
+        })
+
+        .when('/playlist', {
+            templateUrl: bzrup('playlist_list'),
+            controller: 'PlaylistsController'
+        })
+        .when('/playlist/:token', {
+            templateUrl: bzrup('playlist_details'),
+            controller: 'PlaylistController'
+        })
+
+
         .when('/media', {
             templateUrl: bzrup('media'),
             controller: 'MediaController'
@@ -82,46 +102,6 @@ var kinoulinkMe = null,
         });
     }
 }]);
-
-(function()
-{
-    var initInjector = angular.injector(['ng']);
-    var $http = initInjector.get('$http');
-
-    $http({
-        method: 'POST',
-        url: appConfig.api + 'user/me',
-        withCredentials: true,
-        cache: false,
-        responseType: "json",
-        timeout : 20000,
-        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).
-    error(function(data)
-    {
-        if (data === null)
-        {
-            data = {data : {message : "Vérifiez votre connexion Internet!"}};
-        }
-
-        angular.elementById('body').html('<div style="margin:2em" class="alert alert-danger"><h1>Oups, kinoulink a un problème: </h1><p>' + data.data.message + '</p></div>');
-    }).
-    then(function(response)
-    {
-        var apiResponse = response.data;
-
-        if (apiResponse.status === 200)
-        {
-            kinoulinkMe = apiResponse.data;
-
-            ga('set', '&uid', kinoulinkMe.id);
-        }
-
-        angular.element(document).ready(function() {
-            angular.bootstrap(document, ['kinoulinkApp']);
-        });
-    })
-})();
 
 function formatDateVerbose(value)
 {

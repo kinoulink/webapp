@@ -1,0 +1,44 @@
+<header>
+    <h1>Playlist "{{ playlist.title }}"</h1>
+</header>
+
+<div class="container">
+
+    <h3>Média</h3>
+
+    <div class="panel-form">
+
+        <div ng-show="playlist.media.length == 0">
+            <div class="alert alert-info">
+                Pas de média ;-(
+            </div>
+        </div>
+
+        <hr />
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Intitulé
+                </th>
+                <th>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="media in device.media">
+                <td>{{ media.data.name }}</td>
+                <td>
+                    <a ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br />
+
+</div>

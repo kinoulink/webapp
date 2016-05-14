@@ -6,7 +6,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
 
         function refresh()
         {
-            dataService.api('user/media/', {}, function(response)
+            dataService.apiGet('media', {}, function(response)
             {
                 $scope.loading = false;
 
@@ -28,17 +28,19 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
             $scope.uploadProgress = 0;
 
             $scope.upload = Upload.upload({
-                url: dataService.apiRoot + 'user/media/upload',
+                url: appConfig.api + 'media/upload',
                 method: 'POST',
                 cache: false,
                 responseType: "json",
-                headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+                headers : {'Content-Type': 'application/x-www-form-urlencoded', 'X-Auth-Token' : $rootScope.accessToken},
                 withCredentials: true,
                 file: fileToUpload
-            }).progress(function(evt)
+            })
+            .progress(function(evt)
             {
                 $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-            }).success(function(data, status, headers, config)
+            })
+            .success(function(data, status, headers, config)
             {
                 $scope.uploadProgress = 0;
 
