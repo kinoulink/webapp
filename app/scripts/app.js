@@ -9,7 +9,8 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
 
     if (_global_bootstrap_data !== null)
     {
-        $rootScope.user = _global_bootstrap_data;
+        $rootScope.user = _global_bootstrap_data.user;
+        $rootScope.accessToken = _global_bootstrap_data.access_token;
     }
 
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)

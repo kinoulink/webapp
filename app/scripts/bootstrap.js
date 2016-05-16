@@ -28,7 +28,10 @@
 
         if (apiResponse.status === 200)
         {
-            _global_bootstrap_data = apiResponse.data;
+            _global_bootstrap_data = {
+                user : apiResponse.data,
+                access_token : accessToken
+            };
 
             ga('set', '&uid', _global_bootstrap_data);
         }
