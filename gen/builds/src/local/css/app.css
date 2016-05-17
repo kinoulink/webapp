@@ -23,20 +23,24 @@ article h2, article h3, article h4 {
 }
 
 #header {
-  line-height: 60px;
-  position: fixed;
-  width: 100%;
   background: white;
   z-index: 1;
   border-bottom: 1px solid #f0f0f0;
-  font-size: 2em;
 }
-#header a {
+#header ._menu {
   display: inline-block;
-  width: 48px;
-  height: 48px;
   text-align: center;
-  line-height: 48px;
+  font-size: 1.4em;
+}
+#header ._title {
+  position: absolute;
+  left: 200px;
+  right: 100px;
+  color: #000;
+  font-size: 2em;
+  font-weight: 400;
+  text-align: center;
+  top: 0;
 }
 
 .LoginController nav#menu > *, .LoginController #header-left-button, .LoginController #header-right-button, .RegisterController nav#menu > *, .RegisterController #header-left-button, .RegisterController #header-right-button, .ForgotPassword nav#menu > *, .ForgotPassword #header-left-button, .ForgotPassword #header-right-button, .NumberController nav#menu > *, .NumberController #header-left-button, .NumberController #header-right-button {
@@ -98,17 +102,30 @@ html.focus #page {
 }
 
 .media-listing .thumbnail {
+  width: 30%;
+  margin-left: 10px;
+  margin-bottom: 10px;
   height: 200px;
+  float: left;
+  position: relative;
+  overflow: hidden;
 }
 .media-listing .thumbnail img {
   display: block;
-  width: 92px;
-  height: 92px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .media-listing .thumbnail .caption {
-  height: 100px;
+  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: absolute;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px;
 }
 
 #menu {
@@ -167,7 +184,6 @@ html.focus #page {
 /* Toggle Styles */
 #wrapper {
   padding-left: 0;
-  padding-top: 60px;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;

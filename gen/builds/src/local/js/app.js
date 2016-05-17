@@ -98,6 +98,11 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
             templateUrl: bzrup('media'),
             controller: 'MediaController'
         })
+        .when('/media/:token', {
+            templateUrl: bzrup('media_details'),
+            controller: 'MediaDetailsController'
+        })
+
         .otherwise({
             redirectTo: '/'
         });
@@ -224,7 +229,7 @@ kinoulinkApp.filter('formatDateVerbose', function()
 {
     return function (input)
     {
-        return moment(input * 1000).fromNow(true);
+        return moment(input).fromNow(true);
     };
 }).filter('momentVerbose', function()
 {
@@ -244,161 +249,48 @@ kinoulinkApp.filter('formatDateVerbose', function()
     {
         return input + ' ' + text + (input > 1 ? 's' : '');
     };
-}).filter('distance', ['data', 'geolocation', function(dataService, geolocation)
-{
-    return function(input)
-    {
-        if (input === null || typeof input === 'undefined') return '';
-
-        var distance = geolocation.getDistanceSimple(dataService.user.position, input);
-
-        if (distance < 0)
-        {
-            return (distance * 1000).toFixed(0) + ' m';
-        }
-        else
-        {
-            return distance.toFixed(2) + ' km';
-        }
-    };
-}]).filter('distance2', function()
-{
-   return function (distance)
-   {
-       if (distance.toFixed(0) <= 0)
-       {
-           return (distance * 1000).toFixed(0) + ' m';
-       }
-       else
-       {
-           return distance.toFixed(0) + ' km';
-       }
-   }
 });
-kinoulinkApp.directive('bzInvitationsReceived', ['data', '$compile', function(dataService, $compile)
+kinoulinkApp.directive('myBreadcrumb', ['$http', function($http)
 {
-    var userID;
+    var breadcrumbData;
 
-    function link(scope, element, attr)
+    function link(scope, element, attrs)
     {
-        userID = scope.me.id;
-
-        scope.$watch(attr.bzInvitationsReceived, function(value)
+        attrs.$observe('myBreadcrumb',
+            function(value)
         {
-            angular.forEach(value, function(item)
+            var html = '<ol class="breadcrumb">';
+
+            value = scope.$eval(value);
+
+            addNote('Accueil', '/');
+
+            value.forEach(function(item)
             {
-                element.append(renderInvitation(item));
+                addNote(item.title, item.hasOwnProperty('link') ? item.link : '');
             });
 
-            $compile(element.contents())(scope);
-        });
-    }
+            html += '</ol>';
 
-    function renderInvitation(invitation)
-    {
-        var accepted = false, declined = false, author = invitation.author.id === userID, html = '<div class="clearfix __row">';
-
-            html += '<div class="table-cell _w-a"><a ng-href="#/u/' + invitation.author.id + '"><img src="' + invitation.author.avatar.big + '" /></a> </div>';
-
-            html += '<div id="invitation-' + invitation.id + '" class="panel-form __m"><div class="row">';
-
-                if (invitation.hasOwnProperty('workflow'))
-                {
-                    angular.forEach(invitation.workflow, function (step)
-                    {
-                        if (step.user === dataService.user.id)
-                        {
-                            if (step.status == 1)
-                            {
-                                accepted = true;
-
-                                html += '<span class="ribbon _accepted"><i class="fa fa-check"></i></span>';
-                            }
-                            else if (step.status == 2)
-                            {
-                                declined = true;
-
-                                html += '<span class="ribbon _declined"><i class="fa fa-plus"></i></span>';
-                            }
-                        }
-                    });
-                }
-
-                html += '<div class="col-sm-8">';
-
-                if (author)
-                {
-                    html += '<h4>Vous avez lancé un bilzunch</h4>';
-                }
+            function addNote(title, link)
+            {
+                if (link)
+                    html += '<li><a href="#' + link + '">' + title + '</a></li>';
                 else
-                {
-                    html += '<h4>' + invitation.author.title + ' vous invite à un kinoulink</h4>';
-                }
+                    html += '<li>' + title + '</li>';
+            }
 
-                html += '<span class="__st">' + formatTimeAgo(invitation.createdat) + '</span>' +
-                            '<p><i class="fa fa-clock-o"></i> ' + formatDateVerbose(invitation.date) + ' (' + formatDateShortFuture(invitation.when) + ') à ' + invitation.time + '</p>' +
-                            '<p><i class="fa fa-map-marker"></i> ' + invitation.place + '</p>';
-
-                            html += '<div>';
-
-                if (invitation.guests.length === 1)
-                {
-                    html += '<p><i class="fa fa-users"></i> un ' + (author ? '' : 'autre ') +  'invité</p>';
-                }
-                else if (invitation.guests.length > 0)
-                {
-                    html += '<p><i class="fa fa-users"></i> ' + invitation.guests.length + (author ? '' : ' autres') +  ' invités</p>';
-                }
-
-                html += '</div>';
-
-                html += '</div>';
-
-                html += '<div class="col-sm-4">';
-
-                invitation.guests.forEach(function(item)
-                {
-                    html += '<span class="guest"><img src="' + item.avatar.small + '" /><br/>' + item.title  + '</span>';
-                });
-
-                html += '</div></div>'; // end row
-
-                html += '<div class="_f">';
-
-                    if (!declined && !accepted && !author)
-                    {
-                        html += '<a class="_a3 pull-right" ng-click="decline(\'' + invitation.id + '\')"><i class="fa fa-times" style="color:indianred"></i> Décliner</a>';
-                        html += '<a class="_a2 pull-right" ng-click="accept(\'' + invitation.id + '\')"><i class="fa fa-check" style="color:darkseagreen"></i> Accepter</a>';
-                    }
-
-                    html += '<a class="_a1" ng-href="#/kinoulink/' + invitation.id + '">Voir en détails</a>';
-
-                html += '</div>';
-
-        html += '</div></div>';
-
-        return html;
-    }
-
-    function formatDateVerbose(value)
-    {
-        return moment(value, 'DD/MM/YYYY').format('dddd D MMMM');
-    }
-
-    function formatDateShortFuture(value)
-    {
-        return moment(value * 1000).from(moment());
-    }
-
-    function formatTimeAgo(value)
-    {
-        return moment(value * 1000).from(moment());
+            element.html(html);
+        })
     }
 
     return {
-        restrict: 'A',
-        invitations: '=bz-invitations-received',
-        link: link
+        restrict : 'A',
+        template : '',
+        link : link,
+        'scope' : {
+            myBreadcrumb : '@'
+        }
     };
 }]);
 kinoulinkApp.directive('bzLoader', function()
@@ -408,355 +300,6 @@ kinoulinkApp.directive('bzLoader', function()
         templateUrl : bzrup('directives/loader')
     }
 });
-kinoulinkApp.directive('bzkinoulinkMessenger', ['data', function(dataService)
-{
-    var previousMessageItem = null, timerScrollBottom = 0, agoCurrent = null, isInitPhase = true, isNoMessages = true,
-        bodyNode = document.getElementById('body');
-
-    function link(scope, rootNode, attr)
-    {
-        scope.submitMessage = function()
-        {
-            var message     = scope.message,
-                threadUID   = scope.thread.id,
-                uid         = dataService.user.id.substr(0, 16) + '-' + (new Date()).getTime();
-
-            if (message.length === 0)
-            {
-                return ;
-            }
-
-            dataService.sendRemoteMessage('chat.message.send', {m : message, t : threadUID});
-
-            dataService.api("inbox/thread/messages/post", {message : message, thread : threadUID, uid : uid}, function(response)
-            {
-
-            });
-
-            renderMessage({
-                id:         uid,
-                user:       dataService.user.id,
-                message:    message,
-                date:       (new Date()).getTime()/1000
-            });
-
-            scope.message = '';
-        };
-
-        scope.onMessageRead = function(message)
-        {
-            if (dataService.user.notifications.messages > 0)
-            {
-                dataService.user.notifications.messages--;
-
-                dataService.sendMessage('bind.user');
-            }
-
-            dataService.sendRemoteMessage('chat.message.read', {i: message.id, t: scope.thread.id});
-        };
-
-        scope.$watch('thread', function (value)
-        {
-            if (angular.isDefined(value))
-            {
-                scope.thread = value;
-
-                if (value.messages.length === 0)
-                {
-                    rootNode.append('<span id="messengerNoMessages" class="text-embossed">Aucun message ;-(</span>');
-                }
-                else
-                {
-                    value.messages.sort(function(a, b)
-                    {
-                        return a.date < b.date ? -1 : 1;
-                    });
-
-                    angular.forEach(value.messages, function (message) {
-                        renderMessage(message);
-                    });
-                }
-
-                isInitPhase = false;
-            }
-        });
-
-        scope.$on('chat.message.received', function (event, incomingData)
-        {
-            if (scope.thread !== null && incomingData.t === scope.thread.id)
-            {
-                renderMessage({
-                    id:         incomingData.i,
-                    user:       incomingData.f,
-                    message:    incomingData.m,
-                    date:       (new Date()).getTime()/1000
-                });
-
-                event.preventDefault();
-            }
-        });
-
-        function getUser(userID)
-        {
-            var foundUser;
-
-            angular.forEach(scope.thread.users, function (user) {
-                if (user.id === userID) {
-                    foundUser = user;
-                }
-            });
-
-            if (foundUser === null) {
-                foundUser = {title : 'kinoulink', avatar: appConfig.root + 'images/avatar.gif'};
-            }
-
-            return foundUser;
-        }
-
-        function renderMessage(message)
-        {
-            var userID          = message.user,
-                user            = getUser(userID),
-                clazz           = (userID === dataService.user.id ? 'from' : 'to'),
-                chatNode        = angular.element(rootNode.children()[0]),
-                agoMessage      = moment(message.date * 1000).fromNow(),
-                messageContent  = parseMessage(message.message);
-
-            if (isNoMessages)
-            {
-                isNoMessages = false;
-
-                angular.elementById('messengerNoMessages').remove();
-            }
-
-            if (message.user === 'kinoulink')
-            {
-                if (agoMessage !== agoCurrent) {
-                    chatNode.append('<dd class="text-center text-embossed __date"><span>' + agoMessage + '</span></dd>');
-                }
-
-                chatNode.append('<dd class="_message-notify _type-' + message.type + '">' + messageContent + '</dd>');
-
-                previousMessageItem = null;
-            }
-            else {
-                if (agoMessage === agoCurrent && previousMessageItem !== null && previousMessageItem.data.user === userID) {
-                    var htmlNode = document.getElementById(previousMessageItem.htmlNodeID);
-
-                    // if (htmlNode !== null) {
-                    htmlNode.innerHTML += '<br />' + messageContent;
-                    // }
-                }
-                else {
-                    var htmlNodeID = 'messenger-message-' + Math.floor(Math.random() * 10000000000);
-
-                    if (agoMessage !== agoCurrent) {
-                        chatNode.append('<dd class="text-center text-embossed __date"><span>' + agoMessage + '</span></dd>');
-                    }
-
-                    chatNode.append('<dd class="' + clazz + '"><p id="' + htmlNodeID + '">' + messageContent + '</p><img class="avatar" src="' + user.avatar + '" /></dd>');
-
-                    previousMessageItem = {data: message, htmlNodeID: htmlNodeID};
-                }
-            }
-
-            agoCurrent = agoMessage;
-
-            clearTimeout(timerScrollBottom);
-
-            timerScrollBottom = setTimeout(function () {
-                window.scrollTo(0, bodyNode.scrollHeight);
-            }, isInitPhase ? 500 : 50);
-
-            if (message.hasOwnProperty('id')
-                && message.hasOwnProperty('unread')
-                && angular.isDefined(message.unread.indexOf)
-                && message.unread.indexOf(dataService.user.id) >= 0)
-            {
-                scope.onMessageRead(message);
-            }
-        }
-
-    }
-
-    function parseMessage(message)
-    {
-        if (message === null || message.length === 0)
-        {
-            return '';
-        }
-
-        var replacePatternHTTP  = /(\b(https?):\/\/[-A-Z0-9+&amp;@#\/%?=~_|!:,.;]*[-A-Z0-9+&amp;@#\/%=~_|])/ig,
-            replacePatternWWW   = /(^|[^\/])(www\.[\S]+(\b|$))/gim,
-            emoticonsMap        = {';-)' : 'happy', ':-)' : 'happy', ':p' : 'tongue', ';(' : 'sad', ':(' : 'sad', ';-(' : 'sad', ':s' : 'wink', ':o' : 'confused'},
-            emoticonsMap2       = ['wink', 'grin', 'cool', 'angry', 'evil', 'shocked', 'baffled', 'confused', 'neutral', 'sleepy', 'crying'],
-            tokens              = message.split(' '),
-            newMessage          = '',
-
-
-        message = htmlentities(message);
-
-        message = message.replace(replacePatternHTTP, '<a class="colored-link-1" title="$1" href="$1" target="_blank">$1</a>');
-
-        message = message.replace(replacePatternWWW, '$1<a class="colored-link-1" href="http://$2" target="_blank">$2</a>');
-
-        angular.forEach(tokens, function(token)
-        {
-            if (emoticonsMap.hasOwnProperty(token))
-            {
-                newMessage += '<i class="icon-' + emoticonsMap[token] + '"></i>';
-            }
-            else if (token[0] === '(' && token[token.length - 1] === ')')
-            {
-                var k = token.substring(1, token.length - 1);
-
-                if (emoticonsMap2.indexOf(k) > -1)
-                {
-                    newMessage += '<i class="icon-' + k + '"></i>';
-                }
-                else
-                {
-                    newMessage += token;
-                }
-            }
-            else
-            {
-                newMessage += token;
-            }
-
-            newMessage += ' ';
-        });
-
-        return newMessage;
-    }
-
-    return {
-        restrict: 'A',
-        template: '<dl class="chat"></dl>' +
-            '<form class="message-input" ng-submit="submitMessage()">' +
-                '<input name="message" type="text" ng-model="message" placeholder="Entrez votre message ici ...">' +
-                '<button type="submit"><i class="fa fa-chevron-right"></i></button>' +
-            '</form>',
-        scope: {
-            'thread' : '=bzThread',
-            'onThread' : '=bzOnThread',
-            'message' : '@'
-        },
-        link: link
-    };
-}]);
-kinoulinkApp.directive('bzPresence', ['$http', function($http)
-{
-    function link(scope, element, attr)
-    {
-        var user = null;
-
-        scope.refresh = function()
-        {
-            $http({
-                method: 'GET',
-                url:'http://messenger.kinoulink.fr/presence/' + user.id,
-                withCredentials: false,
-                cache: false,
-                responseType: "json",
-                timeout : 20000,
-                headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).
-                error(function(data)
-                {
-                }).
-                then(function(response)
-                {
-                    var status = response.data.status;
-
-                    if (status === 200)
-                    {
-                        element.html('<img src="' + appConfig.root + 'images/presence-online.png" />');
-                    }
-                    else
-                    {
-                        element.html('');
-                    }
-                })
-        };
-
-        scope.$watch(attr.bzUser, function(value)
-        {
-            user = value;
-
-            scope.refresh();
-        });
-    }
-
-    return {
-        'restrict' : 'E',
-        'template' : '',
-        'link' : link
-    };
-}]);
-kinoulinkApp.directive('bzRestaurantsBook', ['data', 'geolocation', function(data, geolocation)
-{
-    function link($scope, element, attrs)
-    {
-        $scope.restaurants = null;
-        $scope.search = '';
-
-        $scope.$watch('search', function(value)
-        {
-            data.api('data/search', {places : true, users: false, query : value}, function(response)
-            {
-                if (response.status === 200)
-                {
-                    $scope.restaurants = response.data.hits;
-                }
-            });
-        });
-    }
-
-    function buildUI(searchQuery)
-    {
-        var _restos = [];
-
-        angular.forEach(allRestaurants, function(item)
-        {
-            var contact = {
-                id: item.id,
-                title: item.title,
-                status: getStatus(item),
-                href: '/r/' + item.id
-            };
-
-            _restos.push(contact);
-        });
-
-        _restos.sort(function(a, b)
-        {
-            return a.title < b.title ? 1 : -1;
-        });
-
-        return _restos;
-    }
-
-    function getStatus(item)
-    {
-        var j = item.details.address.street + "", s = item.details.address.city + "";
-
-        if (j.length > 0 && s.length > 0)
-        {
-            return j + ', ' + s;
-        }
-        else
-        {
-            return j + s;
-        }
-    }
-
-    return {
-        restrict: 'A',
-        templateUrl: bzrup('directives/restaurants_book'),
-        link: link
-    };
-}]);
 kinoulinkApp.factory("browser", ["layout", function(layout)
 {
    return {
@@ -1463,6 +1006,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
     {
         $scope.loading = true;
         $rootScope.menu = 'media';
+        $rootScope.title = 'Mes Médias';
 
         function refresh()
         {
@@ -1523,6 +1067,36 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
                 refresh();
             });
         };
+
+        refresh();
+    }]);
+kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
+    {
+        $scope.loading = true;
+        $rootScope.menu = 'media';
+        $rootScope.title = 'Mes Médias';
+
+        $scope.media = {'title' : 'Chargement ...'};
+
+        var token = router.get('token');
+
+        function refresh()
+        {
+            dataService.apiGet('media/' + token, {}, function(response)
+            {
+                $scope.loading = false;
+
+                if (response.status == 200)
+                {
+                    $scope.media = response.data;
+                }
+                else
+                {
+                    dataService.displayError('Media', response);
+                }
+            });
+        }
 
         refresh();
     }]);

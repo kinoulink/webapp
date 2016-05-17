@@ -98,6 +98,11 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
             templateUrl: bzrup('media'),
             controller: 'MediaController'
         })
+        .when('/media/:token', {
+            templateUrl: bzrup('media_details'),
+            controller: 'MediaDetailsController'
+        })
+
         .otherwise({
             redirectTo: '/'
         });

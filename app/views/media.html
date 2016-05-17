@@ -1,8 +1,6 @@
-<header>
-    <h1>Mes Média</h1>
-</header>
-
 <section class="container">
+
+    <div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}] }}"></div>
 
     <form ng-submit="add()" class="panel-form">
 
@@ -10,8 +8,6 @@
 
         <button ngf-select="onFileSelect($files)" class="btn btn-success">Sélectionner une vidéo ou photo ..
         </button>
-
-        <hr />
 
         <div class="clearfix text-center">
             <div class="progress" ng-show="uploadProgress > 0">
@@ -24,20 +20,39 @@
 
     </form>
 
-    <div ng-class="{'panel-form' : true, 'loading' : loading }">
+    <hr />
+
+    <div class="navbar navbar-default">
+
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" title="Vue par date"><i class="fa fa-calendar"></i></a></li>
+            <li><a href="#" title="Vue par grille"><i class="fa fa-th"></i></a></li>
+            <li><a href="#" title="Vue par tableau"><i class="fa fa-list"></i></a></li>
+        </ul>
+
+    </div>
+
+    <div ng-class="{'panel-form' : true, 'loading' : loading }">_
+
         <div class="alert alert-info" ng-show="medias.length == 0">
             Vous n'avez pas encore téléchargé de photos ou vidéos!
         </div>
 
-        <div class="row media-listing">
-            <div class="col-sm-6 col-md-4" ng-repeat="media in medias">
-                <div class="thumbnail">
-                    <img ng-src="{{ media.thumbnail }}">
-                    <div class="caption">
-                        <p>{{ media.data.name }}</p>
-                    </div>
+        <div class="media-listing" ng-repeat="media in medias">
+            <a class="thumbnail" ng-href="#/media/{{ media.id }}">
+                <img ng-src="{{ media.thumbnail }}">
+                <div class="caption">
+                    <p>{{ media.title }}</p>
+                    <span class="text-muted"><i class="fa fa-clock-o">{{ media.createdAt | moment }}</i></span>
                 </div>
-            </div>
+            </a>
         </div>
 
     </div>

@@ -18,7 +18,7 @@ kinoulinkApp.filter('formatDateVerbose', function()
 {
     return function (input)
     {
-        return moment(input * 1000).fromNow(true);
+        return moment(input).fromNow(true);
     };
 }).filter('momentVerbose', function()
 {
@@ -38,34 +38,4 @@ kinoulinkApp.filter('formatDateVerbose', function()
     {
         return input + ' ' + text + (input > 1 ? 's' : '');
     };
-}).filter('distance', ['data', 'geolocation', function(dataService, geolocation)
-{
-    return function(input)
-    {
-        if (input === null || typeof input === 'undefined') return '';
-
-        var distance = geolocation.getDistanceSimple(dataService.user.position, input);
-
-        if (distance < 0)
-        {
-            return (distance * 1000).toFixed(0) + ' m';
-        }
-        else
-        {
-            return distance.toFixed(2) + ' km';
-        }
-    };
-}]).filter('distance2', function()
-{
-   return function (distance)
-   {
-       if (distance.toFixed(0) <= 0)
-       {
-           return (distance * 1000).toFixed(0) + ' m';
-       }
-       else
-       {
-           return distance.toFixed(0) + ' km';
-       }
-   }
 });

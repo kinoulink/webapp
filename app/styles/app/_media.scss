@@ -2,20 +2,33 @@
 {
   .thumbnail
   {
+    width: 30%;
+    margin-left: 10px;
+    margin-bottom: 10px;
     height: 200px;
+    float: left;
+    position: relative;
+    overflow: hidden;
 
     img
     {
       display: block;
-      width: 92px;
-      height: 92px;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .caption
     {
-      height: 100px;
+      height: 50px;
       overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
+      position: absolute;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 4px;
     }
   }
 }

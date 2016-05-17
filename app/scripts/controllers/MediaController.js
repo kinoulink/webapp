@@ -3,6 +3,7 @@ kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upl
     {
         $scope.loading = true;
         $rootScope.menu = 'media';
+        $rootScope.title = 'Mes Médias';
 
         function refresh()
         {

@@ -1,0 +1,19 @@
+<section class="container">
+
+    <div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : media.title}] }}"></div>
+
+    <div ng-class="{'panel-form' : true, 'loading' : loading }">
+
+        <h2>Fichier source</h2>
+
+        <ul>
+            <li>Taille <span>{{ media.file.size }}</span></li>
+        </ul>
+
+        <div>
+            <img src="{{ media.url }}" style="max-width: 100%" />
+        </div>
+
+    </div>
+
+</section>
