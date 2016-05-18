@@ -1,48 +1,40 @@
-<header>
-    <h1>Mes Playlists</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'Playlist', 'link' : '/playlist'}] }}"></div>
 
-<div class="container">
+<div ng-show="playlists.length == 0" class="alert alert-info">
+    Pas encore de playlist ;-(
+</div>
 
-    <div ng-show="playlists.length == 0" class="alert alert-info">
-        Pas encore de playlist ;-(
+<table class="table">
+    <thead>
+        <tr>
+            <th>Intitulé</th>
+            <th>Auteur</th>
+            <th>Médias</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tr ng-repeat="playlist in playlists">
+        <td>{{playlist.title}}</td>
+        <td>{{playlist.user.name}}</td>
+        <td>4 média</td>
+        <td><a class="btn btn-primary" ng-href="#/playlist/{{ playlist.id }}">Ouvrir</a></td>
+    </tr>
+</table>
+
+<hr />
+
+<h2>Une nouvelle playlist ?</h2>
+
+<form class="panel-form" ng-submit="add()">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <input ng-model="playlistNew.title" type="text" placeholder="Nom" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+            <br class="visible-xs" />
+            <input type="submit" class="btn btn-success" />
+        </div>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Intitulé</th>
-                <th>Auteur</th>
-                <th>Médias</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tr ng-repeat="playlist in playlists">
-            <td>{{playlist.title}}</td>
-            <td>{{playlist.user.name}}</td>
-            <td>4 média</td>
-            <td><a class="btn btn-primary" ng-href="#/playlist/{{ playlist.id }}">Ouvrir</a></td>
-        </tr>
-    </table>
-
-    <hr />
-
-    <h2>Une nouvelle playlist ?</h2>
-
-    <form class="panel-form" ng-submit="add()">
-
-        <div class="row">
-            <div class="col-sm-6">
-                <input ng-model="playlistNew.title" type="text" placeholder="Nom" class="form-control" />
-            </div>
-            <div class="col-sm-6">
-                <br class="visible-xs" />
-                <input type="submit" class="btn btn-success" />
-            </div>
-        </div>
-
-    </form>
-
-
-
-</div>
+</form>

@@ -1,26 +1,29 @@
 @import "../variables";
 
+$menu_width: 220px;
+
 #menu
 {
   background: $color-menu-background;
 
   z-index: 1000;
   position: fixed;
-  left: 250px;
+  left: $menu_width;
   width: 0;
   height: 100%;
-  margin-left: -250px;
+  margin-left: -$menu_width;
   overflow-y: auto;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 
-  header
+  ._user
   {
-    height: 60px;
+    background: url(/images/header-profile-skin-1.png) no-repeat;
+
+    height: 150px;
     padding: 10px;
-    border-bottom: 1px solid $color-menu-border-dark;
 
     img
     {
@@ -38,10 +41,7 @@
       {
         display: block;
         line-height: 40px;
-        border-bottom: 1px solid $color-menu-border-dark;
-        border-top: 1px solid $color-menu-border-light;
         color: white;
-        text-shadow: 1px 0 1px black;
         padding-left: 20px;
         text-decoration: none;
 
@@ -51,6 +51,11 @@
         }
       }
     }
+}
+
+#page-content
+{
+  padding: 15px;
 }
 
 .LoginController
@@ -83,7 +88,7 @@
 }
 
 #wrapper.toggled {
-  padding-left: 250px;
+  padding-left: $menu_width;
 }
 
 #menu {
@@ -91,18 +96,17 @@
 }
 
 #wrapper.toggled #menu {
-  width: 250px;
+  width: $menu_width;
 }
 
 #page-content-wrapper {
   width: 100%;
   position: absolute;
-  padding: 15px;
 }
 
 #wrapper.toggled #page-content-wrapper {
   position: absolute;
-  margin-right: -250px;
+  margin-right: -$menu_width;
 }
 
 /* Sidebar Styles */
@@ -110,7 +114,7 @@
 .sidebar-nav {
   position: absolute;
   top: 0;
-  width: 250px;
+  width: $menu_width;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -155,7 +159,7 @@
 
 @media(min-width:768px) {
   #wrapper {
-    padding-left: 250px;
+    padding-left: $menu_width;
   }
 
   #wrapper.toggled {
@@ -163,7 +167,7 @@
   }
 
   #menu {
-    width: 250px;
+    width: $menu_width;
   }
 
   #wrapper.toggled #menu {
@@ -171,7 +175,6 @@
   }
 
   #page-content-wrapper {
-    padding: 20px;
     position: relative;
   }
 

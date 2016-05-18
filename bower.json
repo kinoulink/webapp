@@ -13,7 +13,9 @@
     "moment": "master",
     "angular-loading-bar": "master",
     "angular-ui-notification": "^0.1.0",
-    "angular-ui-calendar": "^1.0.1"
+    "angular-ui-calendar": "^1.0.1",
+    "angular-ui-select": "^0.17.1",
+    "select2": "^4.0.2"
   },
   "devDependencies": {},
   "appPath": "app"

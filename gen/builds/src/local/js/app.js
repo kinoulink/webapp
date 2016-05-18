@@ -214,7 +214,7 @@ kinoulinkApp.filter('formatDateVerbose', function()
     return function(value)
     {
         if (typeof value === 'string') {
-            return moment(value, 'DD/MM/YYYY').format('dddd D MMMM');
+            return moment(value).format('dddd D MMMM');
         } else {
             return moment(value * 1000).format('dddd D MMMM');
         }
@@ -300,6 +300,43 @@ kinoulinkApp.directive('bzLoader', function()
         templateUrl : bzrup('directives/loader')
     }
 });
+kinoulinkApp.directive('mySelect', ['data', '$timeout', function(dataService, $timeout)
+{
+    function link(scope, element, attrs, model)
+    {
+        var $element = $(element);
+
+        dataService.apiGet('playlist', {}, function(response)
+        {
+            response.data.forEach(function(item)
+            {
+                $element.append('<option value="' + item.id + '">' + item.title + '</option>');
+            });
+
+            /*$element.select2({
+                placeholder: "toto"
+            })
+            .on('change', function(e)
+            {
+                $timeout((function(model)
+                {
+                    model.$setViewValue($element.select2("val"));
+                })(model), 100);
+            })*/
+        });
+
+        scope.$watch(attrs.ngModel, function()
+        {
+            console.log('edited');
+        });
+    }
+
+    return {
+        restrict : 'A',
+        template : '',
+        link : link
+    };
+}]);
 kinoulinkApp.factory("browser", ["layout", function(layout)
 {
    return {
@@ -1074,6 +1111,8 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
     function ($scope, $rootScope, dataService, router)
     {
         $scope.loading = true;
+        $scope.newPlaylist = 0;
+
         $rootScope.menu = 'media';
         $rootScope.title = 'Mes Médias';
 
@@ -1097,6 +1136,19 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
                 }
             });
         }
+
+        dataService.apiGet('playlist', {}, function(response)
+        {
+            $scope.playlists = response.data;
+        })
+
+        $scope.addToPlaylist = function()
+        {
+            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist, media : $scope.media.id}, function(response)
+            {
+                refresh();
+            });
+        };
 
         refresh();
     }]);
@@ -1130,10 +1182,11 @@ kinoulinkApp.controller('NotifyController', ['$scope', 'data', function($scope, 
     $scope.$on('notify.toast.display', displayToast);
 
 }]);
-kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router",
-    function ($scope, $rootScope, dataService, router)
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router", "Upload",
+    function ($scope, $rootScope, dataService, router, Upload)
     {
         $rootScope.menu = "playlist";
+        $rootScope.title = 'Playlist';
 
         var token = router.get('token');
 
@@ -1153,28 +1206,49 @@ kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "
             });
         };
 
-        $scope.detach = function()
-        {
-            dataService.api('user/devices/detach', { device : device }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.sendAction = function(action)
-        {
-            dataService.api('user/devices/actions/add', { device : device, action : action }, function(response)
-            {
-                refresh();
-            });
-        };
-
         $scope.removeMedia = function(media)
         {
             dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
             {
                 refresh();
             });
+        };
+
+        $scope.onFileSelect = function(files)
+        {
+            var fileToUpload = files[0];
+
+            $scope.uploadProgress = 0;
+
+            $scope.upload = Upload.upload({
+                    url: appConfig.api + 'media/upload',
+                    method: 'POST',
+                    cache: false,
+                    responseType: "json",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Auth-Token': $rootScope.accessToken
+                    },
+                    withCredentials: true,
+                    file: fileToUpload
+                })
+                .progress(function (evt)
+                {
+                    $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
+                })
+                .success(function (data, status, headers, config)
+                {
+                    $scope.uploadProgress = 0;
+
+                    if (data.status == 200)
+                    {
+                        refresh();
+                    }
+                    else
+                    {
+                        dataService.displayError('Téléchargement', data);
+                    }
+                });
         };
 
         refresh();
@@ -1184,6 +1258,8 @@ kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "data", 
     function ($scope, $rootScope, dataService, router)
     {
         $rootScope.menu = "playlist";
+        $rootScope.title = 'Playlist';
+
         $scope.playlists = [];
         $scope.playlistNew = {};
 

@@ -28,10 +28,12 @@
 
           <nav id="menu" role="navigation" ng-controller="menu">
 
-              <header>
-                  <img src="/images/users53.png" alt="me" />
+              <div class="_user text-center">
+                  <div>
+                    <img src="/images/users53.png" alt="me" />
+                  </div>
                   <a class="a" title="Mon profile" ng-href="#/me" ng-click="$root.navOpened=false">{{$root.user.name}}</a>
-              </header>
+              </div>
 
                 <div class="_items">
                     <a ng-href="#/devices" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'devices'}"><i class="fa fa-tablet"></i> Mes KTVs</a>
@@ -48,11 +50,11 @@
               <header id="header" role="banner" class="navbar navbar-default">
                   <a class="_menu navbar-text navbar-left" ng-click="$root.sidebarToggled = !$root.sidebarToggled"><i class="fa fa-bars"></i></a>
                   <a ng-href="#/" class="navbar-brand">Kinoulink</a>
-                  <span class="navbar-text _title">Mes Média</span>
+                  <span class="navbar-text _title">{{ $root.title }}</span>
                   <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
               </header>
 
-              <div ng-view="">
+              <div id="page-content" ng-view="">
 
                   <div class="__l"></div>
                   <h1 style="color:#ddd">Chargement en cours</h1>

@@ -29,6 +29,7 @@ var scripts = {
             "{VENDOR}/jquery/dist/jquery.js",
             "{VENDOR}/fullcalendar/dist/fullcalendar.min.js",
             "{VENDOR}/angular-ui-calendar/src/calendar.js",
+            "{VENDOR}/select2/dist/js/select2.js",
             "{APP}/scripts/vendor/*"
         ]
 };

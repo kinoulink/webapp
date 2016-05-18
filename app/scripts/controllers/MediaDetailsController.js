@@ -2,6 +2,8 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
     function ($scope, $rootScope, dataService, router)
     {
         $scope.loading = true;
+        $scope.newPlaylist = 0;
+
         $rootScope.menu = 'media';
         $rootScope.title = 'Mes Médias';
 
@@ -25,6 +27,19 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
                 }
             });
         }
+
+        dataService.apiGet('playlist', {}, function(response)
+        {
+            $scope.playlists = response.data;
+        })
+
+        $scope.addToPlaylist = function()
+        {
+            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist, media : $scope.media.id}, function(response)
+            {
+                refresh();
+            });
+        };
 
         refresh();
     }]);

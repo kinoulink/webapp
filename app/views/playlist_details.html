@@ -1,44 +1,67 @@
-<header>
-    <h1>Playlist "{{ playlist.title }}"</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : playlist.title}] }}"></div>
 
-<div class="container">
+<form ng-submit="add()" class="panel-form">
 
-    <h3>Média</h3>
+    <h2>Un nouveau média ?</h2>
 
-    <div class="panel-form">
+    <div class="row">
 
-        <div ng-show="playlist.media.length == 0">
+        <div class="col-sm-6">
+
+            <h4>A télécharger</h4>
+
+            <button ngf-select="onFileSelect($files)" class="btn btn-success">Télécharger une vidéo ou photo ..</button>
+
+            <div class="clearfix text-center">
+                <div class="progress" ng-show="uploadProgress > 0">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar"
+                         ng-style="{ 'width' : uploadProgress + '%' }">
+                        <span class="sr-only">{{uploadProgress}}% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <h4>Depuis la librairie</h4>
             <div class="alert alert-info">
-                Pas de média ;-(
+                Pour ajouter un média existant, rendez vous sur <a ng-href="#/media">la page des médias</a>.
             </div>
         </div>
 
-        <hr />
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                    Intitulé
-                </th>
-                <th>
-
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="media in device.media">
-                <td>{{ media.data.name }}</td>
-                <td>
-                    <a ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
     </div>
 
-    <br />
+
+
+
+</form>
+
+
+
+<hr />
+
+<h3>Médias</h3>
+
+<div class="panel-form">
+
+    <div ng-show="playlist.media.length == 0">
+        <div class="alert alert-info">
+            Pas de média ;-(
+        </div>
+    </div>
+
+    <table class="table">
+        <tbody>
+        <tr ng-repeat="media in playlist.medias">
+            <td><img src="{{ media.media.thumbnail }}" style="width: 32px;" /></td>
+            <td>{{ media.media.title }}</td>
+            <td><i class="fa fa-clock-o"></i> {{ media.createdAt | formatDateVerbose }}</td>
+            <td>
+                <button class="btn btn-danger" ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>

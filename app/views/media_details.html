@@ -1,19 +1,46 @@
-<section class="container">
+<div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : media.title}] }}"></div>
 
-    <div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : media.title}] }}"></div>
+<div ng-class="{'panel-form' : true, 'loading' : loading }">
 
-    <div ng-class="{'panel-form' : true, 'loading' : loading }">
+    <h2>Playlists</h2>
 
-        <h2>Fichier source</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="2">Playlist</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="playlist in media.playlists">
+                <td><a class="btn btn-link" ng-href="#/playlist/{{ playlist.playlist.id }}">{{ playlist.playlist.title }}</a></td>
+                <td><i class="fa fa-clock-o"></i> {{ playlist.createdAt | formatDateVerbose }}</td>
+                <td><button class="btn btn-danger">Enlever</button></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    <select ng-model="newPlaylist" my-select="playlist" placeholder="Sélectionnez une playlist"></select>
+                </td>
+                <td><button class="btn btn-success" ng-click="addToPlaylist()">Ajouter</button></td>
+            </tr>
+        </tfoot>
+    </table>
 
-        <ul>
-            <li>Taille <span>{{ media.file.size }}</span></li>
-        </ul>
+    <h2>Fichier source</h2>
 
-        <div>
-            <img src="{{ media.url }}" style="max-width: 100%" />
-        </div>
-
+    <div class="navbar navbar-default">
+        <p class="navbar-text">
+            <label class="label label-info">Taille {{ media.file.size }}</label>
+            <label class="label label-info">Type: {{ media.file.type }}</label>
+        </p>
+        <a class="btn btn-default navbar-text">Télécharger</a>
+        <a class="btn btn-danger navbar-text">Supprimer</a>
     </div>
 
-</section>
+    <div>
+        <img src="{{ media.url }}" style="max-width: 100%" />
+    </div>
+
+</div>

@@ -1,43 +1,32 @@
-article {
-  float: right !important;
-  padding: 0 !important;
-  /*box-shadow: -10px 0 10px rgba(0,0,0,0.5);*/
-  height: 100vh;
-}
-article header {
-  background: #F3F3F3;
-  border-bottom: 1px solid #E8E8E8;
-  margin-bottom: 20px;
-}
-article header h1 {
-  margin: 0;
-  padding: 0;
-  color: #393733;
-  text-align: center;
-  line-height: 60px;
-}
-article h2, article h3, article h4 {
+#page-content h2, #page-content h3, #page-content h4 {
   color: #E36A66;
   text-align: center;
   font-weight: 200;
 }
 
 #header {
-  background: white;
+  background: #f0f0f0;
   z-index: 1;
+  border: none;
   border-bottom: 1px solid #f0f0f0;
+  border-radius: 0;
+  margin-bottom: 0;
 }
 #header ._menu {
+  background: #0e9aef;
   display: inline-block;
   text-align: center;
   font-size: 1.4em;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 4px;
 }
 #header ._title {
   position: absolute;
   left: 200px;
   right: 100px;
   color: #000;
-  font-size: 2em;
+  font-size: 1.7em;
   font-weight: 400;
   text-align: center;
   top: 0;
@@ -129,25 +118,25 @@ html.focus #page {
 }
 
 #menu {
-  background: #3D3B37;
+  background: #3A4459;
   z-index: 1000;
   position: fixed;
-  left: 250px;
+  left: 220px;
   width: 0;
   height: 100%;
-  margin-left: -250px;
+  margin-left: -220px;
   overflow-y: auto;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-#menu header {
-  height: 60px;
+#menu ._user {
+  background: url(/images/header-profile-skin-1.png) no-repeat;
+  height: 150px;
   padding: 10px;
-  border-bottom: 1px solid #2D2C29;
 }
-#menu header img {
+#menu ._user img {
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -158,15 +147,16 @@ html.focus #page {
 #menu ._items a {
   display: block;
   line-height: 40px;
-  border-bottom: 1px solid #2D2C29;
-  border-top: 1px solid #45433F;
   color: white;
-  text-shadow: 1px 0 1px black;
   padding-left: 20px;
   text-decoration: none;
 }
 #menu ._items a.active {
   background: #DB3A31;
+}
+
+#page-content {
+  padding: 15px;
 }
 
 .LoginController #menu {
@@ -191,29 +181,28 @@ html.focus #page {
 }
 
 #wrapper.toggled {
-  padding-left: 250px;
+  padding-left: 220px;
 }
 
 #wrapper.toggled #menu {
-  width: 250px;
+  width: 220px;
 }
 
 #page-content-wrapper {
   width: 100%;
   position: absolute;
-  padding: 15px;
 }
 
 #wrapper.toggled #page-content-wrapper {
   position: absolute;
-  margin-right: -250px;
+  margin-right: -220px;
 }
 
 /* Sidebar Styles */
 .sidebar-nav {
   position: absolute;
   top: 0;
-  width: 250px;
+  width: 220px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -258,7 +247,7 @@ html.focus #page {
 
 @media (min-width: 768px) {
   #wrapper {
-    padding-left: 250px;
+    padding-left: 220px;
   }
 
   #wrapper.toggled {
@@ -266,7 +255,7 @@ html.focus #page {
   }
 
   #menu {
-    width: 250px;
+    width: 220px;
   }
 
   #wrapper.toggled #menu {
@@ -274,7 +263,6 @@ html.focus #page {
   }
 
   #page-content-wrapper {
-    padding: 20px;
     position: relative;
   }
 

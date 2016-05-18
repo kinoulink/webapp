@@ -3,7 +3,7 @@ kinoulinkApp.filter('formatDateVerbose', function()
     return function(value)
     {
         if (typeof value === 'string') {
-            return moment(value, 'DD/MM/YYYY').format('dddd D MMMM');
+            return moment(value).format('dddd D MMMM');
         } else {
             return moment(value * 1000).format('dddd D MMMM');
         }

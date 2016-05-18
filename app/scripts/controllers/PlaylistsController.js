@@ -2,6 +2,8 @@ kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "data", 
     function ($scope, $rootScope, dataService, router)
     {
         $rootScope.menu = "playlist";
+        $rootScope.title = 'Playlist';
+
         $scope.playlists = [];
         $scope.playlistNew = {};
 
