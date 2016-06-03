@@ -4,8 +4,55 @@
   font-weight: 200;
 }
 
+.calendar ._days {
+  min-height: 1000px;
+  padding-left: 30px;
+}
+.calendar ._day {
+  float: left;
+  width: 14%;
+  min-height: 800px;
+  border-left: 1px solid #C0C0C0;
+}
+.calendar ._day > ._title {
+  display: block;
+  text-align: center;
+  font-weight: 300;
+}
+.calendar ._hours {
+  list-style: none;
+  margin: 0;
+  margin-top: 20px;
+  padding: 0;
+  float: left;
+  width: 30px;
+}
+.calendar ._hours li {
+  height: 30px;
+}
+.calendar ._hours li > ._title {
+  font-size: 0.6em;
+}
+.calendar ._hours li hr {
+  margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.calendar ._playlist {
+  padding: 4px;
+  background: #0e9aef;
+}
+
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.modal-backdrop .modal {
+  display: block;
+}
+
 #header {
-  background: #f0f0f0;
+  background: #fff;
   z-index: 1;
   border: none;
   border-bottom: 1px solid #f0f0f0;
@@ -138,8 +185,16 @@ html.focus #page {
 }
 #menu ._user img {
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
+  margin-top: 20px;
+  background: white;
+  border-radius: 4px;
+}
+#menu ._user .__link {
+  color: white;
+  margin-top: 10px;
+  display: block;
 }
 #menu ._items {
   min-width: 200px;
@@ -271,6 +326,23 @@ html.focus #page {
     margin-right: 0;
   }
 }
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  background: #eeeeee;
+}
+
+.breadcrumb {
+  background: none;
+}
+
+.panel {
+  background: white;
+  padding: 4px;
+  border-radius: 4px;
+  border-bottom: 2px solid #ddd;
+}
+
 .device-list-item {
   border: 1px solid #D1D1D2;
   padding: 5px;

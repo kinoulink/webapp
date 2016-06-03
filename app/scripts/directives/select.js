@@ -2,36 +2,36 @@ kinoulinkApp.directive('mySelect', ['data', '$timeout', function(dataService, $t
 {
     function link(scope, element, attrs, model)
     {
-        var $element = $(element);
+        scope.placeholderLabel = attrs.placeholder;
+        scope.showDropdown = false;
+
+        var dropdownElement = element.find('div');
 
         dataService.apiGet('playlist', {}, function(response)
         {
-            response.data.forEach(function(item)
-            {
-                $element.append('<option value="' + item.id + '">' + item.title + '</option>');
-            });
-
-            /*$element.select2({
-                placeholder: "toto"
-            })
-            .on('change', function(e)
-            {
-                $timeout((function(model)
-                {
-                    model.$setViewValue($element.select2("val"));
-                })(model), 100);
-            })*/
+            scope.items = response.data;
         });
 
-        scope.$watch(attrs.ngModel, function()
+        scope.$watch(attrs.ngModel, function(value)
         {
-            console.log('edited');
+            if (value.hasOwnProperty('title'))
+            {
+                scope.placeholderLabel = value.title;
+            }
         });
+
+        scope.clickOnItem = function(item)
+        {
+            model.$setViewValue(item);
+
+            scope.showDropdown = false;
+        }
     }
 
     return {
         restrict : 'A',
-        template : '',
-        link : link
+        template : '<button class="btn btn-default" ng-click="showDropdown = !showDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ placeholderLabel }} <span class="caret"></span></button><div ng-show="showDropdown"><div class="list-group"><button ng-repeat="item in items" ng-click="clickOnItem(item)" class="list-group-item">{{ item.title }}</button></div></div>',
+        link : link,
+        require : 'ngModel'
     };
 }]);

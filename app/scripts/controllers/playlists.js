@@ -1,31 +1,32 @@
-kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "data", "router",
-    function ($scope, $rootScope, dataService, router)
+kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "Playlist", "router",
+    function ($scope, $rootScope, Playlist, router)
     {
         $rootScope.menu = "playlist";
         $rootScope.title = 'Playlist';
 
         $scope.playlists = [];
         $scope.playlistNew = {};
+        $scope.error = null;
 
         function refresh()
         {
-            dataService.apiGet('playlist', { }, function(response)
-            {
-                $scope.playlists = response.data;
-            });
+            $scope.playlists = Playlist.query({sort : 'createdAt DESC'});
         }
 
         $scope.add = function()
         {
-            dataService.apiPost('playlist/create', $scope.playlistNew, function(response)
+            (new Playlist($scope.playlistNew)).$save(function(response)
             {
                 if (response.status == 200)
                 {
+                    $scope.playlistNew = {};
+                    $scope.error = null;
+
                     refresh();
                 }
                 else
                 {
-                    dataService.displayError('Nouvelle Playlist', response);
+                    $scope.error = response.data;
                 }
             });
         };

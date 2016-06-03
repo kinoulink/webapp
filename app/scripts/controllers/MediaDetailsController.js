@@ -35,7 +35,7 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
 
         $scope.addToPlaylist = function()
         {
-            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist, media : $scope.media.id}, function(response)
+            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist.id, media : $scope.media.id}, function(response)
             {
                 refresh();
             });

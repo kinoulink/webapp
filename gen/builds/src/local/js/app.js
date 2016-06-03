@@ -1,6 +1,6 @@
-var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar', 'ui.calendar'])
+var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
 
-.run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
+.run(['$rootScope', '$location', '$http', function($rootScope, $location, $http)
 {
     var $html = angular.elementById('html'),
         $body = angular.elementById('body');
@@ -11,6 +11,8 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
     {
         $rootScope.user = _global_bootstrap_data.user;
         $rootScope.accessToken = _global_bootstrap_data.access_token;
+
+        $http.defaults.headers.common['x-auth-token'] = _global_bootstrap_data.access_token;
     }
 
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
@@ -62,13 +64,13 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
             reloadOnSearch: false
         })
 
-        .when('/devices', {
+        .when('/device', {
             templateUrl: bzrup('devices'),
-            controller: 'DevicesController'
+            controller: 'devices'
         })
-        .when('/devices/:token', {
+        .when('/device/:token', {
             templateUrl: bzrup('device'),
-            controller: 'DeviceController'
+            controller: 'device'
         })
         .when('/devices/:token/media/add', {
             templateUrl: bzrup('deviceMediaAdd'),
@@ -304,37 +306,37 @@ kinoulinkApp.directive('mySelect', ['data', '$timeout', function(dataService, $t
 {
     function link(scope, element, attrs, model)
     {
-        var $element = $(element);
+        scope.placeholderLabel = attrs.placeholder;
+        scope.showDropdown = false;
+
+        var dropdownElement = element.find('div');
 
         dataService.apiGet('playlist', {}, function(response)
         {
-            response.data.forEach(function(item)
-            {
-                $element.append('<option value="' + item.id + '">' + item.title + '</option>');
-            });
-
-            /*$element.select2({
-                placeholder: "toto"
-            })
-            .on('change', function(e)
-            {
-                $timeout((function(model)
-                {
-                    model.$setViewValue($element.select2("val"));
-                })(model), 100);
-            })*/
+            scope.items = response.data;
         });
 
-        scope.$watch(attrs.ngModel, function()
+        scope.$watch(attrs.ngModel, function(value)
         {
-            console.log('edited');
+            if (value.hasOwnProperty('title'))
+            {
+                scope.placeholderLabel = value.title;
+            }
         });
+
+        scope.clickOnItem = function(item)
+        {
+            model.$setViewValue(item);
+
+            scope.showDropdown = false;
+        }
     }
 
     return {
         restrict : 'A',
-        template : '',
-        link : link
+        template : '<button class="btn btn-default" ng-click="showDropdown = !showDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ placeholderLabel }} <span class="caret"></span></button><div ng-show="showDropdown"><div class="list-group"><button ng-repeat="item in items" ng-click="clickOnItem(item)" class="list-group-item">{{ item.title }}</button></div></div>',
+        link : link,
+        require : 'ngModel'
     };
 }]);
 kinoulinkApp.factory("browser", ["layout", function(layout)
@@ -581,6 +583,60 @@ kinoulinkApp.factory('layout', function()
     };
 
 });
+kinoulinkApp
+.factory("apiResource",
+    ["$resource", function($resource)
+    {
+        function transformResponse(data, header)
+        {
+            var wrapped = angular.fromJson(data);
+
+            return wrapped.data;
+        }
+
+        return function(uri, paramDefaults)
+        {
+            var actions = {
+                query: {
+                    isArray: true,
+                    transformResponse: transformResponse
+                },
+                get: {
+                    transformResponse: transformResponse
+                },
+                save : {
+                    params : {id : 'create'},
+                    method: 'POST'
+                }
+
+            };
+
+            return $resource(appConfig.api + uri, paramDefaults, actions);
+        }
+    }
+])
+.factory('Device', ['apiResource',
+    function(apiResource){
+        return apiResource('device/:id', {id:'@id'});
+    }]
+)
+.factory('Playlist', ['apiResource',
+    function(apiResource){
+        return apiResource('playlist/:id', {id:'@id'});
+    }]
+)
+.factory('MediaInPlaylist', ['apiResource',
+    function(apiResource){
+        return apiResource('mediainplaylist/:id', {id:'@id'});
+    }]
+)
+
+
+.factory('DeviceAction', ['apiResource',
+    function(apiResource){
+        return apiResource('deviceaction/:id', {id:'@id'});
+    }]
+);
 kinoulinkApp.factory('router', [
     '$location', '$routeParams', function($location, $routeParams)
     {
@@ -628,55 +684,135 @@ kinoulinkApp.factory('router', [
         };
     }
 ]);
-kinoulinkApp.controller("CalendarController", ["$scope", "$rootScope", "data", "uiCalendarConfig",
-    function ($scope, $rootScope, dataService, uiCalendarConfig)
+kinoulinkApp.factory("ui",
+    ["Notification", function(Notification)
     {
-        $rootScope.menu = "calendar";
+        return {
+            displayError: function (title, response)
+            {
+                if (response.hasOwnProperty('data'))
+                {
+                    if (response.data.hasOwnProperty('error'))
+                    {
+                        notifyDisplayToast('danger', title, response.data.error);
+                    }
+                    else
+                    {
+                        notifyDisplayToast('danger', title, response.data);
+                    }
+                }
+                else if (response.hasOwnProperty('code'))
+                {
+                    if (response.code === 'E_VALIDATION')
+                    {
+                        var message = '';
 
-        $scope.eventSources = [];
+                        for (var key in response.invalidAttributes)
+                        {
+                            message += key + ' : ' + response.invalidAttributes[key][0].message + "\n<br />";
+                        }
 
-        $scope.uiConfig = {
-            calendar:{
-                height: 600,
-                editable: true,
-                header:{
-                    left: 'title',
-                    center: '',
-                    right: 'today prev,next'
+                        notifyDisplayToast('danger', 'Erreur de validation', message);
+                    }
                 }
             }
-        };
-
-        /* remove event */
-        $scope.remove = function(index) {
-            $scope.events.splice(index,1);
-        };
-        /* Change View */
-        $scope.changeView = function(view,calendar) {
-            getCalendar().fullCalendar('changeView',view);
-        };
-        /* Change View */
-        $scope.renderCalender = function(calendar) {
-            if(uiCalendarConfig.calendars[calendar]){
-                uiCalendarConfig.calendars[calendar].fullCalendar('render');
-            }
-        };
-        /* Render Tooltip */
-        $scope.eventRender = function( event, element, view ) {
-            element.attr({'tooltip': event.title,
-                'tooltip-append-to-body': true});
-            $compile(element)($scope);
-        };
-
-        function getCalendar()
-        {
-            return uiCalendarConfig.calendars['myCalendar'];
         }
+    }
+]);
+kinoulinkApp.controller("CalendarController", ["$scope", "$rootScope", "data", "router",
+    function ($scope, $rootScope, dataService, router)
+    {
+        var token = router.get('token');
+
+        $rootScope.menu = "calendar";
+
+        $scope.days = [{id: 1, title: 'Lundi'}, {id: 2, title: 'Mardi'}, {id: 3, title: 'Mercredi'}, {id: 4, title: 'Jeudi'}, {id: 5, title: 'Vendredi'}, {id: 6, title: 'Samedi'}, {id: 7, title: 'Dimanche'}];
+        $scope.hours = [];
+        $scope.showPlaylistPicker = false;
+        $scope.newPlaylist = {};
+
+        for(var i = 0; i < 24; i++)
+        {
+            var title = ((i < 10) ? ('0' + i) : i) + ':00';
+
+            $scope.hours.push({ id : i, title : title});
+        }
+
+        $scope.clickOnDay = function(day, hour)
+        {
+            $scope.newPlaylist = {
+                day : day,
+                hour : hour
+            };
+
+            $scope.showPlaylistPicker = true;
+        };
+
+        $scope.addPlaylist = function()
+        {
+            var item = {
+                calendar : $scope.calendar.id,
+                playlist : $scope.newPlaylist.playlist.id,
+                day : $scope.newPlaylist.day.id,
+                time : $scope.newPlaylist.time
+            };
+
+            dataService.apiPost('playlistincalendar', item, function(response)
+            {
+                refresh();
+
+                $scope.showPlaylistPicker = false;
+            });
+        };
+
+        dataService.apiGet('playlist', {}, function(response)
+        {
+            $scope.playlists = response.data;
+        });
+
+        function refresh()
+        {
+            dataService.apiGet('calendar/' + token, {}, function(response)
+            {
+                $scope.calendar = response.data;
+            });
+
+            dataService.apiGet('playlistincalendar', { calendar : token }, function(response)
+            {
+                var calendarPlaylists = response.data,
+                    calendarPlaylistsByDay = {};
+
+                $scope.days.forEach(function(day)
+                {
+                    calendarPlaylistsByDay["" + day.id] = {};
+
+                    $scope.hours.forEach(function(hour)
+                    {
+                        calendarPlaylistsByDay["" + day.id]["" + hour.id] = [];
+                    });
+                });
+
+                calendarPlaylists.forEach(function(item)
+                {
+                    if (item.hasOwnProperty('time'))
+                    {
+                        (calendarPlaylistsByDay[item.day + ""][item.time + ""]).push(item);
+                    }
+                });
+
+                $scope.calendarPlaylistsByDay = calendarPlaylistsByDay;
+            });
+        }
+
+        refresh();
+
     }]);
 kinoulinkApp.controller("CalendarsController", ["$scope", "$rootScope", "data", "router",
     function ($scope, $rootScope, dataService, router)
     {
         $rootScope.menu = "calendar";
+        $rootScope.title = 'Mes Calendriers';
+
         $scope.calendarNew = null;
 
         function refresh()
@@ -696,118 +832,6 @@ kinoulinkApp.controller("CalendarsController", ["$scope", "$rootScope", "data", 
         };
 
         refresh();
-    }]);
-kinoulinkApp.controller("DeviceController", ["$scope", "$rootScope", "data", "router",
-    function ($scope, $rootScope, dataService, router)
-    {
-        $rootScope.menu = "devices";
-
-        var device = router.get('token');
-
-        function refresh()
-        {
-            dataService.apiGet('device/' + device, { }, function(response)
-            {
-                $scope.device = response.data;
-            });
-        }
-
-        $scope.addMedia = function()
-        {
-            dataService.api('user/devices/media/add', { device : device }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.detach = function()
-        {
-            dataService.api('user/devices/detach', { device : device }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.sendAction = function(action)
-        {
-            dataService.api('user/devices/actions/add', { device : device, action : action }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.removeMedia = function(media)
-        {
-            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        refresh();
-
-    }]);
-kinoulinkApp.controller("DeviceMediaAddController", ["$scope", "$rootScope", "data", "router",
-    function ($scope, $rootScope,dataService, router)
-    {
-        $rootScope.menu = "devices";
-
-        var device = router.get('token');
-
-        $scope.device = device;
-
-        function refresh()
-        {
-            dataService.api('user/media/', { device : device}, function(response)
-            {
-                $scope.medias = response.data;
-            });
-        }
-
-        $scope.addMedia = function(media)
-        {
-            dataService.api('user/devices/media/add', { device : device, media : media._id}, function(response)
-            {
-                router.path('/devices/' + $scope.device);
-            });
-        };
-
-        refresh();
-
-    }]);
-kinoulinkApp.controller("DevicesController", ["$scope", "$rootScope", "data",
-    function ($scope, $rootScope,dataService)
-    {
-        $rootScope.menu = 'devices';
-
-        $scope.deviceNew = {};
-
-        function refresh()
-        {
-            dataService.apiGet('device', {}, function(response)
-            {
-                $scope.devices = response.data;
-            });
-        }
-
-
-        $scope.add = function()
-        {
-            dataService.apiPost('device/create', $scope.deviceNew, function(response)
-            {
-                if (response.status == 200)
-                {
-                    refresh();
-                }
-                else
-                {
-                    dataService.displayError('Nouvelle KTV', response);
-                }
-            });
-        };
-
-        refresh();
-
     }]);
 kinoulinkApp.controller("ForgotPassword", ["$scope", "data",
     function ($scope, dataService)
@@ -1144,7 +1168,7 @@ kinoulinkApp.controller("MediaDetailsController", ["$scope", "$rootScope", "data
 
         $scope.addToPlaylist = function()
         {
-            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist, media : $scope.media.id}, function(response)
+            dataService.apiPost('mediainplaylist', { playlist : $scope.newPlaylist.id, media : $scope.media.id}, function(response)
             {
                 refresh();
             });
@@ -1182,113 +1206,6 @@ kinoulinkApp.controller('NotifyController', ['$scope', 'data', function($scope, 
     $scope.$on('notify.toast.display', displayToast);
 
 }]);
-kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router", "Upload",
-    function ($scope, $rootScope, dataService, router, Upload)
-    {
-        $rootScope.menu = "playlist";
-        $rootScope.title = 'Playlist';
-
-        var token = router.get('token');
-
-        function refresh()
-        {
-            dataService.apiGet('playlist/' + token, { }, function(response)
-            {
-                $scope.playlist = response.data;
-            });
-        }
-
-        $scope.addMedia = function()
-        {
-            dataService.api('user/devices/media/add', { device : device }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.removeMedia = function(media)
-        {
-            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.onFileSelect = function(files)
-        {
-            var fileToUpload = files[0];
-
-            $scope.uploadProgress = 0;
-
-            $scope.upload = Upload.upload({
-                    url: appConfig.api + 'media/upload',
-                    method: 'POST',
-                    cache: false,
-                    responseType: "json",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-Auth-Token': $rootScope.accessToken
-                    },
-                    withCredentials: true,
-                    file: fileToUpload
-                })
-                .progress(function (evt)
-                {
-                    $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-                })
-                .success(function (data, status, headers, config)
-                {
-                    $scope.uploadProgress = 0;
-
-                    if (data.status == 200)
-                    {
-                        refresh();
-                    }
-                    else
-                    {
-                        dataService.displayError('Téléchargement', data);
-                    }
-                });
-        };
-
-        refresh();
-
-    }]);
-kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "data", "router",
-    function ($scope, $rootScope, dataService, router)
-    {
-        $rootScope.menu = "playlist";
-        $rootScope.title = 'Playlist';
-
-        $scope.playlists = [];
-        $scope.playlistNew = {};
-
-        function refresh()
-        {
-            dataService.apiGet('playlist', { }, function(response)
-            {
-                $scope.playlists = response.data;
-            });
-        }
-
-        $scope.add = function()
-        {
-            dataService.apiPost('playlist/create', $scope.playlistNew, function(response)
-            {
-                if (response.status == 200)
-                {
-                    refresh();
-                }
-                else
-                {
-                    dataService.displayError('Nouvelle Playlist', response);
-                }
-            });
-        };
-
-        refresh();
-
-    }]);
 kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "router",
 	function($scope, $location, data, router)
 {
@@ -1373,6 +1290,71 @@ kinoulinkApp.controller("RegisterController", ["$scope", "$location", "data", "r
     };
 
 }]);
+kinoulinkApp.controller("device", ["$scope", "$rootScope", "Device", "router",
+    function ($scope, $rootScope, Device, router)
+    {
+        $rootScope.menu = "devices";
+        $rootScope.title = 'KTV';
+
+        $scope.edition = false;
+        $scope.errorEdition = "";
+
+        function refresh()
+        {
+            $scope.device = Device.get({ id : router.get('token') });
+        }
+
+        $scope.sendAction = function(action)
+        {
+            dataService.api('user/devices/actions/add', { device : device, action : action }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.removeMedia = function(media)
+        {
+            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
+            {
+                refresh();
+            });
+        };
+
+        refresh();
+
+    }]);
+kinoulinkApp.controller("devices", ["$scope", "$rootScope", "Device",
+    function ($scope, $rootScope, Device)
+    {
+        $rootScope.menu = 'devices';
+        $rootScope.title = 'KTV';
+
+        $scope.deviceNew = {};
+        $scope.error = '';
+
+        function refresh()
+        {
+            $scope.devices = Device.query();
+        }
+
+        $scope.add = function()
+        {
+            (new Device($scope.deviceNew)).$save(function(response)
+            {
+                if (response.status == 200)
+                {
+                    refresh();
+                }
+                else
+                {
+                    $scope.error = response.data;
+                }
+            });
+        };
+
+        refresh();
+
+    }]);
 kinoulinkApp.controller("home", ["$scope", "data",
     function ($scope, dataService)
     {
@@ -1388,5 +1370,104 @@ kinoulinkApp.controller("menu", ["$scope", "$window", "data",
 
             $window.location.reload();
         };
+
+    }]);
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "Playlist", "MediaInPlaylist", "router", "Upload",
+    function ($scope, $rootScope, Playlist, MediaInPlaylist, router, Upload)
+    {
+        $rootScope.menu = "playlist";
+        $rootScope.title = 'Playlist';
+
+        var token = router.get('token');
+
+        function refresh()
+        {
+            $scope.playlist = Playlist.get({ id : token});
+
+            $scope.medias = MediaInPlaylist.query();
+        }
+
+        $scope.removeLink = function(link)
+        {
+            dataService.api('delete', 'mediainplaylist/' + link.id, {}, function(response)
+            {
+                refresh();
+            });
+        };
+
+        $scope.onFileSelect = function(files)
+        {
+            var fileToUpload = files[0];
+
+            $scope.uploadProgress = 0;
+
+            $scope.upload = Upload.upload({
+                    url: appConfig.api + 'media/upload',
+                    method: 'POST',
+                    cache: false,
+                    responseType: "json",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Auth-Token': $rootScope.accessToken
+                    },
+                    withCredentials: true,
+                    file: fileToUpload
+                })
+                .progress(function (evt)
+                {
+                    $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
+                })
+                .success(function (data, status, headers, config)
+                {
+                    $scope.uploadProgress = 0;
+
+                    if (data.status == 200)
+                    {
+                        refresh();
+                    }
+                    else
+                    {
+                        dataService.displayError('Téléchargement', data);
+                    }
+                });
+        };
+
+        refresh();
+
+    }]);
+kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "Playlist", "router",
+    function ($scope, $rootScope, Playlist, router)
+    {
+        $rootScope.menu = "playlist";
+        $rootScope.title = 'Playlist';
+
+        $scope.playlists = [];
+        $scope.playlistNew = {};
+        $scope.error = null;
+
+        function refresh()
+        {
+            $scope.playlists = Playlist.query({sort : 'createdAt DESC'});
+        }
+
+        $scope.add = function()
+        {
+            (new Playlist($scope.playlistNew)).$save(function(response)
+            {
+                if (response.status == 200)
+                {
+                    $scope.playlistNew = {};
+                    $scope.error = null;
+
+                    refresh();
+                }
+                else
+                {
+                    $scope.error = response.data;
+                }
+            });
+        };
+
+        refresh();
 
     }]);

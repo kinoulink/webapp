@@ -4,37 +4,51 @@
     Pas encore de playlist ;-(
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Intitulé</th>
-            <th>Auteur</th>
-            <th>Médias</th>
-            <th>Actions</th>
+<div class="panel">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Intitulé</th>
+                <th>Auteur</th>
+                <th>Médias</th>
+                <th>Date modification</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tr ng-repeat="playlist in playlists">
+            <td>{{playlist.title}}</td>
+            <td>{{playlist.user.name}}</td>
+            <td>{{ playlist.medias }} média</td>
+            <td><i class="fa fa-clock-o"></i> {{ playlist.updatedAt | formatDateVerbose }}</td>
+            <td><a class="btn btn-primary" ng-href="#/playlist/{{ playlist.id }}">Ouvrir</a></td>
         </tr>
-    </thead>
-    <tr ng-repeat="playlist in playlists">
-        <td>{{playlist.title}}</td>
-        <td>{{playlist.user.name}}</td>
-        <td>4 média</td>
-        <td><a class="btn btn-primary" ng-href="#/playlist/{{ playlist.id }}">Ouvrir</a></td>
-    </tr>
-</table>
+    </table>
 
-<hr />
+</div>
 
-<h2>Une nouvelle playlist ?</h2>
+<div class="container">
 
-<form class="panel-form" ng-submit="add()">
+    <h2>Une nouvelle playlist ?</h2>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <input ng-model="playlistNew.title" type="text" placeholder="Nom" class="form-control" />
-        </div>
-        <div class="col-sm-6">
-            <br class="visible-xs" />
-            <input type="submit" class="btn btn-success" />
-        </div>
+    <div class="alert alert-danger" ng-show="error">{{ error }}</div>
+
+    <div class="panel">
+
+        <form class="panel-form" ng-submit="add()">
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <input ng-model="playlistNew.title" type="text" placeholder="Nom" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                    <br class="visible-xs" />
+                    <input type="submit" class="btn btn-success" />
+                </div>
+            </div>
+
+        </form>
+
     </div>
 
-</form>
+</div>

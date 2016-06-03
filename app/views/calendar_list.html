@@ -1,8 +1,6 @@
-<header>
-    <h1>Mes Calendiers</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'Calendriers', 'link' : '/calendar'}] }}"></div>
 
-<div class="container">
+<div class="panel">
 
     <div ng-show="calendars.length == 0" class="alert alert-info">
         Pas encore de Calendriers ;-(
@@ -23,23 +21,22 @@
         </tr>
     </table>
 
-    <hr />
-
-    <h2>Un nouveau calendrier ?</h2>
-
-    <form class="panel-form" ng-submit="create()">
-
-        <div class="row">
-            <div class="col-sm-6">
-                <input ng-model="calendarNew.title" type="text" placeholder="Code" class="form-control" />
-            </div>
-            <div class="col-sm-6">
-                <br class="visible-xs" />
-                <input type="submit" class="btn btn-success" />
-            </div>
-        </div>
-
-    </form>
-
-
 </div>
+
+<hr />
+
+<h2>Un nouveau calendrier ?</h2>
+
+<form class="panel-form" ng-submit="create()">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <input ng-model="calendarNew.title" type="text" placeholder="Code" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+            <br class="visible-xs" />
+            <input type="submit" class="btn btn-success" />
+        </div>
+    </div>
+
+</form>

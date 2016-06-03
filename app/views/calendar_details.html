@@ -1,15 +1,109 @@
-<header>
-    <h1>Mon Calendier</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'Calendriers', 'link' : '/calendar'}, {'title' : calendar.title}] }}"></div>
 
-<div class="container">
+<h2>Journée type</h2>
 
-    <div class="btn-group">
-        <button class="btn btn-success" ng-click="changeView('agendaDay')">AgendaDay</button>
-        <button class="btn btn-success" ng-click="changeView('agendaWeek')">AgendaWeek</button>
-        <button class="btn btn-success" ng-click="changeView('month')">Month</button>
-    </div>
+<table class="table">
+    <thead>
+    <tr>
+        <td></td>
+        <td ng-repeat="day in days" ng-click="clickOnDay(day, null)">{{ day.title }}</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="hour in hours">
+        <td>{{ hour.title }}</td>
+        <td ng-repeat="day in days" ng-click="clickOnDay(day, hour)">
+            <div class="_playlist" ng-repeat="item in calendarPlaylistsByDay[day.id][hour.id]">
+                {{ item.playlist.title }}
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
-    <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar" class="calendar"></div>
 
+<h2>Evènement calendrier</h2>
+
+<div class="clearfix calendar">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td></td>
+                <td ng-repeat="day in days" ng-click="clickOnDay(day, null)">{{ day.title }}</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hour in hours">
+                <td>{{ hour.title }}</td>
+                <td ng-repeat="day in days" ng-click="clickOnDay(day, hour)">
+                    <div class="_playlist" ng-repeat="item in calendarPlaylistsByDay[day.id][hour.id]">
+                        {{ item.playlist.title }}
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div ng-show="showPlaylistPicker" class="modal-backdrop" ng-click="showPlaylistPicker=false">
+    <div ng-show="showPlaylistPicker"  class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog"  ng-click="$event.stopPropagation();">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="showPlaylistPicker=false"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Ajouter une Playlist</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Jour</label>
+                            </div>
+                            <div class="col-sm-6">
+                                {{ newPlaylist.day.title }}
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="inputTime">Heure début</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select id="inputTime" name="time" ng-model="newPlaylist.time" class="form-control">
+                                    <option ng-repeat="hour in hours" value="{{ hour.id }}">{{ hour.title }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Playlist</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="list-group">
+                                    <button ng-repeat="item in playlists" ng-click="newPlaylist.playlist = item" class="list-group-item">
+                                        {{ item.title }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="showPlaylistPicker=false">Annuler</button>
+                    <button type="button" class="btn btn-primary" ng-click="addPlaylist()">OK</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div>

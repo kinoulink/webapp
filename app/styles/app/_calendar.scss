@@ -1,0 +1,67 @@
+.calendar
+{
+  ._days
+  {
+    min-height: 1000px;
+    padding-left: 30px;
+  }
+
+  ._day
+  {
+    float: left;
+    width: 14%;
+    min-height: 800px;
+    border-left: 1px solid #C0C0C0;
+
+    > ._title
+    {
+      display: block;
+      text-align: center;
+      font-weight: 300;
+    }
+  }
+
+  ._hours
+  {
+    list-style: none;
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
+    float: left;
+    width: 30px;
+
+    li
+    {
+      > ._title
+      {
+        font-size: 0.6em;
+      }
+
+      height: 30px;
+
+      hr
+      {
+        margin: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+
+  ._playlist
+  {
+    padding: 4px;
+    background: $color-blue;
+  }
+}
+
+.modal-backdrop
+{
+  background: rgba(0,0,0,0.6);
+
+  .modal
+  {
+    display: block;
+  }
+}

@@ -1,5 +1,5 @@
-kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "router", "Upload",
-    function ($scope, $rootScope, dataService, router, Upload)
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "Playlist", "MediaInPlaylist", "router", "Upload",
+    function ($scope, $rootScope, Playlist, MediaInPlaylist, router, Upload)
     {
         $rootScope.menu = "playlist";
         $rootScope.title = 'Playlist';
@@ -8,23 +8,14 @@ kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "data", "
 
         function refresh()
         {
-            dataService.apiGet('playlist/' + token, { }, function(response)
-            {
-                $scope.playlist = response.data;
-            });
+            $scope.playlist = Playlist.get({ id : token});
+
+            $scope.medias = MediaInPlaylist.query();
         }
 
-        $scope.addMedia = function()
+        $scope.removeLink = function(link)
         {
-            dataService.api('user/devices/media/add', { device : device }, function(response)
-            {
-                refresh();
-            });
-        };
-
-        $scope.removeMedia = function(media)
-        {
-            dataService.api('user/devices/media/remove', { device : device, media : media }, function(response)
+            dataService.api('delete', 'mediainplaylist/' + link.id, {}, function(response)
             {
                 refresh();
             });

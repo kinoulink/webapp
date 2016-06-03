@@ -1,21 +1,37 @@
-<header>
-    <h1>Mes KinouTV</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'KTV', 'link' : '/devices'}] }}"></div>
 
-<div class="container">
+<h2>Mes KTVs</h2>
 
-    <h2>Mes KTVs</h2>
+<div class="panel">
 
-    <div class="panel-form">
-        <a class="device-list-item" ng-repeat="device in devices" ng-href="#/devices/{{ device.id }}">
-            <i class="fa fa-tablet"></i>
-            <h4>{{ device.title }}</h4>
-        </a>
-    </div>
+    <table class="table">
 
-    <hr />
+        <thead>
+            <tr>
+                <th>Intitulé</th>
+                <th>Création</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
 
-    <h2>Un nouveau boîtier ?</h2>
+        <tr ng-repeat="device in devices">
+            <td>{{ device.title }}</td>
+            <td><i class="fa fa-clock-o"></i> {{ device.createdAt | formatDateVerbose }}</td>
+            <td>
+                <a ng-href="#/device/{{ device.id }}" class="btn btn-info">Ouvrir</a>
+                <a ng-href="#/calendar/{{ device.id }}" class="btn btn-info">Calendrier</a>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<hr />
+
+<h2>Un nouveau boîtier ?</h2>
+
+<div class="panel">
 
     <form class="panel-form" ng-submit="add()">
 
@@ -46,6 +62,11 @@
             <input type="submit" class="btn btn-success" />
         </div>
 
+        <br />
+
+        <div class="alert alert-danger" ng-show="error != ''">{{ error }}</div>
+
     </form>
+
 
 </div>

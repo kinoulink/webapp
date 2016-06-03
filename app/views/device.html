@@ -1,22 +1,45 @@
-<header>
-    <h1>Ma KTV "{{ device.title }}"</h1>
-</header>
+<div my-breadcrumb="{{ [{'title' : 'KTV', 'link' : '/devices'}, {'title' : device.title}] }}"></div>
 
 <div class="container">
 
-    <h3>Calendrier - Playlist</h3>
+    <h3>{{ device.title }}</h3>
 
-    <div class="panel-form">
+    <div class="panel">
 
-        <a class="btn btn-primary" href="#/calendar/{{ device.calendar }}">Voir le calendrier</a>
+        <div class="clearfix">
+            <a class="pull-right" title="Editer" ng-click="edition = !edition"><i class="fa fa-pencil"></i></a>
+        </div>
 
-        <hr />
+        <br />
+
+        <table class="table">
+            <tr>
+                <td>Intitulé</td>
+                <td ng-hide="edition">{{ device.title }}</td>
+                <td ng-show="edition"><input type="text" ng-model="device.title" /></td>
+            </tr>
+            <tr>
+                <td>Calendrier</td>
+                <td  ng-hide="edition">
+                    <a class="btn btn-link" href="#/calendar/{{ device.calendar }}">{{ device.calendar.title }}</a>
+                </td>
+                <td ng-show="edition"><input type="text" ng-model="device.title" /></td>
+            </tr>
+            <tr>
+                <td>Créé le</td>
+                <td>{{ device.createdAt | formatDateVerbose }}</td>
+            </tr>
+            <tr>
+                <td>Vue le</td>
+                <td>{{ device.updatedAt | formatDateVerbose }}</td>
+            </tr>
+        </table>
 
     </div>
 
     <h3>Actions</h3>
 
-    <div class="panel-form">
+    <div class="panel">
 
         <div class="row">
 

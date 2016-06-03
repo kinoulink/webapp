@@ -43,22 +43,29 @@
 
 <h3>Médias</h3>
 
-<div class="panel-form">
+<div class="panel">
 
-    <div ng-show="playlist.media.length == 0">
+    <div ng-show="medias.length == 0">
         <div class="alert alert-info">
             Pas de média ;-(
         </div>
     </div>
 
     <table class="table">
+        <thead>
+            <tr>
+                <th colspan="2">Média</th>
+                <th>Date d'ajout</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
         <tbody>
-        <tr ng-repeat="media in playlist.medias">
-            <td><img src="{{ media.media.thumbnail }}" style="width: 32px;" /></td>
-            <td>{{ media.media.title }}</td>
-            <td><i class="fa fa-clock-o"></i> {{ media.createdAt | formatDateVerbose }}</td>
+        <tr ng-repeat="link in medias">
+            <td><img src="{{ link.thumbnail }}" style="width: 32px;" /></td>
+            <td>{{ link.media.title }}</td>
+            <td><i class="fa fa-clock-o"></i> {{ link.createdAt | formatDateVerbose }}</td>
             <td>
-                <button class="btn btn-danger" ng-click="removeMedia(media._id)" title="Enlever le média"><i class="fa fa-remove"></i></button>
+                <button class="btn btn-danger" ng-click="removeLink(link)" title="Enlever le média"><i class="fa fa-remove"></i></button>
             </td>
         </tr>
         </tbody>

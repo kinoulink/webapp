@@ -11,6 +11,7 @@ var scripts = {
             "{APP}/scripts/filters/*.js",
             "{APP}/scripts/directives/*.js",
             "{APP}/scripts/services/*.js",
+            "{APP}/scripts/resources/*.js",
             "{APP}/scripts/controllers/*.js"
         ],
     vendor:  [
@@ -24,12 +25,7 @@ var scripts = {
             "{VENDOR}/moment/moment.js",
             "{VENDOR}/angular-loading-bar/build/loading-bar.js",
             "{VENDOR}/angular-bootstrap/ui-bootstrap.js",
-            "{VENDOR}/angular-bootstrap/ui-bootstrap-tpls.js",
             "{VENDOR}/angular-ui-notification/dist/angular-ui-notification.js",
-            "{VENDOR}/jquery/dist/jquery.js",
-            "{VENDOR}/fullcalendar/dist/fullcalendar.min.js",
-            "{VENDOR}/angular-ui-calendar/src/calendar.js",
-            "{VENDOR}/select2/dist/js/select2.js",
             "{APP}/scripts/vendor/*"
         ]
 };

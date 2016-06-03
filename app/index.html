@@ -21,6 +21,19 @@
 	<link href="/css/vendor.css" rel="stylesheet" />
 	<link href="/css/app.css" rel="stylesheet" />
 
+      <script type="text/javascript">
+          WebFontConfig = {
+              google: { families: [ 'Open+Sans:400,300:latin' ] }
+          };
+          (function() {
+              var wf = document.createElement('script');
+              wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+              wf.type = 'text/javascript';
+              wf.async = 'true';
+              var s = document.getElementsByTagName('script')[0];
+              s.parentNode.insertBefore(wf, s);
+          })(); </script>
+
   </head>
   <body id="body">
 
@@ -32,11 +45,11 @@
                   <div>
                     <img src="/images/users53.png" alt="me" />
                   </div>
-                  <a class="a" title="Mon profile" ng-href="#/me" ng-click="$root.navOpened=false">{{$root.user.name}}</a>
+                  <a class="__link" title="Mon profile" ng-href="#/me" ng-click="$root.navOpened=false">{{$root.user.name}}</a>
               </div>
 
                 <div class="_items">
-                    <a ng-href="#/devices" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'devices'}"><i class="fa fa-tablet"></i> Mes KTVs</a>
+                    <a ng-href="#/device" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'devices'}"><i class="fa fa-tablet"></i> Mes KTVs</a>
                     <a ng-href="#/media" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'media'}"><i class="fa fa-film"></i> Mes Média </a>
                     <a ng-href="#/playlist" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'playlist'}">Mes Playlists</a>
                     <a ng-href="#/calendar" ng-click="$root.navOpened=false" ng-class="{active : $root.menu == 'calendar'}">Mes Calendriers</a>
@@ -51,7 +64,6 @@
                   <a class="_menu navbar-text navbar-left" ng-click="$root.sidebarToggled = !$root.sidebarToggled"><i class="fa fa-bars"></i></a>
                   <a ng-href="#/" class="navbar-brand">Kinoulink</a>
                   <span class="navbar-text _title">{{ $root.title }}</span>
-                  <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
               </header>
 
               <div id="page-content" ng-view="">

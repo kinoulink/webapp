@@ -2,6 +2,8 @@ kinoulinkApp.controller("CalendarsController", ["$scope", "$rootScope", "data", 
     function ($scope, $rootScope, dataService, router)
     {
         $rootScope.menu = "calendar";
+        $rootScope.title = 'Mes Calendriers';
+
         $scope.calendarNew = null;
 
         function refresh()

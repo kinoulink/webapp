@@ -1,6 +1,6 @@
-var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar', 'ui.calendar'])
+var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
 
-.run(['$rootScope', '$location', 'data', function($rootScope, $location, data)
+.run(['$rootScope', '$location', '$http', function($rootScope, $location, $http)
 {
     var $html = angular.elementById('html'),
         $body = angular.elementById('body');
@@ -11,6 +11,8 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
     {
         $rootScope.user = _global_bootstrap_data.user;
         $rootScope.accessToken = _global_bootstrap_data.access_token;
+
+        $http.defaults.headers.common['x-auth-token'] = _global_bootstrap_data.access_token;
     }
 
     $rootScope.$on('$routeChangeSuccess', function(ev, evData)
@@ -62,13 +64,13 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
             reloadOnSearch: false
         })
 
-        .when('/devices', {
+        .when('/device', {
             templateUrl: bzrup('devices'),
-            controller: 'DevicesController'
+            controller: 'devices'
         })
-        .when('/devices/:token', {
+        .when('/device/:token', {
             templateUrl: bzrup('device'),
-            controller: 'DeviceController'
+            controller: 'device'
         })
         .when('/devices/:token/media/add', {
             templateUrl: bzrup('deviceMediaAdd'),
