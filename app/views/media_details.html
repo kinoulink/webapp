@@ -1,34 +1,38 @@
 <div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : media.title}] }}"></div>
 
-<div ng-class="{'panel-form' : true, 'loading' : loading }">
-
     <h2>Playlists</h2>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th colspan="2">Playlist</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="playlist in media.playlists">
-                <td><a class="btn btn-link" ng-href="#/playlist/{{ playlist.playlist.id }}">{{ playlist.playlist.title }}</a></td>
-                <td><i class="fa fa-clock-o"></i> {{ playlist.createdAt | formatDateVerbose }}</td>
-                <td><button class="btn btn-danger">Enlever</button></td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="2">
-                    <div ng-model="newPlaylist" my-select="playlist" placeholder="Sélectionnez une playlist"></div>
-                </td>
-                <td><button class="btn btn-success" ng-click="addToPlaylist()">Ajouter</button></td>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="panel">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="2">Playlist</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="playlist in media.playlists">
+                    <td><span class="circle" style="background: {{ playlist.playlist.color }}"></span> <a class="btn btn-link" ng-href="#/playlist/{{ playlist.playlist.id }}">{{ playlist.playlist.title }}</a></td>
+                    <td><i class="fa fa-clock-o"></i> {{ playlist.createdAt | formatDateVerbose }}</td>
+                    <td><button class="btn btn-danger">Enlever</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <div ng-model="newPlaylist" my-select="playlist" placeholder="Sélectionnez une playlist"></div>
+                    </td>
+                    <td><button class="btn btn-success" ng-click="addToPlaylist()">Ajouter</button></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
 
     <h2>Fichier source</h2>
+
+<div class="panel">
 
     <div class="navbar navbar-default">
         <p class="navbar-text">

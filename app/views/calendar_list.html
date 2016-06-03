@@ -17,7 +17,10 @@
         <tr ng-repeat="calendar in calendars">
             <td>{{calendar.title}}</td>
             <td>4 média</td>
-            <td><a class="btn btn-primary" ng-href="#/calendar/{{ calendar.id }}">Ouvrir</a></td>
+            <td>
+                <a class="btn btn-primary" ng-href="#/calendar/{{ calendar.id }}/day">Journée type</a>
+                <a class="btn btn-primary" ng-href="#/calendar/{{ calendar.id }}/month">Evènements calendrier</a>
+            </td>
         </tr>
     </table>
 

@@ -22,6 +22,9 @@
 
     .caption
     {
+      display: block;
+      left: 0;
+      right: 0;
       height: 50px;
       overflow: hidden;
       text-overflow: ellipsis;

@@ -1,25 +1,14 @@
-kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "data", "Upload",
-    function ($scope, $rootScope, dataService, Upload)
+kinoulinkApp.controller("MediaController", ["$scope", "$rootScope", "Media", "data", "Upload",
+    function ($scope, $rootScope, Media, dataService, Upload)
     {
-        $scope.loading = true;
         $rootScope.menu = 'media';
         $rootScope.title = 'Mes Médias';
 
+        $scope.medias = null;
+
         function refresh()
         {
-            dataService.apiGet('media', {}, function(response)
-            {
-                $scope.loading = false;
-
-                if (response.status == 200)
-                {
-                    $scope.medias = response.data;
-                }
-                else
-                {
-                    dataService.displayError('Media', response);
-                }
-            });
+            $scope.medias = Media.query({sort : 'createdAt DESC'});
         }
 
         $scope.onFileSelect = function(files)

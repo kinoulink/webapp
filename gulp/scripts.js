@@ -26,6 +26,7 @@ var scripts = {
             "{VENDOR}/angular-loading-bar/build/loading-bar.js",
             "{VENDOR}/angular-bootstrap/ui-bootstrap.js",
             "{VENDOR}/angular-ui-notification/dist/angular-ui-notification.js",
+            "{VENDOR}/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js",
             "{APP}/scripts/vendor/*"
         ]
 };

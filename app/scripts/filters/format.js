@@ -38,4 +38,10 @@ kinoulinkApp.filter('formatDateVerbose', function()
     {
         return input + ' ' + text + (input > 1 ? 's' : '');
     };
+}).filter('minutes', function()
+{
+    return function (seconds)
+    {
+        return parseInt(seconds) > 0 ? (Math.floor(seconds/60) + ' min') : '';
+    };
 });

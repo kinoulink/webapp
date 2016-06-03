@@ -56,6 +56,11 @@ kinoulinkApp.controller("CalendarController", ["$scope", "$rootScope", "data", "
                 $scope.calendar = response.data;
             });
 
+            dataService.apiPost('playlistinday', { calendar : token }, function(response)
+            {
+
+            });
+
             dataService.apiGet('playlistincalendar', { calendar : token }, function(response)
             {
                 var calendarPlaylists = response.data,

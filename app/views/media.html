@@ -18,8 +18,6 @@
 
 </form>
 
-<hr />
-
 <div class="navbar navbar-default">
 
     <form class="navbar-form navbar-left" role="search">
@@ -37,15 +35,15 @@
 
 </div>
 
-<div ng-class="{'panel-form' : true, 'loading' : loading }">_
+<div ng-class="{'panel' : true, 'loading' : medias === null }">
 
     <div class="alert alert-info" ng-show="medias.length == 0">
         Vous n'avez pas encore téléchargé de photos ou vidéos!
     </div>
 
-    <div class="media-listing" ng-repeat="media in medias">
+    <div class="media-listing clearfix" ng-repeat="media in medias">
         <a class="thumbnail" ng-href="#/media/{{ media.id }}">
-            <img ng-src="{{ media.thumbnail }}">
+            <img ng-src="{{ media | thumbnail }}">
             <div class="caption">
                 <p>{{ media.title }}</p>
                 <span class="text-muted"><i class="fa fa-clock-o">{{ media.createdAt | moment }}</i></span>

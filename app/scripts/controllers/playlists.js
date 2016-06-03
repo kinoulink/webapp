@@ -5,12 +5,13 @@ kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "Playlis
         $rootScope.title = 'Playlist';
 
         $scope.playlists = [];
-        $scope.playlistNew = {};
         $scope.error = null;
 
         function refresh()
         {
             $scope.playlists = Playlist.query({sort : 'createdAt DESC'});
+
+            $scope.playlistNew = { 'color' : pastelColors()};
         }
 
         $scope.add = function()
@@ -33,4 +34,11 @@ kinoulinkApp.controller("PlaylistsController", ["$scope", "$rootScope", "Playlis
 
         refresh();
 
+        function pastelColors()
+        {
+            var r = (Math.round(Math.random()* 127) + 127).toString(16);
+            var g = (Math.round(Math.random()* 127) + 127).toString(16);
+            var b = (Math.round(Math.random()* 127) + 127).toString(16);
+            return '#' + r + g + b;
+        }
     }]);

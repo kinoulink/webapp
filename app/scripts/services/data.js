@@ -51,6 +51,11 @@ kinoulinkApp.factory("data",
             return callAPI('post', service, param, cb);
         },
 
+        apiDelete: function(service, param, cb)
+        {
+            return callAPI('delete', service, param, cb);
+        },
+
         api: callAPI,
 
         notifyDisplayToast: notifyDisplayToast
@@ -104,7 +109,7 @@ kinoulinkApp.factory("data",
              instance.notifyDisplayToast('danger', 'kinoulink API', 'Le serveur kinoulink semble rencontrer un petit problème: ' + response.data.message);
              }
              */
-            callback(response);
+            if (callback) callback(response);
         }).error(function (response, status, headers, config)
         {
             var error;
@@ -125,7 +130,7 @@ kinoulinkApp.factory("data",
 
             notifyDisplayToast('danger', 'kinoulink API', error);
 
-            callback(response);
+            if (callback) callback(response);
         });
     }
 

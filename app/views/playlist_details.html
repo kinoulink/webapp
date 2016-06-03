@@ -1,43 +1,73 @@
 <div my-breadcrumb="{{ [{'title' : 'Média', 'link' : '/media'}, {'title' : playlist.title}] }}"></div>
 
-<form ng-submit="add()" class="panel-form">
-
-    <h2>Un nouveau média ?</h2>
-
     <div class="row">
 
         <div class="col-sm-6">
 
-            <h4>A télécharger</h4>
+            <h2>Un nouveau média ?</h2>
 
-            <button ngf-select="onFileSelect($files)" class="btn btn-success">Télécharger une vidéo ou photo ..</button>
+            <div class="panel">
 
-            <div class="clearfix text-center">
-                <div class="progress" ng-show="uploadProgress > 0">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar"
-                         ng-style="{ 'width' : uploadProgress + '%' }">
-                        <span class="sr-only">{{uploadProgress}}% Complete</span>
+                <h4>A télécharger</h4>
+
+                <form ng-submit="add()" class="panel-form">
+
+                    <button ngf-select="onFileSelect($files)" class="btn btn-success">Télécharger une vidéo ou photo ..</button>
+
+                    <div class="clearfix text-center">
+                        <div class="progress" ng-show="uploadProgress > 0">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                 ng-style="{ 'width' : uploadProgress + '%' }">
+                                <span class="sr-only">{{uploadProgress}}% Complete</span>
+                            </div>
+                        </div>
                     </div>
+
+                </form>
+
+                <hr />
+
+                <h4>Depuis la librairie</h4>
+                <div class="alert alert-info">
+                    Pour ajouter un média existant, rendez vous sur <a ng-href="#/media">la page des médias</a>.
                 </div>
             </div>
 
         </div>
 
         <div class="col-sm-6">
-            <h4>Depuis la librairie</h4>
-            <div class="alert alert-info">
-                Pour ajouter un média existant, rendez vous sur <a ng-href="#/media">la page des médias</a>.
+
+            <h2>&nbsp;</h2>
+
+            <div class="panel">
+                <table class="table">
+                    <tr>
+                        <td>Intitulé</td>
+                        <td ng-hide="edition">{{ playlist.title }}</td>
+                        <td ng-show="edition"><input type="text" ng-model="playlist.title" /></td>
+                    </tr>
+                    <tr>
+                        <td>Médias</td>
+                        <td>{{ playlist.medias }}</td>
+                    </tr>
+                    <tr>
+                        <td>Durée</td>
+                        <td>{{ playlist.duration }} s</td>
+                    </tr>
+                    <tr>
+                        <td>Créé le</td>
+                        <td>{{ playlist.createdAt | formatDateVerbose }}</td>
+                    </tr>
+                    <tr>
+                        <td>Vue le</td>
+                        <td>{{ playlist.updatedAt | formatDateVerbose }}</td>
+                    </tr>
+                </table>
             </div>
+
         </div>
 
     </div>
-
-
-
-
-</form>
-
-
 
 <hr />
 
@@ -55,13 +85,15 @@
         <thead>
             <tr>
                 <th colspan="2">Média</th>
+                <th>Durée affichage média</th>
                 <th>Date d'ajout</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         <tr ng-repeat="link in medias">
-            <td><img src="{{ link.thumbnail }}" style="width: 32px;" /></td>
+            <td><img src="{{ link.media | thumbnail }}" style="width: 32px;" /></td>
+            <td> <input type="number" ng-model="link.duration" min="0" ng-change="mediaDurationChange(link)" /></td>
             <td>{{ link.media.title }}</td>
             <td><i class="fa fa-clock-o"></i> {{ link.createdAt | formatDateVerbose }}</td>
             <td>

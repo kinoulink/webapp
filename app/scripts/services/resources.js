@@ -40,6 +40,16 @@ kinoulinkApp
         return apiResource('playlist/:id', {id:'@id'});
     }]
 )
+.factory('Calendar', ['apiResource',
+    function(apiResource){
+        return apiResource('calendar/:id', {id:'@id'});
+    }]
+)
+.factory('Media', ['apiResource',
+    function(apiResource){
+        return apiResource('media/:id', {id:'@id'});
+    }]
+)
 .factory('MediaInPlaylist', ['apiResource',
     function(apiResource){
         return apiResource('mediainplaylist/:id', {id:'@id'});

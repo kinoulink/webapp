@@ -1,4 +1,4 @@
-var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar'])
+var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngSanitize', 'ngFileUpload', 'ui-notification', 'angular-loading-bar', 'dndLists'])
 
 .run(['$rootScope', '$location', '$http', function($rootScope, $location, $http)
 {
@@ -81,9 +81,13 @@ var kinoulinkApp = angular.module('kinoulinkApp', ['ngResource', 'ngRoute', 'ngS
             templateUrl: bzrup('calendar_list'),
             controller: 'CalendarsController'
         })
-        .when('/calendar/:token', {
-            templateUrl: bzrup('calendar_details'),
-            controller: 'CalendarController'
+        .when('/calendar/:token/day', {
+            templateUrl: bzrup('calendar_day_details'),
+            controller: 'calendar_day'
+        })
+        .when('/calendar/:token/month', {
+            templateUrl: bzrup('calendar_month_details'),
+            controller: 'calendar_month'
         })
 
         .when('/playlist', {

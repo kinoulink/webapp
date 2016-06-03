@@ -1,5 +1,5 @@
-kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "Playlist", "MediaInPlaylist", "router", "Upload",
-    function ($scope, $rootScope, Playlist, MediaInPlaylist, router, Upload)
+kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "$timeout", "Playlist", "MediaInPlaylist", "data", "router", "Upload",
+    function ($scope, $rootScope, $timeout, Playlist, MediaInPlaylist, dataService, router, Upload)
     {
         $rootScope.menu = "playlist";
         $rootScope.title = 'Playlist';
@@ -10,12 +10,12 @@ kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "Playlist
         {
             $scope.playlist = Playlist.get({ id : token});
 
-            $scope.medias = MediaInPlaylist.query();
+            $scope.medias = MediaInPlaylist.query({ playlist : token, sort : 'createdAt DESC'});
         }
 
         $scope.removeLink = function(link)
         {
-            dataService.api('delete', 'mediainplaylist/' + link.id, {}, function(response)
+            MediaInPlaylist.remove({id : link.id}, function(response)
             {
                 refresh();
             });
@@ -56,6 +56,27 @@ kinoulinkApp.controller("PlaylistController", ["$scope", "$rootScope", "Playlist
                         dataService.displayError('Téléchargement', data);
                     }
                 });
+        };
+
+        var changeTimeoutPromise = null;
+
+        $scope.mediaDurationChange = function(item)
+        {
+            if (changeTimeoutPromise)
+            {
+                $timeout.cancel(changeTimeoutPromise);
+            }
+
+            changeTimeoutPromise = $timeout(function()
+            {
+                dataService.apiPost('mediainplaylist/duration', {
+                    id : item.id,
+                    duration : item.duration
+                }, function()
+                {
+                    refresh()
+                });
+            }, 500);
         };
 
         refresh();

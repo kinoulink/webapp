@@ -1,3 +1,43 @@
+.calendar_day
+{
+  ul._playlists
+  {
+    min-height: 30px;
+    margin: 0;
+
+    li
+    {
+      display: block;
+      float: left;
+      width:45%;
+      height: 50px;
+      border: 1px solid #eee;
+      margin: 1%;
+      line-height: 50px;
+      text-align: center;
+      font-size: 20px;
+      cursor: pointer;
+      list-style-type: none;
+
+      &:hover
+      {
+        border:1px solid $color-blue;
+      }
+    }
+
+    &._day
+    {
+      li
+      {
+        float: none;
+        width: auto;
+      }
+    }
+  }
+}
+
+
+
 .calendar
 {
   ._days

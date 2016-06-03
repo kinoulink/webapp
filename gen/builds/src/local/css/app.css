@@ -4,6 +4,31 @@
   font-weight: 200;
 }
 
+.calendar_day ul._playlists {
+  min-height: 30px;
+  margin: 0;
+}
+.calendar_day ul._playlists li {
+  display: block;
+  float: left;
+  width: 45%;
+  height: 50px;
+  border: 1px solid #eee;
+  margin: 1%;
+  line-height: 50px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  list-style-type: none;
+}
+.calendar_day ul._playlists li:hover {
+  border: 1px solid #0e9aef;
+}
+.calendar_day ul._playlists._day li {
+  float: none;
+  width: auto;
+}
+
 .calendar ._days {
   min-height: 1000px;
   padding-left: 30px;
@@ -155,6 +180,9 @@ html.focus #page {
   transform: translate(-50%, -50%);
 }
 .media-listing .thumbnail .caption {
+  display: block;
+  left: 0;
+  right: 0;
   height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -341,6 +369,13 @@ body {
   padding: 4px;
   border-radius: 4px;
   border-bottom: 2px solid #ddd;
+}
+
+.circle {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
 }
 
 .device-list-item {

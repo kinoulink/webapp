@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tr ng-repeat="playlist in playlists">
-            <td>{{playlist.title}}</td>
+            <td><span class="circle" style="background: {{ playlist.color }};"></span> {{playlist.title}}</td>
             <td>{{playlist.user.name}}</td>
             <td>{{ playlist.medias }} média</td>
             <td><i class="fa fa-clock-o"></i> {{ playlist.updatedAt | formatDateVerbose }}</td>
@@ -40,6 +40,8 @@
             <div class="row">
                 <div class="col-sm-6">
                     <input ng-model="playlistNew.title" type="text" placeholder="Nom" class="form-control" />
+                    <br />
+                    <label>Couleur: <span class="circle" style="background: {{ playlistNew.color }};"></span></label>
                 </div>
                 <div class="col-sm-6">
                     <br class="visible-xs" />
